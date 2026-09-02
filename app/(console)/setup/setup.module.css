@@ -1,0 +1,45 @@
+.page {
+  padding-top: 20px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-muted);
+  margin: 0;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip {
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: transparent;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--ink-muted);
+}
+
+.chipOn {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--paper);
+}
+
+.error {
+  color: var(--red);
+  font-size: 14px;
+  margin: 0;
+}

@@ -1,0 +1,82 @@
+.page {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 80px 48px;
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: 64px;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .hero {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+}
+
+.leftCol {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.card {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.card li {
+  padding-left: 24px;
+  position: relative;
+  font-size: 15px;
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.card li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--green);
+  font-weight: bold;
+}
+
+.box {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 32px;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 8px 24px rgba(22, 48, 43, 0.04);
+}
+
+.error {
+  color: var(--red);
+  font-size: 14px;
+}
+
+.continue {
+  display: block;
+  margin-top: 24px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink-muted);
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  transition: text-decoration-color 0.2s;
+}
+
+.continue:hover {
+  text-decoration-color: currentColor;
+}

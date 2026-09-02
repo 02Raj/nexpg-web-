@@ -1,0 +1,288 @@
+.root {
+  display: flex;
+  min-height: 100vh;
+  background: var(--paper-deep);
+}
+
+.sidebar {
+  width: var(--sidebar-width);
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--ink);
+  color: var(--paper);
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+.sidebarTop {
+  padding: 24px 20px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: inherit;
+  margin-bottom: 20px;
+}
+
+.brand strong {
+  display: block;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.brand small {
+  display: block;
+  font-size: 11px;
+  opacity: 0.55;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.brandMark {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: var(--ochre);
+  color: var(--ink);
+  display: grid;
+  place-items: center;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 20px;
+}
+
+.propertyLabel {
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0.5;
+  margin: 0 0 6px;
+}
+
+.propertyName {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.propertyName span {
+  display: block;
+  font-size: 12px;
+  font-weight: 400;
+  opacity: 0.65;
+  margin-top: 2px;
+}
+
+.propertySelect {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--paper);
+  font-size: 13px;
+}
+
+.nav {
+  flex: 1;
+  padding: 16px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  overflow-y: auto;
+}
+
+.navItem {
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  color: rgba(247, 245, 241, 0.72);
+  transition: background 0.15s ease;
+}
+
+.navItem:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--paper);
+}
+
+.navItemActive {
+  background: rgba(201, 122, 43, 0.22);
+  color: var(--paper);
+}
+
+.navLabel {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.navDesc {
+  display: block;
+  font-size: 11px;
+  opacity: 0.55;
+  margin-top: 2px;
+}
+
+.sidebarFoot {
+  padding: 16px 20px 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.apkLink {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ochre);
+  margin-bottom: 12px;
+}
+
+.apkLink:hover {
+  text-decoration: underline;
+}
+
+.userEmail {
+  font-size: 12px;
+  opacity: 0.55;
+  margin: 0 0 10px;
+  word-break: break-all;
+}
+
+.signOut {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--paper);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  width: 100%;
+}
+
+.signOut:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.mainCol {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.topbar {
+  background: var(--paper);
+  border-bottom: 1px solid var(--line);
+}
+
+.topbarInner {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 24px;
+  padding: 32px 48px 24px;
+  max-width: 1240px;
+  margin: 0 auto;
+}
+
+.topTitle {
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 600;
+  margin: 8px 0 0;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+
+.topActions {
+  display: flex;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.quickBtn {
+  padding: 0 20px;
+  height: 44px;
+  border-radius: 8px;
+  border: none;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.quickBtn:hover {
+  opacity: 0.9;
+}
+
+.quickBtnGhost {
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid var(--line);
+}
+
+.quickBtnGhost:hover {
+  background: var(--paper-deep);
+  opacity: 1;
+}
+
+.main {
+  flex: 1;
+  padding: 40px 48px 64px;
+}
+
+.mainInner {
+  max-width: 1240px;
+  margin: 0 auto;
+}
+
+@media (max-width: 960px) {
+  .root {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+  }
+
+  .nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 8px 12px 12px;
+  }
+
+  .navItem {
+    flex: 1;
+    min-width: 120px;
+  }
+
+  .navDesc {
+    display: none;
+  }
+
+  .sidebarFoot {
+    display: none;
+  }
+
+  .topbar {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px;
+  }
+
+  .main {
+    padding: 20px;
+  }
+}

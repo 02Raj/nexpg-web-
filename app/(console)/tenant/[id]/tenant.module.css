@@ -1,0 +1,66 @@
+.page {
+  padding-top: 8px;
+}
+
+.back {
+  background: none;
+  border: none;
+  color: var(--ochre-deep);
+  font-size: 13px;
+  cursor: pointer;
+  padding: 0;
+}
+
+.rentBox,
+.secBox {
+  margin-top: 20px;
+  padding: 16px;
+  background: var(--paper-deep);
+  border-radius: var(--radius-md);
+}
+
+.secRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chip {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ochre-deep);
+  background: var(--ochre-soft);
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+}
+
+.inv {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.invAmt {
+  font-family: var(--font-mono);
+  font-weight: 600;
+}
+
+.payRow {
+  display: flex;
+  gap: 8px;
+}
+
+.paid {
+  font-size: 13px;
+  color: var(--green);
+  font-weight: 500;
+}
+
+.mt {
+  margin-top: 12px;
+}

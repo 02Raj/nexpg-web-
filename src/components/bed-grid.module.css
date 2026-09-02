@@ -1,0 +1,108 @@
+.stack {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.room {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-shadow: 0 4px 12px rgba(22, 48, 43, 0.02);
+}
+
+.roomName {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.cell {
+  flex: 1;
+  min-width: 88px;
+  min-height: 84px;
+  border-radius: 8px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 1px solid var(--line);
+  cursor: pointer;
+  text-align: left;
+  transition: transform 0.1s ease, border-color 0.15s ease;
+}
+
+.cell:hover:not(:disabled) {
+  border-color: var(--ink-faint);
+  transform: translateY(-1px);
+}
+
+.occupied {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--paper);
+}
+
+.occupied:hover:not(:disabled) {
+  background: #122824; /* slightly darker green */
+  border-color: #122824;
+}
+
+.empty {
+  background: var(--paper);
+  border: 1px dashed var(--line);
+}
+
+.empty:hover:not(:disabled) {
+  border-style: solid;
+}
+
+.selected {
+  border: 2px solid var(--ochre);
+  background: var(--ochre-soft);
+}
+
+.disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.bedLabel {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--ink-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.occupied .bedLabel {
+  color: rgba(247, 245, 241, 0.7);
+}
+
+.tenant {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--paper);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.emptyHint {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-muted);
+}

@@ -1,0 +1,54 @@
+.base {
+  min-height: 50px;
+  border-radius: 8px;
+  padding: 0 20px;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 600;
+  transition: opacity 0.15s ease, transform 0.1s ease;
+}
+
+.base:active:not(:disabled) {
+  transform: translateY(1px);
+  opacity: 0.86;
+}
+
+.base:disabled {
+  opacity: 0.5;
+  background: var(--paper-deep);
+  color: var(--ink-faint);
+  cursor: not-allowed;
+}
+
+.primary {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.secondary {
+  background: var(--paper);
+  color: var(--ink);
+  border: 1px solid var(--line);
+}
+
+.secondary:hover:not(:disabled) {
+  background: var(--paper-deep);
+}
+
+.ghost {
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid transparent;
+}
+
+.danger {
+  background: var(--red);
+  color: var(--paper);
+}
+
+.success {
+  background: var(--green);
+  color: var(--paper);
+}
