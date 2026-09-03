@@ -31,9 +31,14 @@ export default function BillsPage() {
 
   const gen = useMutation({
     mutationFn: () => generateInvoices(buildingId),
-    onSuccess: () => {
+    onSuccess: (count) => {
       queryClient.invalidateQueries({ queryKey: keys.invoices(buildingId, period) });
       queryClient.invalidateQueries({ queryKey: keys.dashboard(buildingId) });
+      if (count === 0) {
+        alert('All active tenants already have a bill for this month.');
+      } else {
+        alert(`Successfully generated ${count} new bill(s).`);
+      }
     },
   });
 

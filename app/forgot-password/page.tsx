@@ -1,6 +1,5 @@
 'use client';
 
-import { Button } from '@/components/Button';
 import { Field } from '@/components/Field';
 import { rpcMessage } from '@/lib/format';
 import { useAuth } from '@/providers/AuthProvider';
@@ -30,22 +29,35 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <div className={styles.simplePage}>
-      <div className={`panel ${styles.simpleCard}`}>
-        <p className="kicker">Account</p>
-        <h1 className="display">Reset password</h1>
-        {sent ? (
-          <p className="bodyMuted">If an account exists for {email}, you will receive a reset link shortly.</p>
-        ) : (
-          <form className={styles.form} onSubmit={onSubmit}>
-            <Field label="Email" value={email} onChange={setEmail} type="email" />
-            {error ? <p className={styles.error}>{error}</p> : null}
-            <Button type="submit" label={busy ? 'Sending…' : 'Send reset link'} disabled={busy || !email} />
-          </form>
-        )}
-        <Link href="/login" className={styles.link} style={{ display: 'block', marginTop: 16, textAlign: 'center' }}>
-          Back to sign in
-        </Link>
+    <div className={styles.layout}>
+      <div className={styles.formPanel} style={{ gridColumn: '1 / -1' }}>
+        <div className={styles.formCard}>
+          <p className={styles.kicker}>ACCOUNT</p>
+          <h2 className={styles.formTitle}>Reset password</h2>
+          {sent ? (
+            <>
+              <p className="bodyMuted" style={{ marginBottom: 24 }}>If an account exists for {email}, you will receive a reset link shortly.</p>
+              <button type="button" className={styles.submitBtn} onClick={() => window.location.href = '/login'} style={{ width: '100%' }}>
+                Back to sign in →
+              </button>
+            </>
+          ) : (
+            <form className={styles.form} onSubmit={onSubmit}>
+              <Field label="Email" value={email} onChange={setEmail} type="email" placeholder="owner@example.com" />
+              {error ? <p className={styles.error}>{error}</p> : null}
+              <button type="submit" className={styles.submitBtn} disabled={busy || !email}>
+                {busy ? 'Sending…' : 'Send reset link'}
+              </button>
+            </form>
+          )}
+          {!sent && (
+            <p className={styles.formFooter}>
+              <Link href="/login">
+                Back to sign in
+              </Link>
+            </p>
+          )}
+        </div>
       </div>
     </div>
   );

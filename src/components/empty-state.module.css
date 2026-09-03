@@ -4,8 +4,13 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 48px 24px;
-  min-height: 200px;
+  padding: 64px 32px;
+  min-height: 320px;
+  background: var(--white);
+  border: 1px solid rgba(22, 48, 43, 0.08);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 12px 32px rgba(22, 48, 43, 0.03);
+  margin: 0 auto;
 }
 
 .iconCircle {
@@ -15,38 +20,48 @@
   background: var(--paper-deep);
   display: grid;
   place-items: center;
-  margin-bottom: 16px;
-  color: var(--ink-muted);
+  margin-bottom: 24px;
+  color: var(--ochre-deep);
 }
 
 .title {
-  font-size: 16px;
+  font-family: var(--font-display);
+  font-size: 28px;
   font-weight: 600;
   color: var(--ink);
-  margin: 0 0 6px;
+  margin: 0 0 12px;
+  letter-spacing: -0.01em;
 }
 
 .message {
-  font-size: 14px;
+  font-size: 15px;
   color: var(--ink-muted);
-  margin: 0 0 20px;
-  max-width: 280px;
-  line-height: 1.5;
+  margin: 0 0 32px;
+  max-width: 340px;
+  line-height: 1.6;
 }
 
 .cta {
-  padding: 10px 20px;
+  padding: 0 24px;
   min-height: 44px;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   border: none;
   background: var(--ink);
   color: var(--paper);
+  font-family: var(--font-body);
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  transition: opacity 0.15s ease;
+  transition: opacity 0.15s ease, transform 0.1s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .cta:hover {
-  opacity: 0.9;
+  background: #2a4a44;
+}
+
+.cta:active {
+  transform: translateY(1px);
 }

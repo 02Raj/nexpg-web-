@@ -9,7 +9,7 @@ import { rpcMessage, todayIST } from '@/lib/format';
 import { keys, queryClient } from '@/lib/query';
 import { useBuilding } from '@/providers/BuildingProvider';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { BedDouble } from 'lucide-react';
+import { LayoutGrid } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 import styles from '../../form-page.module.css';
@@ -78,14 +78,12 @@ export default function NewTenantPage() {
       </header>
 
       {emptyBeds.length === 0 ? (
-        <div className="panel">
-          <EmptyState
-            icon={<BedDouble size={28} />}
-            title="No empty beds"
-            message="All beds are occupied. Add more rooms in Settings to continue."
-            action={{ label: 'Go to Settings', onClick: () => router.push('/more') }}
-          />
-        </div>
+        <EmptyState
+          icon={<LayoutGrid size={28} />}
+          title="No empty beds"
+          message="All beds are occupied. Add more rooms in Settings to continue."
+          action={{ label: 'Go to Settings', onClick: () => router.push('/more') }}
+        />
       ) : (
         <div className={styles.card}>
           <div className={styles.form}>
