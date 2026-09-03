@@ -2,10 +2,12 @@
 
 import { fetchInvoices, generateInvoices, markInvoicePaid } from '@/api/nexpg';
 import { Button } from '@/components/Button';
+import { EmptyState } from '@/components/EmptyState';
 import { inrExact, monthLabel, rpcMessage, todayIST } from '@/lib/format';
 import { keys, queryClient } from '@/lib/query';
 import { useBuilding } from '@/providers/BuildingProvider';
 import { useMutation, useQuery } from '@tanstack/react-query';
+import { Receipt } from 'lucide-react';
 import styles from './bills.module.css';
 
 export default function BillsPage() {
@@ -55,8 +57,16 @@ export default function BillsPage() {
       </div>
 
       {rows.length === 0 ? (
-        <div className={`panel ${styles.empty}`}>
-          <p className="bodyMuted">No bills for this month yet.</p>
+        <div className="panel">
+          <EmptyState
+            icon={<Receipt size={28} />}
+            title="No bills yet"
+            message="No bills have been generated for this month. Generate bills to get started."
+            action={{
+              label: gen.isPending ? 'Working…' : 'Generate bills',
+              onClick: () => gen.mutate(),
+            }}
+          />
           {gen.error ? <p className={styles.error}>{rpcMessage(gen.error)}</p> : null}
         </div>
       ) : (

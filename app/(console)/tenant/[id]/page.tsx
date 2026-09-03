@@ -67,26 +67,28 @@ export default function TenantPage() {
         {tenant.status === 'active' ? 'Active' : 'Vacated'} · Joined {prettyDate(tenant.join_date)}
       </p>
 
-      <div className={styles.rentBox}>
-        <p className="kicker">Monthly rent</p>
-        <div className="amountLg">{inrExact(tenant.monthly_rent)}</div>
-      </div>
-
-      <div className={styles.secBox}>
-        <div className={styles.secRow}>
-          <h2 className="section">Security</h2>
-          {deposit ? <span className={styles.chip}>{deposit.status.replace('_', ' ')}</span> : null}
+      <div className={styles.detailRow}>
+        <div className={styles.rentBox}>
+          <p className="kicker">Monthly rent</p>
+          <div className="amountLg">{inrExact(tenant.monthly_rent)}</div>
         </div>
-        <div className="amountLg">{inrExact(deposit?.amount ?? 0)}</div>
-        {deposit?.status === 'refund_due' ? (
-          <Button
-            label={refund.isPending ? 'Saving…' : 'Mark refunded'}
-            variant="secondary"
-            onClick={() => refund.mutate(deposit.id)}
-            disabled={refund.isPending}
-            className={styles.mt}
-          />
-        ) : null}
+
+        <div className={styles.secBox}>
+          <div className={styles.secRow}>
+            <h2 className="section">Security</h2>
+            {deposit ? <span className={styles.chip}>{deposit.status.replace('_', ' ')}</span> : null}
+          </div>
+          <div className="amountLg">{inrExact(deposit?.amount ?? 0)}</div>
+          {deposit?.status === 'refund_due' ? (
+            <Button
+              label={refund.isPending ? 'Saving…' : 'Mark refunded'}
+              variant="secondary"
+              onClick={() => refund.mutate(deposit.id)}
+              disabled={refund.isPending}
+              className={styles.mt}
+            />
+          ) : null}
+        </div>
       </div>
 
       <h2 className="section" style={{ marginTop: 22 }}>

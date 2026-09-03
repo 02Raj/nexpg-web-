@@ -22,6 +22,8 @@
   --radius-md: 10px;
   --radius-lg: 16px;
   --sidebar-width: 260px;
+  --sidebar-rail: 64px;
+  --bottom-nav: 60px;
   --content-max: 1200px;
 }
 
@@ -98,9 +100,10 @@ textarea {
 
 .panel {
   background: var(--white);
-  border: 1px solid var(--line);
+  border: 1px solid rgba(22, 48, 43, 0.06);
   border-radius: var(--radius-lg);
-  padding: 24px;
+  padding: 20px;
+  box-shadow: 0 4px 20px rgba(22, 48, 43, 0.03);
 }
 
 .panelTitle {
@@ -118,31 +121,25 @@ textarea {
 
 .statGrid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 16px;
-}
-
-@media (max-width: 1100px) {
-  .statGrid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 560px) {
-  .statGrid {
-    grid-template-columns: 1fr;
-  }
 }
 
 .statCard {
   background: var(--white);
-  border: 1px solid var(--line);
+  border: 1px solid rgba(22, 48, 43, 0.06);
   border-radius: var(--radius-lg);
-  padding: 24px;
+  padding: 16px 20px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  min-height: 124px;
+  gap: 8px;
+  box-shadow: 0 4px 20px rgba(22, 48, 43, 0.03);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.statCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(22, 48, 43, 0.06);
 }
 
 .statCardLabel {
@@ -156,7 +153,7 @@ textarea {
 
 .statCardValue {
   font-family: var(--font-mono);
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-weight: 600;
   line-height: 1;
 }
@@ -171,7 +168,7 @@ textarea {
   background: var(--white);
   border: 1px solid var(--line);
   border-radius: 12px;
-  overflow: hidden;
+  overflow-x: auto;
   box-shadow: 0 4px 12px rgba(22, 48, 43, 0.02);
 }
 
@@ -199,15 +196,9 @@ textarea {
 
 .settingsGrid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 24px;
   align-items: start;
-}
-
-@media (max-width: 900px) {
-  .settingsGrid {
-    grid-template-columns: 1fr;
-  }
 }
 
 .paperGrain {

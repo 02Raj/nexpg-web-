@@ -4,6 +4,7 @@
   gap: 24px;
 }
 
+/* Stat card value colors */
 .statGreen {
   color: var(--green);
 }
@@ -20,40 +21,122 @@
   color: var(--ochre-deep);
 }
 
-.split {
+/* Stat card header with icon */
+.statHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.statIcon {
+  opacity: 0.7;
+  flex-shrink: 0;
+}
+
+.statFooter {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+/* Content grid: actions + pending + occupancy on desktop */
+.contentGrid {
   display: grid;
-  grid-template-columns: 1fr 1.5fr;
-  gap: 32px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
   align-items: start;
 }
 
-@media (max-width: 900px) {
-  .split {
-    grid-template-columns: 1fr;
-  }
+/* ===== Occupancy bar ===== */
+.occupancyBarWrap {
+  margin-top: 12px;
 }
 
+.occupancyBarTrack {
+  height: 10px;
+  border-radius: 5px;
+  background: var(--paper-deep);
+  overflow: hidden;
+  display: flex;
+}
+
+.occupancyBarFill {
+  height: 100%;
+  background: var(--green);
+  border-radius: 5px 0 0 5px;
+  transition: width 0.4s ease;
+}
+
+.occupancyBarLabels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--ink-muted);
+}
+
+.occupancyPct {
+  font-family: var(--font-mono);
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--green);
+  margin-top: 4px;
+}
+
+/* ===== Pending rent list ===== */
+.pendingList {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-top: 8px;
+}
+
+.pendingItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.pendingItem:last-child {
+  border-bottom: none;
+}
+
+.pendingName {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.pendingAmt {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ochre-deep);
+}
+
+.pendingEmpty {
+  font-size: 13px;
+  color: var(--ink-faint);
+  padding: 12px 0;
+}
+
+/* ===== Actions panel ===== */
 .actions {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
 }
 
-.empty {
-  padding: 48px;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-}
-
+/* Error text */
 .error {
   color: var(--red);
   font-size: 14px;
   margin: 0;
 }
 
+/* Alerts */
 .alertList {
   display: flex;
   flex-direction: column;
@@ -73,4 +156,24 @@
   font-weight: 500;
   color: var(--ochre-deep);
   margin: 0;
+}
+
+/* Empty state on dashboard */
+.empty {
+  padding: 48px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+@media (max-width: 640px) {
+  .page {
+    gap: 16px;
+  }
+
+  .contentGrid {
+    grid-template-columns: 1fr;
+  }
 }

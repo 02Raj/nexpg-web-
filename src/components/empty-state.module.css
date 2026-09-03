@@ -1,0 +1,52 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 48px 24px;
+  min-height: 200px;
+}
+
+.iconCircle {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--paper-deep);
+  display: grid;
+  place-items: center;
+  margin-bottom: 16px;
+  color: var(--ink-muted);
+}
+
+.title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--ink);
+  margin: 0 0 6px;
+}
+
+.message {
+  font-size: 14px;
+  color: var(--ink-muted);
+  margin: 0 0 20px;
+  max-width: 280px;
+  line-height: 1.5;
+}
+
+.cta {
+  padding: 10px 20px;
+  min-height: 44px;
+  border-radius: 8px;
+  border: none;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+
+.cta:hover {
+  opacity: 0.9;
+}

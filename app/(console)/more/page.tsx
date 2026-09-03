@@ -7,11 +7,13 @@ import {
   updateBillingDate,
 } from '@/api/nexpg';
 import { Button } from '@/components/Button';
+import { EmptyState } from '@/components/EmptyState';
 import { Field } from '@/components/Field';
 import { inr, rpcMessage } from '@/lib/format';
 import { keys, queryClient } from '@/lib/query';
 import { useBuilding } from '@/providers/BuildingProvider';
 import { useMutation, useQuery } from '@tanstack/react-query';
+import { CheckCircle } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import styles from './more.module.css';
@@ -93,7 +95,11 @@ export default function MorePage() {
         <h2 className="panelTitle">Security refund due</h2>
         <p className="panelMuted">After vacate — never mixed with rent invoices.</p>
         {(refunds.data ?? []).length === 0 ? (
-          <p className="small">No refunds pending.</p>
+          <EmptyState
+            icon={<CheckCircle size={28} />}
+            title="All clear"
+            message="No security refunds pending at the moment."
+          />
         ) : (
           <div className="tableWrap">
             <table className="dataTable">

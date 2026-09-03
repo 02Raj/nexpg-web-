@@ -4,13 +4,15 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useAuth } from '@/providers/AuthProvider';
 import { useBuilding } from '@/providers/BuildingProvider';
+import { LayoutDashboard, BedDouble, Receipt, Settings, Menu, X } from 'lucide-react';
+import { useState, useEffect } from 'react';
 import styles from './console-shell.module.css';
 
 const NAV = [
-  { href: '/dashboard', label: 'Dashboard', desc: 'Overview & occupancy' },
-  { href: '/beds', label: 'Beds', desc: 'Room-wise map' },
-  { href: '/bills', label: 'Bills', desc: 'Rent invoices' },
-  { href: '/more', label: 'Settings', desc: 'PG & account' },
+  { href: '/dashboard', label: 'Dashboard', desc: 'Overview & occupancy', icon: LayoutDashboard },
+  { href: '/beds', label: 'Beds', desc: 'Room-wise map', icon: BedDouble },
+  { href: '/bills', label: 'Bills', desc: 'Rent invoices', icon: Receipt },
+  { href: '/more', label: 'Settings', desc: 'PG & account', icon: Settings },
 ];
 
 export function ConsoleShell({ children }: { children: React.ReactNode }) {
@@ -18,13 +20,65 @@ export function ConsoleShell({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const { user, signOut } = useAuth();
   const { building, buildings, selectBuilding, showSwitcher } = useBuilding();
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  // Close sidebar on route change
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [pathname]);
+
+  // Prevent body scroll when mobile sidebar is open
+  useEffect(() => {
+    if (mobileOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [mobileOpen]);
 
   const activeNav = NAV.find((item) => pathname === item.href || pathname.startsWith(`${item.href}/`));
 
   return (
     <div className={styles.root}>
-      <aside className={styles.sidebar}>
+      {/* Mobile header bar */}
+      <div className={styles.mobileHeader}>
+        <button
+          type="button"
+          className={styles.hamburger}
+          onClick={() => setMobileOpen(true)}
+          aria-label="Open menu"
+        >
+          <Menu size={22} />
+        </button>
+        <Link href="/dashboard" className={styles.mobileHeaderBrand}>
+          <span className={styles.brandMark}>N</span>
+          <strong>{building?.name ?? 'NexPG'}</strong>
+        </Link>
+      </div>
+
+      {/* Overlay for mobile sidebar */}
+      <div
+        className={[styles.overlay, mobileOpen ? styles.overlayVisible : ''].filter(Boolean).join(' ')}
+        onClick={() => setMobileOpen(false)}
+        aria-hidden="true"
+      />
+
+      {/* Sidebar */}
+      <aside className={[styles.sidebar, mobileOpen ? styles.sidebarOpen : ''].filter(Boolean).join(' ')}>
         <div className={styles.sidebarTop}>
+          {/* Close button visible only on mobile when open */}
+          {mobileOpen && (
+            <button
+              type="button"
+              className={styles.hamburger}
+              onClick={() => setMobileOpen(false)}
+              aria-label="Close menu"
+              style={{ position: 'absolute', top: 16, right: 12, color: 'var(--paper)' }}
+            >
+              <X size={20} />
+            </button>
+          )}
           <Link href="/dashboard" className={styles.brand}>
             <span className={styles.brandMark}>N</span>
             <span>
@@ -61,12 +115,14 @@ export function ConsoleShell({ children }: { children: React.ReactNode }) {
         <nav className={styles.nav}>
           {NAV.map((item) => {
             const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
+            const Icon = item.icon;
             return (
               <Link
                 key={item.href}
                 href={item.href}
                 className={[styles.navItem, active ? styles.navItemActive : ''].filter(Boolean).join(' ')}
               >
+                <span className={styles.navIcon}><Icon size={20} /></span>
                 <span className={styles.navLabel}>{item.label}</span>
                 <span className={styles.navDesc}>{item.desc}</span>
               </Link>
@@ -85,6 +141,7 @@ export function ConsoleShell({ children }: { children: React.ReactNode }) {
         </div>
       </aside>
 
+      {/* Main content area */}
       <div className={styles.mainCol}>
         <header className={styles.topbar}>
           <div className={styles.topbarInner}>
@@ -102,6 +159,24 @@ export function ConsoleShell({ children }: { children: React.ReactNode }) {
           <div className={styles.mainInner}>{children}</div>
         </main>
       </div>
+
+      {/* Bottom nav for mobile */}
+      <nav className={styles.bottomNav} aria-label="Main navigation">
+        {NAV.map((item) => {
+          const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
+          const Icon = item.icon;
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={[styles.bottomNavItem, active ? styles.bottomNavItemActive : ''].filter(Boolean).join(' ')}
+            >
+              <Icon size={22} />
+              <span className={styles.bottomNavLabel}>{item.label}</span>
+            </Link>
+          );
+        })}
+      </nav>
     </div>
   );
 }

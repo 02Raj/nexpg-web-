@@ -105,7 +105,7 @@ export async function fetchOccupancy(buildingId: string): Promise<OccupancyCell[
 export async function fetchDashboard(buildingId: string) {
   const supabase = getSupabase();
   const period = todayIST().slice(0, 8) + '01';
-  const [occupancy, invoicesRes, depositsRes] = await Promise.all([
+  const [occupancy, invoicesRes, depositsRes, tenantsRes] = await Promise.all([
     fetchOccupancy(buildingId),
     supabase
       .from('monthly_invoices')
@@ -113,6 +113,7 @@ export async function fetchDashboard(buildingId: string) {
       .eq('building_id', buildingId)
       .eq('billing_period', period),
     supabase.from('security_deposits').select('*').eq('building_id', buildingId),
+    supabase.from('tenants').select('id, full_name').eq('building_id', buildingId),
   ]);
 
   if (invoicesRes.error) throw invoicesRes.error;
@@ -120,6 +121,7 @@ export async function fetchDashboard(buildingId: string) {
 
   const invoices = invoicesRes.data as MonthlyInvoice[];
   const deposits = depositsRes.data as SecurityDeposit[];
+  const tenantMap = new Map((tenantsRes.data ?? []).map((t: { id: string; full_name: string }) => [t.id, t.full_name]));
 
   const occupied = occupancy.filter((b) => b.status === 'occupied').length;
   const empty = occupancy.filter((b) => b.status === 'empty').length;
@@ -131,6 +133,12 @@ export async function fetchDashboard(buildingId: string) {
   const refundDue = deposits.filter((d) => d.status === 'refund_due');
   const refundDueAmount = refundDue.reduce((sum, d) => sum + Number(d.amount), 0);
 
+  const pendingInvoices = pendingList.map((inv) => ({
+    id: inv.id,
+    tenantName: tenantMap.get(inv.tenant_id) ?? 'Tenant',
+    amount: Number(inv.amount),
+  }));
+
   return {
     occupancy,
     occupied,
@@ -138,6 +146,7 @@ export async function fetchDashboard(buildingId: string) {
     collected,
     pending,
     pendingCount: pendingList.length,
+    pendingInvoices,
     refundDueAmount,
     refundDueCount: refundDue.length,
     period,

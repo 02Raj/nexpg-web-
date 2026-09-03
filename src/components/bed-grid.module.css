@@ -1,18 +1,18 @@
 .stack {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 24px;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 20px;
 }
 
 .room {
   background: var(--white);
-  border: 1px solid var(--line);
+  border: 1px solid rgba(22, 48, 43, 0.06);
   border-radius: var(--radius-lg);
-  padding: 24px;
+  padding: 20px;
   display: flex;
   flex-direction: column;
   gap: 16px;
-  box-shadow: 0 4px 12px rgba(22, 48, 43, 0.02);
+  box-shadow: 0 4px 16px rgba(22, 48, 43, 0.02);
 }
 
 .roomName {
@@ -31,17 +31,17 @@
 
 .cell {
   flex: 1;
-  min-width: 88px;
-  min-height: 84px;
-  border-radius: 8px;
-  padding: 10px 12px;
+  min-width: 80px;
+  min-height: 64px;
+  border-radius: 6px;
+  padding: 8px 10px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   border: 1px solid var(--line);
   cursor: pointer;
   text-align: left;
-  transition: transform 0.1s ease, border-color 0.15s ease;
+  transition: all 0.2s ease;
 }
 
 .cell:hover:not(:disabled) {
@@ -51,21 +51,24 @@
 
 .occupied {
   background: var(--ink);
-  border-color: var(--ink);
+  border-color: transparent;
   color: var(--paper);
+  box-shadow: 0 2px 8px rgba(22, 48, 43, 0.15);
 }
 
 .occupied:hover:not(:disabled) {
-  background: #122824; /* slightly darker green */
-  border-color: #122824;
+  background: #122824;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(22, 48, 43, 0.2);
 }
 
 .empty {
-  background: var(--paper);
-  border: 1px dashed var(--line);
+  background: rgba(22, 48, 43, 0.02);
+  border: 1px dashed rgba(22, 48, 43, 0.15);
 }
 
 .empty:hover:not(:disabled) {
+  background: rgba(22, 48, 43, 0.04);
   border-style: solid;
 }
 
