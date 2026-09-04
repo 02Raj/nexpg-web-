@@ -3,6 +3,7 @@
 import { fetchOccupancy } from '@/api/nexpg';
 import { BedGrid } from '@/components/BedGrid';
 import { EmptyState } from '@/components/EmptyState';
+import { LoadingCenter } from '@/components/Loading';
 import { keys } from '@/lib/query';
 import { useBuilding } from '@/providers/BuildingProvider';
 import { useQuery } from '@tanstack/react-query';
@@ -20,7 +21,7 @@ export default function BedsPage() {
   });
 
   if (!building) return null;
-  if (q.isLoading) return <p className="bodyMuted">Loading beds…</p>;
+  if (q.isLoading) return <LoadingCenter message="Loading beds…" />;
 
   const beds = q.data ?? [];
 

@@ -2,10 +2,12 @@
 
 import { fetchTenantDetail, markInvoicePaid, markSecurityRefunded, vacateTenant } from '@/api/nexpg';
 import { Button } from '@/components/Button';
+import { LoadingCenter } from '@/components/Loading';
 import { inrExact, prettyDate, rpcMessage } from '@/lib/format';
 import { keys, queryClient } from '@/lib/query';
 import { useBuilding } from '@/providers/BuildingProvider';
 import { useMutation, useQuery } from '@tanstack/react-query';
+import { ArrowLeft, Calendar, CheckCircle2, Clock, Phone, ShieldCheck, Wallet } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
 import styles from './tenant.module.css';
 
@@ -40,8 +42,8 @@ export default function TenantPage() {
     onSuccess: invalidate,
   });
 
-  if (q.isLoading) return <p className="bodyMuted">Loading tenant…</p>;
-  if (q.error || !q.data) return <p style={{ color: 'var(--red)' }}>{rpcMessage(q.error, 'Tenant not found')}</p>;
+  if (q.isLoading) return <LoadingCenter message="Loading tenant profile…" />;
+  if (q.error || !q.data) return <p style={{ color: 'var(--red)', padding: 40 }}>{rpcMessage(q.error, 'Tenant not found')}</p>;
 
   const { tenant, deposit, invoices, bedLabel } = q.data;
 
@@ -57,66 +59,100 @@ export default function TenantPage() {
 
   return (
     <div className={styles.page}>
-      <button type="button" onClick={() => router.back()} className={styles.back}>
-        Back
-      </button>
-      <p className="kicker">{bedLabel}</p>
-      <h1 className="display">{tenant.full_name}</h1>
-      <p className="bodyMuted">{tenant.phone}</p>
-      <p className="small">
-        {tenant.status === 'active' ? 'Active' : 'Vacated'} · Joined {prettyDate(tenant.join_date)}
-      </p>
+      <div className={styles.appBar}>
+        <button type="button" onClick={() => router.back()} className={styles.backBtn}>
+          <ArrowLeft size={18} />
+          <span>Back</span>
+        </button>
+      </div>
 
-      <div className={styles.detailRow}>
-        <div className={styles.rentBox}>
-          <p className="kicker">Monthly rent</p>
-          <div className="amountLg">{inrExact(tenant.monthly_rent)}</div>
+      <div className={styles.headerCard}>
+        <div className={styles.headerTop}>
+          <span className={styles.bedLabel}>{bedLabel}</span>
+          {tenant.status === 'active' ? (
+            <span className={styles.statusActive}>Active</span>
+          ) : (
+            <span className={styles.statusVacated}>Vacated</span>
+          )}
+        </div>
+        <h1 className={styles.tenantName}>{tenant.full_name}</h1>
+        <div className={styles.headerMeta}>
+          <span className={styles.metaItem}>
+            <Phone size={14} /> {tenant.phone}
+          </span>
+          <span className={styles.metaItem}>
+            <Calendar size={14} /> Joined {prettyDate(tenant.join_date)}
+          </span>
+        </div>
+      </div>
+
+      <div className={styles.financialGrid}>
+        <div className={styles.finCard}>
+          <div className={styles.finHeader}>
+            <Wallet size={16} className={styles.finIcon} />
+            <span className="kicker">Monthly rent</span>
+          </div>
+          <div className={styles.finAmount}>{inrExact(tenant.monthly_rent)}</div>
         </div>
 
-        <div className={styles.secBox}>
-          <div className={styles.secRow}>
-            <h2 className="section">Security</h2>
-            {deposit ? <span className={styles.chip}>{deposit.status.replace('_', ' ')}</span> : null}
+        <div className={styles.finCard}>
+          <div className={styles.finHeader}>
+            <ShieldCheck size={16} className={styles.finIcon} />
+            <span className="kicker">Security</span>
+            {deposit ? <span className={styles.secStatus} data-status={deposit.status}>{deposit.status.replace('_', ' ')}</span> : null}
           </div>
-          <div className="amountLg">{inrExact(deposit?.amount ?? 0)}</div>
+          <div className={styles.finAmount}>{inrExact(deposit?.amount ?? 0)}</div>
           {deposit?.status === 'refund_due' ? (
             <Button
               label={refund.isPending ? 'Saving…' : 'Mark refunded'}
               variant="secondary"
               onClick={() => refund.mutate(deposit.id)}
               disabled={refund.isPending}
-              className={styles.mt}
+              className={styles.mtFull}
             />
           ) : null}
         </div>
       </div>
 
-      <h2 className="section" style={{ marginTop: 22 }}>
-        Bills
-      </h2>
-      {invoices.length === 0 ? (
-        <p className="bodyMuted">No rent invoices yet.</p>
-      ) : (
-        invoices.map((inv) => (
-          <div key={inv.id} className={styles.inv}>
-            <div>
-              <div className={styles.invAmt}>{inrExact(inv.amount)}</div>
-              <div className="small">{inv.billing_period.slice(0, 7)}</div>
-            </div>
-            {inv.status === 'pending' ? (
-              <div className={styles.payRow}>
-                <Button label="UPI" variant="success" onClick={() => pay.mutate({ invoiceId: inv.id, mode: 'upi' })} />
-                <Button label="Cash" variant="secondary" onClick={() => pay.mutate({ invoiceId: inv.id, mode: 'cash' })} />
+      <div className={styles.billsSection}>
+        <h2 className="section">Bills</h2>
+        {invoices.length === 0 ? (
+          <p className="bodyMuted">No rent invoices yet.</p>
+        ) : (
+          <div className={styles.invoiceList}>
+            {invoices.map((inv) => (
+              <div key={inv.id} className={styles.invoiceCard}>
+                <div className={styles.invInfo}>
+                  <div className={styles.invAmount}>{inrExact(inv.amount)}</div>
+                  <div className={styles.invPeriod}>{inv.billing_period}</div>
+                </div>
+                
+                <div className={styles.invAction}>
+                  {inv.status === 'pending' ? (
+                    <div className={styles.invPending}>
+                      <Clock size={14} className={styles.iconPending} />
+                      <div className={styles.payButtons}>
+                        <Button label="UPI" variant="success" onClick={() => pay.mutate({ invoiceId: inv.id, mode: 'upi' })} />
+                        <Button label="Cash" variant="secondary" onClick={() => pay.mutate({ invoiceId: inv.id, mode: 'cash' })} />
+                      </div>
+                    </div>
+                  ) : (
+                    <div className={styles.invPaid}>
+                      <CheckCircle2 size={16} className={styles.iconPaid} />
+                      <span>Paid · {inv.payment_mode?.toUpperCase()}</span>
+                    </div>
+                  )}
+                </div>
               </div>
-            ) : (
-              <span className={styles.paid}>{inv.payment_mode === 'upi' ? 'Paid · UPI' : 'Paid · Cash'}</span>
-            )}
+            ))}
           </div>
-        ))
-      )}
+        )}
+      </div>
 
       {tenant.status === 'active' ? (
-        <Button label={vacate.isPending ? 'Vacating…' : 'Vacate tenant'} variant="danger" onClick={confirmVacate} className={styles.mt} />
+        <div className={styles.dangerZone}>
+          <Button label={vacate.isPending ? 'Vacating…' : 'Vacate tenant'} variant="danger" onClick={confirmVacate} className={styles.fullWidth} />
+        </div>
       ) : null}
     </div>
   );

@@ -3,6 +3,7 @@
 import { fetchDashboard, generateInvoices, maybeGenerateInvoices } from '@/api/nexpg';
 import { BedGrid } from '@/components/BedGrid';
 import { Button } from '@/components/Button';
+import { LoadingCenter, Skeleton } from '@/components/Loading';
 import { inr, monthLabel, rpcMessage } from '@/lib/format';
 import { keys, queryClient } from '@/lib/query';
 import { useBuilding } from '@/providers/BuildingProvider';
@@ -50,7 +51,25 @@ export default function DashboardPage() {
     );
   }
 
-  if (dash.isLoading) return <p className="bodyMuted">Loading dashboard…</p>;
+  if (dash.isLoading) {
+    return (
+      <div className={styles.page}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <Skeleton style={{ width: 150, height: 20 }} />
+        </div>
+        <div className="statGrid">
+          {[1, 2, 3, 4].map((i) => (
+            <div key={i} className="statCard">
+              <Skeleton style={{ width: 100, height: 14, marginBottom: 8 }} />
+              <Skeleton style={{ width: 60, height: 28 }} />
+            </div>
+          ))}
+        </div>
+        <LoadingCenter message="Loading dashboard…" />
+      </div>
+    );
+  }
+
   if (dash.error) return <p className={styles.error}>{rpcMessage(dash.error)}</p>;
 
   const d = dash.data!;
