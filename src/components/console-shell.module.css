@@ -24,7 +24,7 @@
 }
 
 .sidebarTop {
-  padding: 24px 20px 16px;
+  padding: 20px 20px 14px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
@@ -33,7 +33,7 @@
   align-items: center;
   gap: 12px;
   color: inherit;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 }
 
 .brand strong {
@@ -106,18 +106,18 @@
 /* ===== Navigation ===== */
 .nav {
   flex: 1;
-  padding: 16px 12px;
+  padding: 12px 12px;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 2px;
   overflow-y: auto;
 }
 
 .navItem {
-  padding: 12px 14px;
+  padding: 10px 14px;
   border-radius: var(--radius-md);
   color: rgba(247, 245, 241, 0.72);
-  transition: background 0.15s ease;
+  transition: background 0.15s ease, color 0.15s ease;
   display: flex;
   flex-direction: column;
 }
@@ -152,7 +152,7 @@
 
 /* ===== Sidebar Footer ===== */
 .sidebarFoot {
-  padding: 16px 20px 20px;
+  padding: 14px 20px 16px;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
@@ -212,15 +212,15 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  gap: 24px;
-  padding: 28px 40px 20px;
+  gap: 20px;
+  padding: 20px 32px 16px;
 }
 
 .topTitle {
   font-family: var(--font-display);
-  font-size: 28px;
+  font-size: 24px;
   font-weight: 600;
-  margin: 6px 0 0;
+  margin: 4px 0 0;
   color: var(--ink);
   letter-spacing: -0.01em;
 }
@@ -233,19 +233,21 @@
 
 .quickBtn {
   padding: 0 16px;
-  height: 40px;
+  height: 36px;
   border-radius: 8px;
   border: none;
   background: var(--ink);
   color: var(--paper);
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
   cursor: pointer;
-  transition: opacity 0.15s;
+  transition: opacity 0.15s, box-shadow 0.15s, transform 0.1s;
 }
 
 .quickBtn:hover {
-  opacity: 0.9;
+  opacity: 0.92;
+  box-shadow: 0 2px 8px rgba(22, 48, 43, 0.15);
+  transform: translateY(-1px);
 }
 
 .quickBtnGhost {
@@ -261,7 +263,7 @@
 
 .main {
   flex: 1;
-  padding: 32px 40px 48px;
+  padding: 24px 32px 32px;
 }
 
 .mainInner {
@@ -371,11 +373,11 @@
   }
 
   .topbarInner {
-    padding: 24px 28px 18px;
+    padding: 18px 24px 14px;
   }
 
   .main {
-    padding: 24px 28px 40px;
+    padding: 20px 24px 32px;
   }
 }
 

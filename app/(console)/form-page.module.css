@@ -5,7 +5,7 @@
 }
 
 .header {
-  margin-bottom: 28px;
+  margin-bottom: 20px;
 }
 
 .kicker {
@@ -37,20 +37,20 @@
   background: var(--white);
   border: 1px solid rgba(22, 48, 43, 0.06);
   border-radius: 12px;
-  padding: 28px 32px;
-  box-shadow: 0 4px 20px rgba(22, 48, 43, 0.03);
+  padding: 24px 28px;
+  box-shadow: 0 2px 14px rgba(22, 48, 43, 0.03);
 }
 
 .form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 16px;
 }
 
 .grid2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 20px;
+  gap: 16px;
 }
 
 @media (max-width: 640px) {

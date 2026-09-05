@@ -11,12 +11,13 @@
 }
 
 .input {
-  min-height: 44px;
+  min-height: 40px;
   border-radius: 8px;
   border: 1px solid rgba(22, 48, 43, 0.13);
   background: var(--white);
-  padding: 0 16px;
+  padding: 0 14px;
   color: var(--ink);
+  font-size: 14px;
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 

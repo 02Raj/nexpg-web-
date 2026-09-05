@@ -1,9 +1,9 @@
 .page {
-  max-width: 600px; /* Tighter layout for a denser app feel */
+  max-width: 600px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 16px;
 }
 
 .appBar {
@@ -36,8 +36,8 @@
   background: var(--white);
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
-  padding: 24px;
-  box-shadow: 0 8px 30px rgba(22, 48, 43, 0.04);
+  padding: 20px;
+  box-shadow: 0 4px 20px rgba(22, 48, 43, 0.03);
   position: relative;
   overflow: hidden;
 }
@@ -56,7 +56,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 
 .bedLabel {
@@ -116,24 +116,24 @@
 .financialGrid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 16px;
+  gap: 12px;
 }
 
 .finCard {
   background: var(--white);
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
-  padding: 20px;
+  padding: 16px;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 4px 20px rgba(22, 48, 43, 0.02);
+  box-shadow: 0 2px 12px rgba(22, 48, 43, 0.02);
 }
 
 .finHeader {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 
 .finIcon {
@@ -180,22 +180,22 @@
   background: var(--white);
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
-  padding: 24px;
-  box-shadow: 0 4px 20px rgba(22, 48, 43, 0.02);
+  padding: 20px;
+  box-shadow: 0 2px 12px rgba(22, 48, 43, 0.02);
 }
 
 .invoiceList {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  margin-top: 16px;
+  gap: 8px;
+  margin-top: 14px;
 }
 
 .invoiceCard {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px;
+  padding: 12px 16px;
   background: var(--paper);
   border: 1px solid var(--line);
   border-radius: var(--radius-md);
@@ -261,8 +261,8 @@
 
 /* Danger Zone */
 .dangerZone {
-  margin-top: 16px;
-  padding: 24px;
+  margin-top: 8px;
+  padding: 20px;
   background: var(--red-soft);
   border-radius: var(--radius-lg);
   border: 1px solid rgba(184, 67, 61, 0.2);
