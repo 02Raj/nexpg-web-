@@ -9,6 +9,8 @@ export type Building = {
   owner_id: string;
   name: string;
   city: string;
+  state: string | null;
+  address: string | null;
   billing_date: number;
   created_at: string;
   updated_at: string;

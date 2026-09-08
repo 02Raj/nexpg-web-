@@ -47,6 +47,21 @@
   gap: 16px;
 }
 
+.sectionLabel {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 4px 0 0;
+}
+
+.error {
+  color: var(--red);
+  font-size: 14px;
+  margin: 0;
+}
+
 .grid2 {
   display: grid;
   grid-template-columns: 1fr 1fr;

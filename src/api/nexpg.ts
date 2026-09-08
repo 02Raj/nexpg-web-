@@ -20,7 +20,13 @@ export async function fetchBuildings() {
   return data as Building[];
 }
 
-export async function createBuilding(input: { name: string; city: string; billing_date: number }) {
+export async function createBuilding(input: {
+  name: string;
+  city: string;
+  state: string;
+  address?: string;
+  billing_date: number;
+}) {
   const supabase = getSupabase();
   const { data: sessionData, error: sessionError } = await supabase.auth.getUser();
   if (sessionError) throw sessionError;
@@ -33,6 +39,8 @@ export async function createBuilding(input: { name: string; city: string; billin
       owner_id: ownerId,
       name: input.name.trim(),
       city: input.city.trim(),
+      state: input.state.trim(),
+      address: input.address?.trim() || null,
       billing_date: input.billing_date,
     })
     .select('*')

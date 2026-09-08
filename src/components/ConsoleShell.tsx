@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useAuth } from '@/providers/AuthProvider';
 import { useBuilding } from '@/providers/BuildingProvider';
+import { formatBuildingLocation } from '@/lib/locations';
 import { LayoutDashboard, BedDouble, Receipt, Settings, Menu, X } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import styles from './console-shell.module.css';
@@ -14,6 +15,34 @@ const NAV = [
   { href: '/bills', label: 'Bills', desc: 'Rent invoices', icon: Receipt },
   { href: '/more', label: 'Settings', desc: 'PG & account', icon: Settings },
 ];
+
+function pageMeta(pathname: string, buildingName?: string) {
+  if (pathname.startsWith('/dashboard')) {
+    return { kicker: 'Dashboard', title: buildingName || 'Dashboard', showActions: true };
+  }
+  if (pathname.startsWith('/beds')) {
+    return { kicker: 'Beds', title: 'Bed occupancy', showActions: true };
+  }
+  if (pathname.startsWith('/bills')) {
+    return { kicker: 'Bills', title: 'Rent invoices', showActions: true };
+  }
+  if (pathname.startsWith('/more')) {
+    return { kicker: 'Settings', title: 'Property settings', showActions: true };
+  }
+  if (pathname.startsWith('/tenant/new')) {
+    return { kicker: 'Tenant', title: 'Add tenant', showActions: false };
+  }
+  if (pathname.startsWith('/tenant/')) {
+    return { kicker: 'Tenant', title: 'Tenant profile', showActions: false };
+  }
+  if (pathname.startsWith('/setup/building')) {
+    return { kicker: 'Setup · Step 1', title: 'Add property', showActions: false };
+  }
+  if (pathname.startsWith('/setup/rooms')) {
+    return { kicker: 'Setup · Step 2', title: 'Add rooms', showActions: false };
+  }
+  return { kicker: 'NexPG', title: 'Console', showActions: true };
+}
 
 export function ConsoleShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname() ?? '/';
@@ -37,7 +66,7 @@ export function ConsoleShell({ children }: { children: React.ReactNode }) {
     return () => { document.body.style.overflow = ''; };
   }, [mobileOpen]);
 
-  const activeNav = NAV.find((item) => pathname === item.href || pathname.startsWith(`${item.href}/`));
+  const meta = pageMeta(pathname, building?.name);
 
   return (
     <div className={styles.root}>
@@ -53,8 +82,18 @@ export function ConsoleShell({ children }: { children: React.ReactNode }) {
         </button>
         <Link href="/dashboard" className={styles.mobileHeaderBrand}>
           <span className={styles.brandMark}>N</span>
-          <strong>{building?.name ?? 'NexPG'}</strong>
+          <span className={styles.mobileHeaderText}>
+            <strong>{meta.title}</strong>
+            <small>{building?.name ?? 'NexPG'}</small>
+          </span>
         </Link>
+        {meta.showActions ? (
+          <div className={styles.mobileHeaderActions}>
+            <button type="button" className={styles.mobileActionBtn} onClick={() => router.push('/tenant/new')}>
+              + Tenant
+            </button>
+          </div>
+        ) : null}
       </div>
 
       {/* Overlay for mobile sidebar */}
@@ -98,14 +137,14 @@ export function ConsoleShell({ children }: { children: React.ReactNode }) {
                 >
                   {buildings.map((b) => (
                     <option key={b.id} value={b.id}>
-                      {b.name} · {b.city}
+                      {b.name} · {formatBuildingLocation(b)}
                     </option>
                   ))}
                 </select>
               ) : (
                 <p className={styles.propertyName}>
                   {building.name}
-                  <span>{building.city}</span>
+                  <span>{formatBuildingLocation(building)}</span>
                 </p>
               )}
             </div>
@@ -146,13 +185,15 @@ export function ConsoleShell({ children }: { children: React.ReactNode }) {
         <header className={styles.topbar}>
           <div className={styles.topbarInner}>
             <div>
-              <p className="kicker">{activeNav?.label ?? 'Console'}</p>
-              <h1 className={styles.topTitle}>{pageTitle(pathname, building?.name)}</h1>
+              <p className="kicker">{meta.kicker}</p>
+              <h1 className={styles.topTitle}>{meta.title}</h1>
             </div>
-            <div className={styles.topActions}>
-              <ButtonQuick label="Add tenant" onClick={() => router.push('/tenant/new')} />
-              <ButtonQuick label="Add PG" variant="ghost" onClick={() => router.push('/setup/building')} />
-            </div>
+            {meta.showActions ? (
+              <div className={styles.topActions}>
+                <ButtonQuick label="Add tenant" onClick={() => router.push('/tenant/new')} />
+                <ButtonQuick label="Add PG" variant="ghost" onClick={() => router.push('/setup/building')} />
+              </div>
+            ) : null}
           </div>
         </header>
         <main className={styles.main}>
@@ -179,16 +220,6 @@ export function ConsoleShell({ children }: { children: React.ReactNode }) {
       </nav>
     </div>
   );
-}
-
-function pageTitle(pathname: string, buildingName?: string) {
-  if (pathname.startsWith('/dashboard')) return buildingName ? `${buildingName}` : 'Dashboard';
-  if (pathname.startsWith('/beds')) return 'Bed occupancy';
-  if (pathname.startsWith('/bills')) return 'Rent invoices';
-  if (pathname.startsWith('/more')) return 'Settings';
-  if (pathname.startsWith('/tenant')) return 'Tenant';
-  if (pathname.startsWith('/setup')) return 'Setup';
-  return 'NexPG';
 }
 
 function ButtonQuick({

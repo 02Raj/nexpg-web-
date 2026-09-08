@@ -267,8 +267,9 @@
 }
 
 .mainInner {
-  max-width: 100%;
+  max-width: min(1360px, 100%);
   margin: 0 auto;
+  width: 100%;
 }
 
 /* ===== Mobile hamburger button ===== */
@@ -502,17 +503,55 @@
     z-index: 20;
   }
 
-  .mobileHeaderBrand {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    color: var(--ink);
-  }
+.mobileHeaderBrand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--ink);
+  flex: 1;
+  min-width: 0;
+}
 
-  .mobileHeaderBrand strong {
-    font-size: 16px;
-    font-weight: 600;
-  }
+.mobileHeaderText {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.mobileHeaderText strong {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mobileHeaderText small {
+  font-size: 11px;
+  color: var(--ink-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mobileHeaderActions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.mobileActionBtn {
+  height: 32px;
+  padding: 0 12px;
+  border-radius: 8px;
+  border: none;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
 
   .hamburger {
     display: flex;

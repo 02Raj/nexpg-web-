@@ -69,14 +69,6 @@ export default function NewTenantPage() {
 
   return (
     <div className={styles.page}>
-      <header className={styles.header}>
-        <button type="button" onClick={() => router.back()} className="small" style={{ color: 'var(--ochre-deep)', background: 'none', border: 'none', cursor: 'pointer', padding: 0, marginBottom: 12 }}>
-          ← Back
-        </button>
-        <p className={styles.kicker}>Tenant</p>
-        <h1 className={styles.title}>Add to a bed.</h1>
-      </header>
-
       {emptyBeds.length === 0 ? (
         <EmptyState
           icon={<LayoutGrid size={28} />}
@@ -87,35 +79,31 @@ export default function NewTenantPage() {
       ) : (
         <div className={styles.card}>
           <div className={styles.form}>
+            <p className={styles.sectionLabel}>Select a bed</p>
             <BedGrid
               beds={occ.data ?? []}
               selectableEmpty
               selectedBedId={bedId}
+              showRoomStats
               onSelect={(bed) => setBedId(bed.id)}
             />
 
-            <div className={styles.grid2} style={{ marginTop: 12 }}>
-              <Field label="Full name" value={name} onChange={setName} />
-              <Field label="Phone" value={phone} onChange={setPhone} maxLength={10} />
+            <p className={styles.sectionLabel}>Tenant details</p>
+            <div className={styles.grid2}>
+              <Field label="Full name" value={name} onChange={setName} placeholder="Rahul Sharma" />
+              <Field label="Phone (10 digits)" value={phone} onChange={setPhone} maxLength={10} />
             </div>
-            
+
             <div className={styles.grid2}>
               <Field label="Monthly rent (₹)" value={rent} onChange={setRent} type="number" />
               <Field label="Security deposit (₹)" value={security} onChange={setSecurity} type="number" />
             </div>
 
-            <div className={styles.grid2}>
-              <Field label="Join date" value={join} onChange={setJoin} type="date" />
-              <div>
-                {/* Empty div to fill the grid slot, or we can leave it spanning 1 col */}
-              </div>
-            </div>
+            <Field label="Join date" value={join} onChange={setJoin} type="date" />
 
-            {mutate.error ? <p style={{ color: 'var(--red)', fontSize: 14 }}>{rpcMessage(mutate.error)}</p> : null}
-            
-            <div style={{ marginTop: 8 }}>
-              <Button label={mutate.isPending ? 'Saving…' : 'Add tenant'} disabled={!canSubmit} onClick={() => mutate.mutate()} />
-            </div>
+            {mutate.error ? <p className={styles.error}>{rpcMessage(mutate.error)}</p> : null}
+
+            <Button label={mutate.isPending ? 'Saving…' : 'Add tenant'} disabled={!canSubmit} onClick={() => mutate.mutate()} />
           </div>
         </div>
       )}

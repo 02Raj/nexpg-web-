@@ -1571,6 +1571,631 @@
 }
 
 /* ═══════════════════════════════════════════════
+   HERO SHOWCASE — Web + Phone
+   ═══════════════════════════════════════════════ */
+.heroShowcase {
+  position: relative;
+  min-height: 380px;
+}
+
+.heroShowcaseWeb {
+  position: relative;
+  z-index: 1;
+}
+
+.heroShowcasePhone {
+  position: absolute;
+  right: -8px;
+  bottom: -24px;
+  z-index: 2;
+  transform: scale(0.88);
+  filter: drop-shadow(0 24px 48px rgba(0, 0, 0, 0.45));
+}
+
+/* ─── Web console mockup ─── */
+.webMock {
+  background: var(--paper);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow:
+    0 24px 64px rgba(0, 0, 0, 0.35),
+    0 0 0 1px rgba(247, 245, 241, 0.08);
+}
+
+.webMockLarge {
+  box-shadow:
+    0 32px 80px rgba(22, 48, 43, 0.12),
+    0 0 0 1px rgba(22, 48, 43, 0.06);
+}
+
+.webMockChrome {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: var(--white);
+  border-bottom: 1px solid var(--line);
+}
+
+.webMockBody {
+  display: flex;
+  min-height: 260px;
+}
+
+.webMockLarge .webMockBody {
+  min-height: 340px;
+}
+
+.webSidebar {
+  width: 88px;
+  flex-shrink: 0;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 14px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.webMockLarge .webSidebar {
+  width: 168px;
+  padding: 16px 14px;
+}
+
+.webSidebarBrand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.webSidebarMark {
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  background: var(--ochre);
+  color: var(--ink);
+  display: grid;
+  place-items: center;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.webSidebarName {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.webSidebarProperty {
+  font-size: 11px;
+  line-height: 1.4;
+  margin: 0;
+  opacity: 0.75;
+}
+
+.webSidebarProperty small {
+  display: block;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.55;
+  margin-bottom: 4px;
+}
+
+.webSidebarNav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.webNavItem {
+  font-size: 10px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  opacity: 0.55;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.webMockLarge .webNavItem {
+  font-size: 12px;
+  padding: 8px 10px;
+}
+
+.webNavItemActive {
+  background: rgba(201, 122, 43, 0.22);
+  opacity: 1;
+  font-weight: 600;
+}
+
+.webMain {
+  flex: 1;
+  padding: 14px;
+  background: var(--paper);
+  min-width: 0;
+}
+
+.webMockLarge .webMain {
+  padding: 20px;
+}
+
+.webMainTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.webMainKicker {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ochre-deep);
+  margin: 0 0 4px;
+}
+
+.webMainTitle {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+  color: var(--ink);
+}
+
+.webMockLarge .webMainTitle {
+  font-size: 20px;
+}
+
+.webMainPill {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background: var(--paper-deep);
+  color: var(--ink-muted);
+  white-space: nowrap;
+}
+
+.webStats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.webStat {
+  background: var(--white);
+  border: 1px solid rgba(22, 48, 43, 0.06);
+  border-radius: 8px;
+  padding: 10px 8px;
+}
+
+.webStat p {
+  font-size: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-muted);
+  margin: 0 0 4px;
+}
+
+.webStat strong {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--ink);
+}
+
+.webMockLarge .webStat strong {
+  font-size: 16px;
+}
+
+.webStatGreen { color: var(--green) !important; }
+.webStatRed { color: var(--red) !important; }
+.webStatOchre { color: var(--ochre-deep) !important; }
+
+.webBedSection {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.webBedLabel {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ink-muted);
+  margin: 0;
+}
+
+.webRoom {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.webRoom > span {
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.webBeds {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.webBedOn,
+.webBedEmpty {
+  font-size: 10px;
+  padding: 6px 8px;
+  border-radius: 5px;
+  font-weight: 500;
+}
+
+.webBedOn {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.webBedEmpty {
+  background: rgba(22, 48, 43, 0.04);
+  border: 1px dashed rgba(22, 48, 43, 0.15);
+  color: var(--ink-muted);
+}
+
+/* ─── Phone mockup ─── */
+.phone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.3s ease;
+}
+
+.phoneFeatured {
+  z-index: 2;
+}
+
+.phoneTiltLeft {
+  transform: rotate(-6deg) translateY(12px);
+}
+
+.phoneTiltRight {
+  transform: rotate(6deg) translateY(12px);
+}
+
+.phoneFrame {
+  width: 168px;
+  background: #1c1c1e;
+  border-radius: 28px;
+  padding: 10px 8px 12px;
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.35),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+.phoneFeatured .phoneFrame {
+  width: 188px;
+}
+
+.phoneNotch {
+  width: 56px;
+  height: 5px;
+  background: #2c2c2e;
+  border-radius: 3px;
+  margin: 0 auto 8px;
+}
+
+.phoneScreen {
+  background: var(--paper);
+  border-radius: 18px;
+  overflow: hidden;
+  min-height: 300px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.phoneFeatured .phoneScreen {
+  min-height: 330px;
+}
+
+.phoneHomeBar {
+  width: 48px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 2px;
+  margin: 10px auto 0;
+}
+
+.phoneCaption {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(247, 245, 241, 0.55);
+  margin: 10px 0 0;
+}
+
+/* Mobile screen content */
+.mScreen {
+  padding: 14px 12px 52px;
+  min-height: 100%;
+  position: relative;
+  background: var(--paper);
+}
+
+.mKicker {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ochre-deep);
+  margin: 0 0 4px;
+}
+
+.mTitle {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 12px;
+  color: var(--ink);
+}
+
+.mStats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.mStats div {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 8px 6px;
+  text-align: center;
+}
+
+.mStats span {
+  display: block;
+  font-size: 8px;
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.mStats strong {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--ink);
+}
+
+.mOchre { color: var(--ochre-deep) !important; }
+
+.mCard {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 12px;
+}
+
+.mCardTitle {
+  font-size: 10px;
+  color: var(--ink-muted);
+  margin: 0 0 4px;
+}
+
+.mCardValue {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0;
+  color: var(--green);
+}
+
+.mRoomCard {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 8px;
+}
+
+.mRoomCard > p {
+  font-size: 10px;
+  font-weight: 600;
+  margin: 0 0 8px;
+  color: var(--ink);
+}
+
+.mBedRow {
+  display: flex;
+  gap: 6px;
+}
+
+.mBedFilled,
+.mBedVacant {
+  flex: 1;
+  font-size: 9px;
+  padding: 8px 4px;
+  border-radius: 6px;
+  text-align: center;
+  font-weight: 500;
+}
+
+.mBedFilled {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.mBedVacant {
+  border: 1px dashed rgba(22, 48, 43, 0.2);
+  color: var(--ink-muted);
+}
+
+.mBillRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 10px;
+}
+
+.mBillRow strong {
+  display: block;
+  font-size: 11px;
+  color: var(--ink);
+}
+
+.mBillRow span {
+  color: var(--ink-muted);
+  font-size: 9px;
+}
+
+.mBillPaid,
+.mBillPending {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+.mBillPaid {
+  background: var(--green-soft);
+  color: var(--green);
+}
+
+.mBillPending {
+  background: var(--ochre-soft);
+  color: var(--ochre-deep);
+}
+
+.mBottomNav {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: space-around;
+  padding: 10px 8px;
+  background: var(--ink);
+  color: rgba(247, 245, 241, 0.5);
+  font-size: 8px;
+  font-weight: 500;
+}
+
+.mNavOn {
+  color: var(--ochre) !important;
+  font-weight: 600;
+}
+
+/* ─── Product showcase section ─── */
+.productSection {
+  padding: 100px 40px;
+  background: var(--paper);
+  border-top: 1px solid var(--line);
+}
+
+.productHeader {
+  text-align: center;
+  max-width: 680px;
+  margin: 0 auto 56px;
+}
+
+.productShowcase {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 48px;
+  align-items: start;
+}
+
+.productLabel {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ochre-deep);
+  margin-bottom: 16px;
+}
+
+.productLabelDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--ochre);
+}
+
+.productLabelDotMobile {
+  background: var(--green);
+}
+
+.productCaption {
+  font-size: 14px;
+  color: var(--ink-muted);
+  margin: 16px 0 0;
+  line-height: 1.55;
+}
+
+.phoneRow {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 12px;
+  padding: 20px 0 8px;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 100%, rgba(201, 122, 43, 0.08) 0%, transparent 70%);
+  border-radius: 16px;
+}
+
+.phoneRow .phoneCaption {
+  color: var(--ink-muted);
+}
+
+.syncBanner {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-top: 48px;
+  padding: 24px 28px;
+  background: var(--ink);
+  color: var(--paper);
+  border-radius: 14px;
+}
+
+.syncBannerIcon {
+  font-size: 28px;
+  color: var(--ochre);
+  flex-shrink: 0;
+}
+
+.syncBannerTitle {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0 0 4px;
+}
+
+.syncBannerText {
+  font-size: 14px;
+  margin: 0;
+  opacity: 0.72;
+  line-height: 1.5;
+}
+
+/* ═══════════════════════════════════════════════
    RESPONSIVE — TABLET
    ═══════════════════════════════════════════════ */
 @media (max-width: 1024px) {
@@ -1586,6 +2211,27 @@
   .heroVisual {
     max-width: 560px;
     margin: 0 auto;
+  }
+
+  .heroShowcasePhone {
+    right: 0;
+    bottom: -16px;
+    transform: scale(0.82);
+  }
+
+  .productShowcase {
+    grid-template-columns: 1fr;
+    gap: 56px;
+  }
+
+  .phoneRow {
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .phoneTiltLeft,
+  .phoneTiltRight {
+    transform: none;
   }
 
   .heroVisualFrame {
@@ -1656,6 +2302,25 @@
 
   .hero {
     padding: 128px 24px 80px;
+  }
+
+  .productSection {
+    padding: 72px 24px;
+  }
+
+  .phoneRow {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .phoneFeatured .phoneFrame {
+    width: 200px;
+  }
+
+  .syncBanner {
+    flex-direction: column;
+    text-align: center;
+    padding: 20px;
   }
 
   .heroTitle {

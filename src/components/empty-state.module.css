@@ -65,3 +65,11 @@
 .cta:active {
   transform: translateY(1px);
 }
+
+.flat {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 24px 8px;
+  min-height: 160px;
+}

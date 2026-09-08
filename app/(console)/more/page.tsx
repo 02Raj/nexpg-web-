@@ -7,15 +7,16 @@ import {
   updateBillingDate,
 } from '@/api/nexpg';
 import { Button } from '@/components/Button';
-import { EmptyState } from '@/components/EmptyState';
 import { Field } from '@/components/Field';
+import { NoBuilding } from '@/components/NoBuilding';
+import { formatBuildingLocation } from '@/lib/locations';
 import { inr, rpcMessage } from '@/lib/format';
 import { keys, queryClient } from '@/lib/query';
 import { useBuilding } from '@/providers/BuildingProvider';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { CheckCircle } from 'lucide-react';
+import { Building2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './more.module.css';
 
 export default function MorePage() {
@@ -25,6 +26,10 @@ export default function MorePage() {
   const [roomName, setRoomName] = useState('');
   const [beds, setBeds] = useState('2');
   const [msg, setMsg] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (building) setBilling(String(building.billing_date));
+  }, [building?.id, building?.billing_date]);
 
   const refunds = useQuery({
     queryKey: ['refunds', building?.id],
@@ -58,10 +63,26 @@ export default function MorePage() {
     },
   });
 
-  if (!building) return null;
+  if (!building) return <NoBuilding />;
 
   return (
     <div className={styles.page}>
+      <section className={styles.topRow}>
+        <div className={styles.propertyHero}>
+          <div className={styles.propertyIcon}>
+            <Building2 size={22} />
+          </div>
+          <div className={styles.propertyInfo}>
+            <h2 className={styles.propertyName}>{building.name}</h2>
+            <p className={styles.propertyMeta}>{formatBuildingLocation(building)}</p>
+          </div>
+          <div className={styles.propertyAside}>
+            <p className={styles.propertyAsideLabel}>Billing day</p>
+            <p className={styles.propertyAsideValue}>{building.billing_date}</p>
+          </div>
+        </div>
+      </section>
+
       <div className="settingsGrid">
         <section className="panel">
           <h2 className="panelTitle">Billing date</h2>
@@ -95,11 +116,7 @@ export default function MorePage() {
         <h2 className="panelTitle">Security refund due</h2>
         <p className="panelMuted">After vacate — never mixed with rent invoices.</p>
         {(refunds.data ?? []).length === 0 ? (
-          <EmptyState
-            icon={<CheckCircle size={28} />}
-            title="All clear"
-            message="No security refunds pending at the moment."
-          />
+          <p className={styles.inlineOk}>All clear — no security refunds pending.</p>
         ) : (
           <div className="tableWrap">
             <table className="dataTable">

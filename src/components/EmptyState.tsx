@@ -5,11 +5,13 @@ type Props = {
   title: string;
   message: string;
   action?: { label: string; onClick: () => void };
+  /** Use inside an existing panel — drops outer card chrome */
+  flat?: boolean;
 };
 
-export function EmptyState({ icon, title, message, action }: Props) {
+export function EmptyState({ icon, title, message, action, flat }: Props) {
   return (
-    <div className={styles.wrap}>
+    <div className={[styles.wrap, flat ? styles.flat : ''].filter(Boolean).join(' ')}>
       <div className={styles.iconCircle}>{icon}</div>
       <h3 className={styles.title}>{title}</h3>
       <p className={styles.message}>{message}</p>

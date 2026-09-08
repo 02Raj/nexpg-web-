@@ -5,17 +5,27 @@ type Props = {
   beds: OccupancyCell[];
   selectableEmpty?: boolean;
   selectedBedId?: string | null;
+  showRoomStats?: boolean;
   onSelect?: (bed: OccupancyCell) => void;
 };
 
-export function BedGrid({ beds, selectableEmpty, selectedBedId, onSelect }: Props) {
+export function BedGrid({ beds, selectableEmpty, selectedBedId, showRoomStats, onSelect }: Props) {
   const rooms = groupByRoom(beds);
 
   return (
     <div className={styles.stack}>
-      {rooms.map((room) => (
+      {rooms.map((room) => {
+        const occupiedCount = room.beds.filter((b) => b.status === 'occupied').length;
+        return (
         <div key={room.name} className={styles.room}>
-          <div className={styles.roomName}>{room.name}</div>
+          <div className={styles.roomHeader}>
+            <div className={styles.roomName}>{room.name}</div>
+            {showRoomStats ? (
+              <span className={styles.roomMeta}>
+                {occupiedCount}/{room.beds.length} filled
+              </span>
+            ) : null}
+          </div>
           <div className={styles.row}>
             {room.beds.map((bed) => {
               const occupied = bed.status === 'occupied';
@@ -47,7 +57,8 @@ export function BedGrid({ beds, selectableEmpty, selectedBedId, onSelect }: Prop
             })}
           </div>
         </div>
-      ))}
+        );
+      })}
     </div>
   );
 }

@@ -9,7 +9,7 @@ import s from './marketing.module.css';
    DATA
    ══════════════════════════════════════════════════ */
 
-const CITIES = ['Delhi NCR', 'Noida', 'Gurgaon', 'Bengaluru', 'Pune', 'Hyderabad'];
+const CITIES = ['Noida', 'Gurgaon', 'Delhi', 'Ghaziabad', 'Bangalore', 'Pune', 'Lucknow', 'Ahmedabad', 'Chandigarh'];
 
 const FAQS: { q: string; a: string }[] = [
   {
@@ -30,7 +30,7 @@ const FAQS: { q: string; a: string }[] = [
   },
   {
     q: 'Which cities do you support?',
-    a: 'NexPG works everywhere, but we are built specifically for the Indian PG market. Our early users are primarily in Delhi NCR, Noida, Gurgaon, Bengaluru, Pune, and Hyderabad.',
+    a: 'NexPG works across India. Pick popular cities like Noida, Gurgaon, or Bangalore — or type any city name and select your state. Smaller IT hubs like Lucknow, Ahmedabad, and Chandigarh are fully supported.',
   },
   {
     q: 'Do I need both the web and mobile app?',
@@ -41,7 +41,7 @@ const FAQS: { q: string; a: string }[] = [
 const PRICING_ITEMS = [
   'Unlimited beds & rooms',
   'Rent & bill tracking',
-  'Tenant onboarding & KYC',
+  'Tenant onboarding',
   'Security deposit management',
   'Multi-property support',
   'Android app access',
@@ -107,8 +107,8 @@ export default function MarketingPage() {
               <Link href={primaryHref} className={s.btnHeroPrimary}>
                 {isLoggedIn ? 'Go to Dashboard →' : 'Get started — it\u2019s free'}
               </Link>
-              <button type="button" className={s.btnHeroSecondary} onClick={() => scrollTo('how-it-works')}>
-                See how it works
+              <button type="button" className={s.btnHeroSecondary} onClick={() => scrollTo('product')}>
+                See web & mobile
               </button>
             </div>
           </div>
@@ -117,8 +117,7 @@ export default function MarketingPage() {
             <div className={s.heroVisualFrame} />
             <span className={`${s.heroMark} ${s.heroMarkTL}`} />
             <span className={`${s.heroMark} ${s.heroMarkBR}`} />
-            <span className={`${s.heroMark} ${s.heroMarkLabel}`}>owner console v1</span>
-            <DashboardMockup />
+            <HeroShowcase />
           </div>
         </div>
       </header>
@@ -133,6 +132,53 @@ export default function MarketingPage() {
               <span key={c} className={s.city}>{c}</span>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* ── PRODUCT SHOWCASE (Web + Mobile) ── */}
+      <section id="product" className={s.productSection}>
+        <div className={s.sectionInner}>
+          <Reveal className={s.productHeader}>
+            <p className={s.sectionKicker}>Product</p>
+            <h2 className={s.sectionTitle}>One PG. Two screens. Always in sync.</h2>
+            <p className={s.sectionSubtitle}>
+              Manage from your laptop at home, or from your phone on-site at the PG — same beds, same rent, same tenants.
+            </p>
+          </Reveal>
+
+          <Reveal delay={80}>
+            <div className={s.productShowcase}>
+              <div className={s.productWebCol}>
+                <div className={s.productLabel}>
+                  <span className={s.productLabelDot} />
+                  Web owner console
+                </div>
+                <WebConsoleMockup large />
+                <p className={s.productCaption}>Dashboard, beds, bills & settings — full desk experience on laptop.</p>
+              </div>
+
+              <div className={s.productMobileCol}>
+                <div className={s.productLabel}>
+                  <span className={`${s.productLabelDot} ${s.productLabelDotMobile}`} />
+                  Android app
+                </div>
+                <div className={s.phoneRow}>
+                  <MobilePhoneMockup screen="dashboard" tilt="left" />
+                  <MobilePhoneMockup screen="beds" tilt="center" featured />
+                  <MobilePhoneMockup screen="bills" tilt="right" />
+                </div>
+                <p className={s.productCaption}>On-site checks: occupancy, add tenant, mark rent paid — synced instantly.</p>
+              </div>
+            </div>
+
+            <div className={s.syncBanner}>
+              <span className={s.syncBannerIcon}>⟷</span>
+              <div>
+                <p className={s.syncBannerTitle}>Real-time sync</p>
+                <p className={s.syncBannerText}>Add a tenant on web → shows on phone. Mark paid on phone → updates dashboard.</p>
+              </div>
+            </div>
+          </Reveal>
         </div>
       </section>
 
@@ -169,7 +215,7 @@ export default function MarketingPage() {
             {/* Medium — Tenant */}
             <Reveal className={`${s.bentoCard} ${s.bentoMedium}`} delay={160}>
               <h3 className={s.bentoCardTitle}>Tenant Onboarding</h3>
-              <p className={s.bentoCardDesc}>KYC, ID proofs and agreements, organised in one place. Onboard new tenants in minutes.</p>
+              <p className={s.bentoCardDesc}>Add tenants to beds, set rent and security deposit, and keep contact details in one place.</p>
               <div className={s.featureVisual}>
                 <TenantVisual />
               </div>
@@ -230,7 +276,7 @@ export default function MarketingPage() {
                 <span className={s.stepDot} />
               </p>
               <h3 className={s.stepTitle}>Add your PG</h3>
-              <p className={s.stepDesc}>Enter your property details, define floors and rooms, and set bed counts.</p>
+              <p className={s.stepDesc}>Enter property name, state, city and address. Define rooms and beds — works in any Indian city.</p>
             </Reveal>
             <Reveal className={s.step} delay={240}>
               <p className={s.stepNum}>
@@ -347,6 +393,7 @@ export default function MarketingPage() {
           <div>
             <p className={s.footerColTitle}>Product</p>
             <ul className={s.footerLinks}>
+              <li><button type="button" className={s.footerLink} onClick={() => scrollTo('product')}>Product</button></li>
               <li><button type="button" className={s.footerLink} onClick={() => scrollTo('features')}>Features</button></li>
               <li><button type="button" className={s.footerLink} onClick={() => scrollTo('pricing')}>Pricing</button></li>
               <li><Link href="/download" className={s.footerLink}>Android App</Link></li>
@@ -406,6 +453,7 @@ function Navbar({
             <span className={s.navBrandName}>NexPG</span>
           </Link>
           <ul className={s.navLinks}>
+            <li><button type="button" className={s.navLink} onClick={() => onNav('product')}>Product</button></li>
             <li><button type="button" className={s.navLink} onClick={() => onNav('features')}>Features</button></li>
             <li><button type="button" className={s.navLink} onClick={() => onNav('pricing')}>Pricing</button></li>
             <li><button type="button" className={s.navLink} onClick={() => onNav('faq')}>FAQ</button></li>
@@ -424,6 +472,7 @@ function Navbar({
 
       {mobileMenuOpen && (
         <div className={s.mobileMenu}>
+          <button type="button" className={s.mobileMenuLink} onClick={() => onNav('product')}>Product</button>
           <button type="button" className={s.mobileMenuLink} onClick={() => onNav('features')}>Features</button>
           <button type="button" className={s.mobileMenuLink} onClick={() => onNav('pricing')}>Pricing</button>
           <button type="button" className={s.mobileMenuLink} onClick={() => onNav('faq')}>FAQ</button>
@@ -439,7 +488,228 @@ function Navbar({
 }
 
 /* ══════════════════════════════════════════════════
-   DASHBOARD MOCKUP
+   HERO SHOWCASE + PRODUCT MOCKUPS
+   ══════════════════════════════════════════════════ */
+
+function HeroShowcase() {
+  return (
+    <div className={s.heroShowcase}>
+      <div className={s.heroShowcaseWeb}>
+        <WebConsoleMockup />
+      </div>
+      <div className={s.heroShowcasePhone}>
+        <MobilePhoneMockup screen="beds" featured />
+      </div>
+    </div>
+  );
+}
+
+function WebConsoleMockup({ large }: { large?: boolean }) {
+  return (
+    <div className={[s.webMock, large ? s.webMockLarge : ''].filter(Boolean).join(' ')}>
+      <div className={s.webMockChrome}>
+        <span className={`${s.mockupDot} ${s.mockupDotRed}`} />
+        <span className={`${s.mockupDot} ${s.mockupDotYellow}`} />
+        <span className={`${s.mockupDot} ${s.mockupDotGreen}`} />
+        <span className={s.mockupLabel}>NexPG — Dashboard</span>
+      </div>
+      <div className={s.webMockBody}>
+        <aside className={s.webSidebar}>
+          <div className={s.webSidebarBrand}>
+            <span className={s.webSidebarMark}>N</span>
+            {large ? <span className={s.webSidebarName}>NexPG</span> : null}
+          </div>
+          {large ? (
+            <p className={s.webSidebarProperty}>
+              <small>Active property</small>
+              Sharma PG · Noida
+            </p>
+          ) : null}
+          <nav className={s.webSidebarNav}>
+            <span className={`${s.webNavItem} ${s.webNavItemActive}`}>Dashboard</span>
+            <span className={s.webNavItem}>Beds</span>
+            <span className={s.webNavItem}>Bills</span>
+            <span className={s.webNavItem}>Settings</span>
+          </nav>
+        </aside>
+        <main className={s.webMain}>
+          <div className={s.webMainTop}>
+            <div>
+              <p className={s.webMainKicker}>Dashboard</p>
+              <h3 className={s.webMainTitle}>Sharma PG</h3>
+            </div>
+            <span className={s.webMainPill}>September 2026</span>
+          </div>
+          <div className={s.webStats}>
+            <div className={s.webStat}>
+              <p>Occupied</p>
+              <strong className={s.webStatGreen}>42</strong>
+            </div>
+            <div className={s.webStat}>
+              <p>Empty</p>
+              <strong className={s.webStatRed}>6</strong>
+            </div>
+            <div className={s.webStat}>
+              <p>Collected</p>
+              <strong>₹14,000</strong>
+            </div>
+            <div className={s.webStat}>
+              <p>Pending</p>
+              <strong className={s.webStatOchre}>₹0</strong>
+            </div>
+          </div>
+          <div className={s.webBedSection}>
+            <p className={s.webBedLabel}>Quick occupancy</p>
+            <div className={s.webRoom}>
+              <span>Room 1</span>
+              <div className={s.webBeds}>
+                <span className={s.webBedOn}>A · Divyansh</span>
+                <span className={s.webBedOn}>B · Hridyansh</span>
+              </div>
+            </div>
+            <div className={s.webRoom}>
+              <span>Room 2</span>
+              <div className={s.webBeds}>
+                <span className={s.webBedOn}>A · Priya</span>
+                <span className={s.webBedEmpty}>B · Empty</span>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+  );
+}
+
+type MobileScreen = 'dashboard' | 'beds' | 'bills';
+
+function MobilePhoneMockup({
+  screen,
+  tilt,
+  featured,
+}: {
+  screen: MobileScreen;
+  tilt?: 'left' | 'center' | 'right';
+  featured?: boolean;
+}) {
+  return (
+    <div
+      className={[
+        s.phone,
+        featured ? s.phoneFeatured : '',
+        tilt === 'left' ? s.phoneTiltLeft : '',
+        tilt === 'right' ? s.phoneTiltRight : '',
+      ]
+        .filter(Boolean)
+        .join(' ')}
+    >
+      <div className={s.phoneFrame}>
+        <div className={s.phoneNotch} />
+        <div className={s.phoneScreen}>
+          {screen === 'dashboard' ? <MobileDashboardScreen /> : null}
+          {screen === 'beds' ? <MobileBedsScreen /> : null}
+          {screen === 'bills' ? <MobileBillsScreen /> : null}
+        </div>
+        <div className={s.phoneHomeBar} />
+      </div>
+      <p className={s.phoneCaption}>
+        {screen === 'dashboard' ? 'Dashboard' : screen === 'beds' ? 'Beds' : 'Bills'}
+      </p>
+    </div>
+  );
+}
+
+function MobileDashboardScreen() {
+  return (
+    <div className={s.mScreen}>
+      <p className={s.mKicker}>Sharma PG</p>
+      <h4 className={s.mTitle}>Overview</h4>
+      <div className={s.mStats}>
+        <div><span>Occupied</span><strong>2</strong></div>
+        <div><span>Empty</span><strong>0</strong></div>
+        <div><span>Pending</span><strong className={s.mOchre}>₹0</strong></div>
+      </div>
+      <div className={s.mCard}>
+        <p className={s.mCardTitle}>This month</p>
+        <p className={s.mCardValue}>₹14,000 collected</p>
+      </div>
+      <div className={s.mBottomNav}>
+        <span className={s.mNavOn}>Home</span>
+        <span>Beds</span>
+        <span>Bills</span>
+        <span>More</span>
+      </div>
+    </div>
+  );
+}
+
+function MobileBedsScreen() {
+  return (
+    <div className={s.mScreen}>
+      <p className={s.mKicker}>Beds</p>
+      <h4 className={s.mTitle}>Occupancy</h4>
+      <div className={s.mRoomCard}>
+        <p>Room 1 · 2/2 filled</p>
+        <div className={s.mBedRow}>
+          <span className={s.mBedFilled}>A Divyansh</span>
+          <span className={s.mBedFilled}>B Hridyansh</span>
+        </div>
+      </div>
+      <div className={s.mRoomCard}>
+        <p>Room 2 · 1/2 filled</p>
+        <div className={s.mBedRow}>
+          <span className={s.mBedFilled}>A Priya</span>
+          <span className={s.mBedVacant}>B Empty</span>
+        </div>
+      </div>
+      <div className={s.mBottomNav}>
+        <span>Home</span>
+        <span className={s.mNavOn}>Beds</span>
+        <span>Bills</span>
+        <span>More</span>
+      </div>
+    </div>
+  );
+}
+
+function MobileBillsScreen() {
+  return (
+    <div className={s.mScreen}>
+      <p className={s.mKicker}>Bills</p>
+      <h4 className={s.mTitle}>September 2026</h4>
+      <div className={s.mBillRow}>
+        <div>
+          <strong>Divyansh</strong>
+          <span>Room 1-A</span>
+        </div>
+        <span className={s.mBillPaid}>Paid</span>
+      </div>
+      <div className={s.mBillRow}>
+        <div>
+          <strong>Hridyansh</strong>
+          <span>Room 1-B</span>
+        </div>
+        <span className={s.mBillPaid}>Paid</span>
+      </div>
+      <div className={s.mBillRow}>
+        <div>
+          <strong>Priya</strong>
+          <span>Room 2-A</span>
+        </div>
+        <span className={s.mBillPending}>Pending</span>
+      </div>
+      <div className={s.mBottomNav}>
+        <span>Home</span>
+        <span>Beds</span>
+        <span className={s.mNavOn}>Bills</span>
+        <span>More</span>
+      </div>
+    </div>
+  );
+}
+
+/* ══════════════════════════════════════════════════
+   DASHBOARD MOCKUP (legacy — used in bento if needed)
    ══════════════════════════════════════════════════ */
 
 function DashboardMockup() {
@@ -571,9 +841,9 @@ function RentVisual() {
 
 function TenantVisual() {
   const tenants = [
-    { init: 'A', name: 'Amit Sharma', status: 'KYC Done' },
-    { init: 'P', name: 'Priya Rao', status: 'Verified' },
-    { init: 'R', name: 'Rahul Kumar', status: 'KYC Done' },
+    { init: 'A', name: 'Amit Sharma', status: 'Room 101-A' },
+    { init: 'P', name: 'Priya Rao', status: '₹8,000/mo' },
+    { init: 'R', name: 'Rahul Kumar', status: 'Room 102-B' },
   ];
 
   return (

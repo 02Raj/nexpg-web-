@@ -16,10 +16,19 @@
 }
 
 .base:disabled {
-  opacity: 0.5;
+  opacity: 1;
   background: var(--paper-deep);
   color: var(--ink-faint);
+  border: 1px solid var(--line);
   cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+.primary:disabled {
+  background: rgba(22, 48, 43, 0.35);
+  color: rgba(247, 245, 241, 0.85);
+  border: none;
 }
 
 .primary {

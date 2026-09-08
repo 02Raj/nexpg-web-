@@ -3,17 +3,21 @@
 import { fetchInvoices, generateInvoices, markInvoicePaid } from '@/api/nexpg';
 import { Button } from '@/components/Button';
 import { EmptyState } from '@/components/EmptyState';
+import { LoadingCenter } from '@/components/Loading';
+import { NoBuilding } from '@/components/NoBuilding';
 import { inrExact, monthLabel, rpcMessage, todayIST } from '@/lib/format';
 import { keys, queryClient } from '@/lib/query';
 import { useBuilding } from '@/providers/BuildingProvider';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { Receipt } from 'lucide-react';
+import { useState } from 'react';
 import styles from './bills.module.css';
 
 export default function BillsPage() {
   const { building } = useBuilding();
   const buildingId = building?.id ?? '';
   const period = `${todayIST().slice(0, 8)}01`;
+  const [flash, setFlash] = useState<string | null>(null);
 
   const q = useQuery({
     queryKey: keys.invoices(buildingId, period),
@@ -24,6 +28,7 @@ export default function BillsPage() {
   const pay = useMutation({
     mutationFn: ({ id, mode }: { id: string; mode: 'upi' | 'cash' }) => markInvoicePaid(id, mode),
     onSuccess: () => {
+      setFlash('Payment recorded.');
       queryClient.invalidateQueries({ queryKey: keys.invoices(buildingId, period) });
       queryClient.invalidateQueries({ queryKey: keys.dashboard(buildingId) });
     },
@@ -34,25 +39,45 @@ export default function BillsPage() {
     onSuccess: (count) => {
       queryClient.invalidateQueries({ queryKey: keys.invoices(buildingId, period) });
       queryClient.invalidateQueries({ queryKey: keys.dashboard(buildingId) });
-      if (count === 0) {
-        alert('All active tenants already have a bill for this month.');
-      } else {
-        alert(`Successfully generated ${count} new bill(s).`);
-      }
+      setFlash(
+        count === 0
+          ? 'All active tenants already have a bill for this month.'
+          : `${count} new bill${count === 1 ? '' : 's'} generated.`,
+      );
     },
   });
 
-  if (!building) return null;
-  if (q.isLoading) return <p className="bodyMuted">Loading bills…</p>;
+  if (!building) return <NoBuilding />;
+  if (q.isLoading) return <LoadingCenter message="Loading bills…" />;
 
   const rows = q.data ?? [];
   const pending = rows.filter((r) => r.status === 'pending');
   const paid = rows.filter((r) => r.status === 'paid');
+  const pendingTotal = pending.reduce((sum, r) => sum + r.amount, 0);
+  const collectedTotal = paid.reduce((sum, r) => sum + r.amount, 0);
 
   return (
     <div className={styles.page}>
+      <div className={styles.summary}>
+        <div className={styles.summaryCard}>
+          <p className={styles.summaryLabel}>Pending</p>
+          <p className={styles.summaryValue}>{inrExact(pendingTotal)}</p>
+          <p className={styles.summaryHint}>{pending.length} invoice{pending.length === 1 ? '' : 's'}</p>
+        </div>
+        <div className={styles.summaryCard}>
+          <p className={styles.summaryLabel}>Collected</p>
+          <p className={`${styles.summaryValue} ${styles.summaryGreen}`}>{inrExact(collectedTotal)}</p>
+          <p className={styles.summaryHint}>{paid.length} paid</p>
+        </div>
+        <div className={styles.summaryCard}>
+          <p className={styles.summaryLabel}>Period</p>
+          <p className={styles.summaryValueSm}>{monthLabel(period)}</p>
+          <p className={styles.summaryHint}>Rent only — not deposits</p>
+        </div>
+      </div>
+
       <div className={styles.toolbar}>
-        <p className="bodyMuted">{monthLabel(period)} · Security deposit is never listed here.</p>
+        <p className="bodyMuted">Mark payments as UPI or cash when tenants pay.</p>
         <Button
           label={gen.isPending ? 'Working…' : 'Generate bills'}
           variant="secondary"
@@ -61,24 +86,28 @@ export default function BillsPage() {
         />
       </div>
 
+      {flash ? <p className={styles.flash}>{flash}</p> : null}
+      {gen.error ? <p className={styles.error}>{rpcMessage(gen.error)}</p> : null}
+
       {rows.length === 0 ? (
-        <div className="panel">
-          <EmptyState
-            icon={<Receipt size={28} />}
-            title="No bills yet"
-            message="No bills have been generated for this month. Generate bills to get started."
-            action={{
-              label: gen.isPending ? 'Working…' : 'Generate bills',
-              onClick: () => gen.mutate(),
-            }}
-          />
-          {gen.error ? <p className={styles.error}>{rpcMessage(gen.error)}</p> : null}
-        </div>
+        <EmptyState
+          icon={<Receipt size={28} />}
+          title="No bills yet"
+          message="Generate monthly rent invoices for all active tenants. Security deposit is tracked separately."
+          action={{
+            label: gen.isPending ? 'Working…' : 'Generate bills',
+            onClick: () => gen.mutate(),
+          }}
+        />
       ) : (
-        <>
+        <div className={styles.body}>
+          {pending.length === 0 && paid.length > 0 ? (
+            <p className={styles.allClear}>All rents collected for {monthLabel(period)}.</p>
+          ) : null}
+
           {pending.length > 0 ? (
-            <section>
-              <h2 className="section" style={{ marginBottom: 12 }}>Pending ({pending.length})</h2>
+            <section className={`panel ${styles.section}`}>
+              <h2 className="panelTitle">Pending ({pending.length})</h2>
               <div className="tableWrap">
                 <table className="dataTable">
                   <thead>
@@ -87,7 +116,7 @@ export default function BillsPage() {
                       <th>Phone</th>
                       <th>Amount</th>
                       <th>Notes</th>
-                      <th style={{ width: 220 }}>Mark paid</th>
+                      <th className={styles.payCol}>Mark paid</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -122,8 +151,8 @@ export default function BillsPage() {
           ) : null}
 
           {paid.length > 0 ? (
-            <section>
-              <h2 className="section" style={{ marginBottom: 12 }}>Paid ({paid.length})</h2>
+            <section className={`panel ${styles.section}`}>
+              <h2 className="panelTitle">Paid ({paid.length})</h2>
               <div className="tableWrap">
                 <table className="dataTable">
                   <thead>
@@ -148,7 +177,7 @@ export default function BillsPage() {
               </div>
             </section>
           ) : null}
-        </>
+        </div>
       )}
       {pay.error ? <p className={styles.error}>{rpcMessage(pay.error)}</p> : null}
     </div>
