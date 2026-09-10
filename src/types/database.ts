@@ -128,6 +128,16 @@ export type Database = {
       monthly_invoices: Table<MonthlyInvoice>;
       apk_download_requests: Table<ApkDownloadRequest>;
       owner_profiles: Table<OwnerProfile>;
+      contact_inquiries: Table<{
+        id: string;
+        full_name: string;
+        email: string;
+        phone: string | null;
+        topic: string;
+        message: string;
+        status: string;
+        created_at: string;
+      }>;
     };
     Views: Record<string, never>;
     Functions: {

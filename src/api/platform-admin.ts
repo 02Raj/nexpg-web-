@@ -31,6 +31,7 @@ export type PlatformDashboard = {
   total_buildings: number;
   active_pg_tenants: number;
   apk_pending: number;
+  contact_new: number;
   signups_by_day: { day: string; count: number }[];
 };
 

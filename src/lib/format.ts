@@ -46,6 +46,17 @@ export function prettyDate(iso: string) {
   }).format(d);
 }
 
+export function prettyDateTime(iso: string) {
+  return new Intl.DateTimeFormat('en-IN', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+    timeZone: 'Asia/Kolkata',
+  }).format(new Date(iso));
+}
+
 export function rpcMessage(error: unknown, fallback = 'Something went wrong') {
   if (error && typeof error === 'object' && 'message' in error) {
     const raw = String((error as { message: string }).message);

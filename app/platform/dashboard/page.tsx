@@ -44,6 +44,7 @@ export default function PlatformDashboardPage() {
         <StatCard label="Properties" value={d.total_buildings} />
         <StatCard label="Active tenants (beds)" value={d.active_pg_tenants} />
         <StatCard label="APK pending" value={d.apk_pending} />
+        <StatCard label="New contact messages" value={d.contact_new ?? 0} />
       </div>
 
       <section className={layout.panel}>

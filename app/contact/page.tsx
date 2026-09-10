@@ -4,12 +4,13 @@ import { MarketingFrame } from '@/components/marketing/MarketingFrame';
 import { CONTACT, MAILTO, WHATSAPP_URL } from '@/content/contact';
 import { pageMetadata, SITE_NAME, SITE_URL } from '@/lib/seo';
 import blog from '../blog/blog.module.css';
+import { ContactForm } from './ContactForm';
 import c from './contact.module.css';
 
 export const metadata = pageMetadata({
   title: 'Contact RunMyPG',
   description:
-    'Talk to RunMyPG — WhatsApp, sales, support and general contact for PG owners in India.',
+    'Talk to RunMyPG — WhatsApp, email, or send a message. Sales, support and product questions for PG owners in India.',
   path: '/contact',
 });
 
@@ -29,35 +30,38 @@ export default function ContactPage() {
         <div className={blog.page}>
           <header className={blog.hero}>
             <p className={blog.kicker}>Contact</p>
-            <h1 className={blog.title}>We’re here.</h1>
+            <h1 className={blog.title}>We’re here to help.</h1>
             <p className={blog.lead}>
-              WhatsApp for a quick reply. Email sales, support or the general inbox — all official{' '}
-              {SITE_NAME} addresses.
+              WhatsApp, email, or the form — pick what is easiest. We reply from official {SITE_NAME}{' '}
+              addresses.
             </p>
           </header>
 
           <div className={c.wrap}>
-            <div className={c.grid}>
-              <a className={`${c.card} ${c.wa}`} href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
-                <p className={c.label}>WhatsApp</p>
-                <p className={c.value}>{CONTACT.phoneDisplay}</p>
-                <p className={c.hint}>Chat with us on WhatsApp — usually the fastest.</p>
-              </a>
-              <a className={c.card} href={MAILTO.contact}>
-                <p className={c.label}>General</p>
-                <p className={c.value}>{CONTACT.emails.contact}</p>
-                <p className={c.hint}>Anything that isn’t clearly sales or a product issue.</p>
-              </a>
-              <a className={c.card} href={MAILTO.sales}>
-                <p className={c.label}>Sales</p>
-                <p className={c.value}>{CONTACT.emails.sales}</p>
-                <p className={c.hint}>Onboarding, demos, and questions before you sign up.</p>
-              </a>
-              <a className={c.card} href={MAILTO.support}>
-                <p className={c.label}>Support</p>
-                <p className={c.value}>{CONTACT.emails.support}</p>
-                <p className={c.hint}>Account, billing date, Android app, or a bug in the console.</p>
-              </a>
+            <div className={c.layout}>
+              <div className={c.channels}>
+                <a className={`${c.card} ${c.wa}`} href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
+                  <p className={c.label}>WhatsApp</p>
+                  <p className={c.value}>{CONTACT.phoneDisplay}</p>
+                  <p className={c.hint}>Usually the fastest for a short question.</p>
+                </a>
+                <a className={c.card} href={MAILTO.contact}>
+                  <p className={c.label}>General</p>
+                  <p className={c.value}>{CONTACT.emails.contact}</p>
+                  <p className={c.hint}>Anything that isn’t clearly sales or a product issue.</p>
+                </a>
+                <a className={c.card} href={MAILTO.sales}>
+                  <p className={c.label}>Sales</p>
+                  <p className={c.value}>{CONTACT.emails.sales}</p>
+                  <p className={c.hint}>Onboarding, demos, and questions before you sign up.</p>
+                </a>
+                <a className={c.card} href={MAILTO.support}>
+                  <p className={c.label}>Support</p>
+                  <p className={c.value}>{CONTACT.emails.support}</p>
+                  <p className={c.hint}>Account, billing date, Android app, or a bug in the console.</p>
+                </a>
+              </div>
+              <ContactForm />
             </div>
             <p className={blog.lead} style={{ marginTop: 28, textAlign: 'center' }}>
               Prefer the product first?{' '}
