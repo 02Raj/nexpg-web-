@@ -648,6 +648,11 @@
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--ink-muted);
+  text-decoration: none;
+}
+
+.city:hover {
+  color: var(--ink);
 }
 
 /* ═══════════════════════════════════════════════

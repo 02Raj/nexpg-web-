@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import { CITIES, MARKETING_FAQS, PRICING_ITEMS } from '@/content/marketing';
 import { getLatestPosts } from '@/content/blog';
+import { getCityGuides } from '@/content/cities';
 import { MAILTO, WHATSAPP_URL } from '@/content/contact';
 import { WhatsAppFab } from '@/components/marketing/WhatsAppFab';
 import { useAuth } from '@/providers/AuthProvider';
@@ -85,9 +86,18 @@ export function MarketingHome() {
             <p className={s.socialProofLabel}>PG management software for owners across India</p>
           <span className={s.socialProofDivider} />
           <div className={s.cityList}>
-            {CITIES.map((c) => (
-              <span key={c} className={s.city}>{c}</span>
-            ))}
+            {CITIES.map((name) => {
+              const guide = getCityGuides().find((city) => city.name === name);
+              return guide ? (
+                <Link key={name} href={`/cities/${guide.slug}`} className={s.city}>
+                  {name}
+                </Link>
+              ) : (
+                <span key={name} className={s.city}>
+                  {name}
+                </span>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -403,6 +413,7 @@ export function MarketingHome() {
               <li><a href="#product" className={s.footerLink}>Product</a></li>
               <li><a href="#features" className={s.footerLink}>Features</a></li>
               <li><a href="#pricing" className={s.footerLink}>Pricing</a></li>
+              <li><Link href="/cities" className={s.footerLink}>Cities</Link></li>
               <li><Link href="/download" prefetch={false} className={s.footerLink}>Android App</Link></li>
               <li><Link href="/about" className={s.footerLink}>About</Link></li>
               <li><Link href="/blog" className={s.footerLink}>Blog</Link></li>
@@ -428,7 +439,11 @@ export function MarketingHome() {
         </div>
         <div className={s.footerBottom}>
           <p className={s.footerCopy}>© {new Date().getFullYear()} RunMyPG. All rights reserved.</p>
-          <p className={s.footerCities}>Delhi NCR · Noida · Gurgaon · Bengaluru · Pune · Hyderabad</p>
+          <p className={s.footerCities}>
+            <Link href="/cities" className={s.footerLink}>
+              Delhi · Noida · Gurgaon · Bengaluru · Pune · Hyderabad · more cities
+            </Link>
+          </p>
         </div>
       </footer>
       <WhatsAppFab />

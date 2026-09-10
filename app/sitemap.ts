@@ -1,5 +1,6 @@
 import { SITE_URL } from '@/lib/seo';
 import { getBlogPosts } from '@/content/blog';
+import { getCityGuides } from '@/content/cities';
 import type { MetadataRoute } from 'next';
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -9,6 +10,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     lastModified: new Date(post.date),
     changeFrequency: 'monthly' as const,
     priority: 0.6,
+  }));
+  const cities = getCityGuides().map((city) => ({
+    url: `${SITE_URL}/cities/${city.slug}`,
+    lastModified,
+    changeFrequency: 'monthly' as const,
+    priority: 0.65,
   }));
 
   return [
@@ -48,6 +55,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly',
       priority: 0.6,
     },
+    {
+      url: `${SITE_URL}/cities`,
+      lastModified,
+      changeFrequency: 'weekly',
+      priority: 0.75,
+    },
+    ...cities,
     ...posts,
   ];
 }

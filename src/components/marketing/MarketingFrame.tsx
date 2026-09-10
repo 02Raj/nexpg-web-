@@ -149,6 +149,11 @@ export function MarketingFrame({
                 </Link>
               </li>
               <li>
+                <Link href="/cities" className={s.footerLink}>
+                  Cities
+                </Link>
+              </li>
+              <li>
                 <Link href="/download" prefetch={false} className={s.footerLink}>
                   Android App
                 </Link>
@@ -208,7 +213,11 @@ export function MarketingFrame({
         </div>
         <div className={s.footerBottom}>
           <p className={s.footerCopy}>© {new Date().getFullYear()} RunMyPG. All rights reserved.</p>
-          <p className={s.footerCities}>Delhi NCR · Noida · Gurgaon · Bengaluru · Pune · Hyderabad</p>
+          <p className={s.footerCities}>
+            <Link href="/cities" className={s.footerLink}>
+              Delhi · Noida · Gurgaon · Bengaluru · Pune · Hyderabad · more cities
+            </Link>
+          </p>
         </div>
       </footer>
       <WhatsAppFab />
