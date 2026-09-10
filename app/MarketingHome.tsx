@@ -2,11 +2,10 @@
 
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
-import { CITIES, MARKETING_FAQS, PRICING_ITEMS } from '@/content/marketing';
+import { CITIES, MARKETING_CAPABILITIES, MARKETING_FAQS, PRICING_ITEMS } from '@/content/marketing';
 import { getLatestPosts } from '@/content/blog';
 import { getCityGuides } from '@/content/cities';
-import { MAILTO, WHATSAPP_URL } from '@/content/contact';
-import { WhatsAppFab } from '@/components/marketing/WhatsAppFab';
+import { MarketingFooter } from '@/components/marketing/MarketingFooter';
 import { useAuth } from '@/providers/AuthProvider';
 import s from '@/components/marketing/marketing.module.css';
 import b from './blog/blog.module.css';
@@ -53,20 +52,25 @@ export function MarketingHome() {
         <div className={s.heroGridDecor} />
         <div className={s.heroInner}>
           <div className={s.heroContent}>
-            <p className={s.heroKicker}>PG Management Software</p>
+            <p className={s.heroKicker}>PG management software · India</p>
             <h1 id="hero-heading" className={s.heroTitle}>
               Run your PG<br />
-              from <span className={s.heroTitleAccent}>one desk.</span>
+              from <span className={s.heroTitleAccent}>one dashboard.</span>
             </h1>
             <p className={s.heroSubtitle}>
-              PG management software for Indian owners — beds, rent, tenants, deposits and occupancy, synced between your laptop and your phone.
+              Manage tenants, rooms, occupancy, rent and deposits in one place. Available as a web console and an Android app.
             </p>
+            <ul className={s.heroCaps}>
+              {MARKETING_CAPABILITIES.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
             <div className={s.heroCtas}>
               <Link href={primaryHref} className={s.btnHeroPrimary}>
                 {isLoggedIn ? 'Go to Dashboard →' : 'Get started — it\u2019s free'}
               </Link>
               <a href="#product" className={s.btnHeroSecondary}>
-                See web & mobile
+                See the product
               </a>
             </div>
           </div>
@@ -107,9 +111,9 @@ export function MarketingHome() {
         <div className={s.sectionInner}>
           <Reveal className={s.productHeader}>
             <p className={s.sectionKicker}>Product</p>
-            <h2 className={s.sectionTitle}>One PG. Two screens. Always in sync.</h2>
+            <h2 className={s.sectionTitle}>Web console and Android app.</h2>
             <p className={s.sectionSubtitle}>
-              Manage from your laptop at home, or from your phone on-site at the PG — same beds, same rent, same tenants.
+              Full owner dashboard in the browser. Android when you are at the property — occupancy, tenants, rent and bills.
             </p>
           </Reveal>
 
@@ -121,7 +125,7 @@ export function MarketingHome() {
                   Web owner console
                 </div>
                 <WebConsoleMockup large />
-                <p className={s.productCaption}>Dashboard, beds, bills & settings — full desk experience on laptop.</p>
+                <p className={s.productCaption}>Dashboard, occupancy, bills and settings — the full owner console.</p>
               </div>
 
               <div className={s.productMobileCol}>
@@ -134,7 +138,7 @@ export function MarketingHome() {
                   <MobilePhoneMockup screen="beds" tilt="center" featured />
                   <MobilePhoneMockup screen="bills" tilt="right" />
                 </div>
-                <p className={s.productCaption}>On-site checks: occupancy, add tenant, mark rent paid — synced instantly.</p>
+                <p className={s.productCaption}>On site: check occupancy, add a tenant, mark rent paid.</p>
               </div>
             </div>
 
@@ -149,7 +153,7 @@ export function MarketingHome() {
             <p className={s.sectionKicker}>Features</p>
             <h2 className={s.sectionTitle}>Everything you need to run your PG. Nothing you don&apos;t.</h2>
             <p className={s.sectionSubtitle}>
-              Purpose-built for Indian PG owners. No bloated hotel software, no spreadsheets — just the tools you actually use, done well.
+              Built for Indian PG and hostel owners: occupancy, tenants, rent and deposits — not hotel PMS.
             </p>
           </Reveal>
           <div className={s.bentoGrid}>
@@ -201,8 +205,8 @@ export function MarketingHome() {
 
             {/* Small — Mobile + Web */}
             <Reveal className={`${s.bentoCard} ${s.bentoSmall}`} delay={180}>
-              <h3 className={s.bentoCardTitle}>Mobile + Web</h3>
-              <p className={s.bentoCardDesc}>Run daily operations from the Android app and keep your full owner console on the web.</p>
+              <h3 className={s.bentoCardTitle}>Web + Android</h3>
+              <p className={s.bentoCardDesc}>Owner dashboard on the web. Android app for the property. Same login.</p>
               <div className={s.featureVisual}>
                 <SyncVisual />
               </div>
@@ -385,7 +389,7 @@ export function MarketingHome() {
           <div className={s.finalCtaInner}>
             <h2 className={s.finalCtaTitle}>Start managing your PG today.</h2>
             <p className={s.finalCtaSubtitle}>
-              Join PG owners across India who&apos;ve moved beyond spreadsheets and switched to RunMyPG.
+              Put occupancy, tenants and rent on one dashboard. Free while we are in beta.
             </p>
             <Link href={primaryHref} className={s.finalCtaBtn}>
               {isLoggedIn ? 'Go to Dashboard →' : 'Create free account →'}
@@ -395,58 +399,7 @@ export function MarketingHome() {
       </section>
       </main>
 
-      {/* ── FOOTER ── */}
-      <footer className={s.footer}>
-        <div className={s.footerInner}>
-          <div>
-            <div className={s.footerBrand}>
-              <span className={s.footerBrandMark}>R</span>
-              <span className={s.footerBrandName}>RunMyPG</span>
-            </div>
-            <p className={s.footerDesc}>
-              PG management software for Indian owners. Beds, rent, tenants, deposits — simplified.
-            </p>
-          </div>
-          <div>
-            <p className={s.footerColTitle}>Product</p>
-            <ul className={s.footerLinks}>
-              <li><a href="#product" className={s.footerLink}>Product</a></li>
-              <li><a href="#features" className={s.footerLink}>Features</a></li>
-              <li><a href="#pricing" className={s.footerLink}>Pricing</a></li>
-              <li><Link href="/cities" className={s.footerLink}>Cities</Link></li>
-              <li><Link href="/download" prefetch={false} className={s.footerLink}>Android App</Link></li>
-              <li><Link href="/about" className={s.footerLink}>About</Link></li>
-              <li><Link href="/blog" className={s.footerLink}>Blog</Link></li>
-            </ul>
-          </div>
-          <div>
-            <p className={s.footerColTitle}>Account</p>
-            <ul className={s.footerLinks}>
-              <li><Link href="/login" className={s.footerLink}>Log in</Link></li>
-              <li><Link href="/signup" className={s.footerLink}>Sign up</Link></li>
-              <li><Link href="/forgot-password" className={s.footerLink}>Reset password</Link></li>
-            </ul>
-          </div>
-          <div>
-            <p className={s.footerColTitle}>Support</p>
-            <ul className={s.footerLinks}>
-              <li><a href="#faq" className={s.footerLink}>FAQ</a></li>
-              <li><Link href="/contact" className={s.footerLink}>Contact</Link></li>
-              <li><a href={WHATSAPP_URL} className={s.footerLink} target="_blank" rel="noopener noreferrer">WhatsApp</a></li>
-              <li><a href={MAILTO.support} className={s.footerLink}>support@runmypg.in</a></li>
-            </ul>
-          </div>
-        </div>
-        <div className={s.footerBottom}>
-          <p className={s.footerCopy}>© {new Date().getFullYear()} RunMyPG. All rights reserved.</p>
-          <p className={s.footerCities}>
-            <Link href="/cities" className={s.footerLink}>
-              Delhi · Noida · Gurgaon · Bengaluru · Pune · Hyderabad · more cities
-            </Link>
-          </p>
-        </div>
-      </footer>
-      <WhatsAppFab />
+      <MarketingFooter />
     </>
   );
 }
@@ -769,7 +722,7 @@ function DashboardMockup() {
       <div className={s.mockupBody}>
         <div className={s.mockupHeader}>
           <span className={s.mockupHeaderTitle}>Sunrise PG</span>
-          <span className={s.mockupHeaderBadge}>All synced</span>
+          <span className={s.mockupHeaderBadge}>This month</span>
         </div>
 
         <div className={s.mockupStats}>

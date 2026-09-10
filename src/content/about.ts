@@ -9,7 +9,7 @@ export const ABOUT_VALUES = [
   },
   {
     title: 'Honest scope',
-    text: 'We ship what owners actually use: web console plus Android, in sync. No fake “500 features” page.',
+    text: 'We ship what owners actually use: a web console and an Android app. No fake “500 features” page.',
   },
   {
     title: 'Reachable people',
@@ -23,8 +23,8 @@ export const ABOUT_REASONS = [
     text: 'PG occupancy, tenant onboarding, bills and security deposits — not channel managers or night audit.',
   },
   {
-    title: 'Desk and site',
-    text: 'Laptop for the full owner console. Phone when you are walking the property. Same login, same data.',
+    title: 'Web and Android',
+    text: 'Full owner dashboard in the browser. Android when you are walking the property. Same login.',
   },
   {
     title: 'Free while in beta',

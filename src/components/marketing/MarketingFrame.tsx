@@ -3,8 +3,7 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { useAuth } from '@/providers/AuthProvider';
-import { MAILTO, WHATSAPP_URL } from '@/content/contact';
-import { WhatsAppFab } from '@/components/marketing/WhatsAppFab';
+import { MarketingFooter } from '@/components/marketing/MarketingFooter';
 import s from './marketing.module.css';
 
 export function MarketingFrame({
@@ -119,108 +118,7 @@ export function MarketingFrame({
         </div>
       ) : null}
       {children}
-      <footer className={s.footer}>
-        <div className={s.footerInner}>
-          <div>
-            <div className={s.footerBrand}>
-              <span className={s.footerBrandMark}>R</span>
-              <span className={s.footerBrandName}>RunMyPG</span>
-            </div>
-            <p className={s.footerDesc}>
-              PG management software for Indian owners. Beds, rent, tenants, deposits — simplified.
-            </p>
-          </div>
-          <div>
-            <p className={s.footerColTitle}>Product</p>
-            <ul className={s.footerLinks}>
-              <li>
-                <Link href="/#product" className={s.footerLink}>
-                  Product
-                </Link>
-              </li>
-              <li>
-                <Link href="/#features" className={s.footerLink}>
-                  Features
-                </Link>
-              </li>
-              <li>
-                <Link href="/#pricing" className={s.footerLink}>
-                  Pricing
-                </Link>
-              </li>
-              <li>
-                <Link href="/cities" className={s.footerLink}>
-                  Cities
-                </Link>
-              </li>
-              <li>
-                <Link href="/download" prefetch={false} className={s.footerLink}>
-                  Android App
-                </Link>
-              </li>
-            </ul>
-          </div>
-          <div>
-            <p className={s.footerColTitle}>Resources</p>
-            <ul className={s.footerLinks}>
-              <li>
-                <Link href="/about" className={s.footerLink}>
-                  About
-                </Link>
-              </li>
-              <li>
-                <Link href="/blog" className={s.footerLink}>
-                  Blog
-                </Link>
-              </li>
-              <li>
-                <Link href="/contact" className={s.footerLink}>
-                  Contact
-                </Link>
-              </li>
-              <li>
-                <Link href="/#faq" className={s.footerLink}>
-                  FAQ
-                </Link>
-              </li>
-              <li>
-                <a href={WHATSAPP_URL} className={s.footerLink} target="_blank" rel="noopener noreferrer">
-                  WhatsApp
-                </a>
-              </li>
-              <li>
-                <a href={MAILTO.support} className={s.footerLink}>
-                  support@runmypg.in
-                </a>
-              </li>
-            </ul>
-          </div>
-          <div>
-            <p className={s.footerColTitle}>Account</p>
-            <ul className={s.footerLinks}>
-              <li>
-                <Link href="/login" className={s.footerLink}>
-                  Log in
-                </Link>
-              </li>
-              <li>
-                <Link href="/signup" className={s.footerLink}>
-                  Sign up
-                </Link>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div className={s.footerBottom}>
-          <p className={s.footerCopy}>© {new Date().getFullYear()} RunMyPG. All rights reserved.</p>
-          <p className={s.footerCities}>
-            <Link href="/cities" className={s.footerLink}>
-              Delhi · Noida · Gurgaon · Bengaluru · Pune · Hyderabad · more cities
-            </Link>
-          </p>
-        </div>
-      </footer>
-      <WhatsAppFab />
+      <MarketingFooter />
     </>
   );
 }

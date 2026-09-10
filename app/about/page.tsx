@@ -39,9 +39,7 @@ export default function AboutPage() {
             <p className={a.kicker}>Our story</p>
             <h1 className={a.title}>About RunMyPG</h1>
             <p className={a.lead}>
-              RunMyPG is PG management software for owners across India. We exist so you can see every
-              bed, every pending rent, and every deposit — from a laptop at the desk or a phone at the
-              gate — without hotel software or a graveyard of spreadsheets.
+              RunMyPG is PG management software for owners across India. See occupancy, pending rent and deposits from one dashboard — on the web, and on Android.
             </p>
             <div className={a.ctas}>
               <Link href="/signup" className={a.primary}>
@@ -64,8 +62,8 @@ export default function AboutPage() {
               </p>
               <p>
                 We started RunMyPG to replace that mess with one owner console: rooms and beds, tenants,
-                monthly bills, security deposits. The Android app uses the same login so on-site checks
-                match what you see at home. It is free while we are in beta.
+                monthly bills, security deposits. There is a web dashboard and an Android app. It is
+                free while we are in beta.
               </p>
             </div>
           </div>
@@ -97,8 +95,8 @@ export default function AboutPage() {
           </section>
 
           <div className={a.ctaBlock}>
-            <h2>Start managing your PG from one desk.</h2>
-            <p>Create a free account — no credit card. Web console and Android stay in sync.</p>
+            <h2>Start managing your PG from one dashboard.</h2>
+            <p>Create a free account — no credit card. Web console and Android app.</p>
             <Link href="/signup">Create free account →</Link>
           </div>
         </div>

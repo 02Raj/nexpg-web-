@@ -61,6 +61,42 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'weekly',
       priority: 0.75,
     },
+    {
+      url: `${SITE_URL}/help`,
+      lastModified,
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
+    {
+      url: `${SITE_URL}/privacy`,
+      lastModified,
+      changeFrequency: 'yearly',
+      priority: 0.4,
+    },
+    {
+      url: `${SITE_URL}/terms`,
+      lastModified,
+      changeFrequency: 'yearly',
+      priority: 0.4,
+    },
+    {
+      url: `${SITE_URL}/refund`,
+      lastModified,
+      changeFrequency: 'yearly',
+      priority: 0.35,
+    },
+    {
+      url: `${SITE_URL}/cookies`,
+      lastModified,
+      changeFrequency: 'yearly',
+      priority: 0.35,
+    },
+    {
+      url: `${SITE_URL}/cookies/preferences`,
+      lastModified,
+      changeFrequency: 'yearly',
+      priority: 0.3,
+    },
     ...cities,
     ...posts,
   ];

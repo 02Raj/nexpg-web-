@@ -3,7 +3,7 @@ import { pageMetadata } from '@/lib/seo';
 export const metadata = pageMetadata({
   title: 'Android App for PG Owners',
   description:
-    'Download the RunMyPG Android app for PG owners. Same login as the web console — beds, rent, tenants and bills stay in sync on site.',
+    'Download the RunMyPG Android app. Owner dashboard on the web; occupancy, tenants and rent on your phone.',
   path: '/download',
 });
 

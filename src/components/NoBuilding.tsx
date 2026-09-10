@@ -10,7 +10,7 @@ export function NoBuilding() {
     <EmptyState
       icon={<Building2 size={28} />}
       title="Add your first PG"
-      message="Set up your property with state, city and rooms. Everything you add here syncs with the Android app."
+      message="Set up your property with state, city and rooms. Then run it from the web console or the Android app."
       action={{ label: 'Add PG property', onClick: () => router.push('/setup/building') }}
     />
   );

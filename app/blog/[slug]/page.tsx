@@ -83,7 +83,7 @@ export default async function BlogPostPage({ params }: { params: Promise<Params>
               })}
             </div>
             <div className={b.cta}>
-              <p>Run occupancy, rent and deposits from one desk — web + Android, free in beta.</p>
+              <p>Run occupancy, rent and deposits from one dashboard — web console and Android app, free in beta.</p>
               <Link href="/signup">Create free account →</Link>
             </div>
           </div>

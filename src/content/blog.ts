@@ -64,7 +64,7 @@ export const BLOG_POSTS: BlogPost[] = [
       },
       {
         type: 'p',
-        text: 'RunMyPG is built only for this workflow. The web owner console holds the full picture. The Android app uses the same login so occupancy and collections stay in sync. It is free while we are in beta.',
+        text: 'RunMyPG is built only for this workflow. The web console is the owner dashboard. The Android app uses the same login for work at the property. It is free while we are in beta.',
       },
     ],
   },

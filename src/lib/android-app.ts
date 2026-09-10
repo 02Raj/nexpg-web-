@@ -60,8 +60,8 @@ export const ANDROID_INSTALL_STEPS = [
   'Sign in with the same email and password as this website.',
 ] as const;
 
-export const ANDROID_SYNC_LINES = [
-  'One account on web and phone',
-  'Beds, rent and bills stay in sync',
-  'Change on laptop → shows on phone instantly',
+export const ANDROID_APP_POINTS = [
+  'Web owner console and Android app',
+  'Same login as the website',
+  'Occupancy, tenants, rent and bills on your phone',
 ] as const;

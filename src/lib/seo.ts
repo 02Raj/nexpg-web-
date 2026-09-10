@@ -4,11 +4,11 @@ import { CONTACT } from '@/content/contact';
 
 export const SITE_URL = 'https://www.runmypg.in';
 export const SITE_NAME = 'RunMyPG';
-export const SITE_TAGLINE = 'PG Management Software for Owners in India';
+export const SITE_TAGLINE = 'PG Management Software for Hostels & Paying Guest Homes in India';
 
 export const DEFAULT_TITLE = `${SITE_NAME} | ${SITE_TAGLINE}`;
 export const DEFAULT_DESCRIPTION =
-  'RunMyPG is PG management software for Indian owners. Track bed occupancy, tenants, rent, bills and security deposits from web and Android — free while in beta.';
+  'PG management software in India for hostels and paying guest homes. Manage tenants, rooms, occupancy, rent and deposits from one dashboard — on the web and on Android. Free while in beta.';
 
 export const OG_IMAGE_ALT = 'RunMyPG — PG management software for owners in India';
 
@@ -129,7 +129,7 @@ export function homeJsonLd() {
           'Tenant onboarding',
           'Security deposit management',
           'Multi-property PG console',
-          'Android app with real-time sync',
+          'Android owner app',
         ],
         publisher: { '@id': `${SITE_URL}/#organization` },
       },

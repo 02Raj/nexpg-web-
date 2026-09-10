@@ -5,7 +5,7 @@ import { Button } from '@/components/Button';
 import { PageSkeleton } from '@/components/Loading';
 import {
   ANDROID_INSTALL_STEPS,
-  ANDROID_SYNC_LINES,
+  ANDROID_APP_POINTS,
   flowStep,
   getEffectiveApkDownloadUrl,
   getPublicApkUrl,
@@ -129,13 +129,12 @@ export default function DownloadPage() {
       <div className={styles.layout}>
         <div className={styles.intro}>
           <p className="kicker">PG owner Android app</p>
-          <h1 className="display">Android app — same PG, same login.</h1>
+          <h1 className="display">Android app for PG owners.</h1>
           <p className={styles.lead}>
-            Download the RunMyPG Android app for on-site PG operations. Use the website on your laptop. One account
-            syncs beds, rent and bills.
+            Use the web console for the full dashboard. Use the Android app at the property — occupancy, tenants, rent and bills.
           </p>
           <ul className={styles.syncList}>
-            {ANDROID_SYNC_LINES.map((line) => (
+            {ANDROID_APP_POINTS.map((line) => (
               <li key={line}>{line}</li>
             ))}
           </ul>

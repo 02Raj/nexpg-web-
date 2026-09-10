@@ -52,7 +52,7 @@ export default function OpenGraphImage() {
             PG management software for owners in India.
           </div>
           <div style={{ fontSize: 28, color: 'rgba(247, 245, 241, 0.72)', maxWidth: 820 }}>
-            Beds, rent, tenants and deposits — web console + Android, always in sync.
+            PG management software for Indian PG and hostel owners. Occupancy, tenants, rent and deposits — web console and Android app.
           </div>
         </div>
 

@@ -77,7 +77,7 @@ export const CITY_GUIDES: CityGuide[] = [
       },
       {
         q: 'Can staff use the phone while I use the website?',
-        a: 'Same login, same property. Add a tenant on web or phone — occupancy stays in sync.',
+        a: 'Same login, same property. Add a tenant on the web or in the Android app.',
       },
     ],
     related: ['delhi', 'gurgaon', 'ghaziabad'],

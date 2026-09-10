@@ -10,10 +10,18 @@ export const CITIES = [
   'Chandigarh',
 ];
 
+export const MARKETING_CAPABILITIES = [
+  'Tenant management',
+  'Rooms & beds',
+  'Rent collection',
+  'Occupancy',
+  'Security deposits',
+] as const;
+
 export const MARKETING_FAQS: { q: string; a: string }[] = [
   {
     q: 'What is RunMyPG?',
-    a: 'RunMyPG is PG management software for paying guest and hostel owners in India. Track bed occupancy, rent, bills, tenants and security deposits from a web console and Android app that stay in sync.',
+    a: 'RunMyPG is PG management software for paying guest and hostel owners in India. You run tenants, rooms, occupancy, rent bills and security deposits from one owner dashboard — on the web and on the Android app.',
   },
   {
     q: 'Is RunMyPG really free?',
@@ -21,7 +29,7 @@ export const MARKETING_FAQS: { q: string; a: string }[] = [
   },
   {
     q: 'How does the Android app work?',
-    a: 'Open Mobile app from the menu (or /download). Sign in with the same email as the website, tap Request Android app, then install when download is ready. Web and phone stay in sync automatically.',
+    a: 'Open Android app from the menu (or /download). Sign in with the same email as the website, tap Request Android app if asked, then install when Download is ready.',
   },
   {
     q: 'Is my data secure?',
@@ -41,7 +49,7 @@ export const MARKETING_FAQS: { q: string; a: string }[] = [
   },
   {
     q: 'Do I need both the web and mobile app?',
-    a: "No. The web console is the full-featured owner dashboard — best used on a laptop or desktop. The Android app is designed for on-the-go operations when you're on-site at your PG. Use one or both — your data stays in sync.",
+    a: 'No. The website is the full owner dashboard. The Android app is for when you are at the property. Use either, or both.',
   },
 ];
 

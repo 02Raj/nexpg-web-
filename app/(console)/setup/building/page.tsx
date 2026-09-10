@@ -56,7 +56,7 @@ export default function SetupBuildingPage() {
         <p className={formStyles.kicker}>Setup · Step 1 of 2</p>
         <h1 className={formStyles.title}>Add your PG property</h1>
         <p className={formStyles.description}>
-          Works across India — pick a popular city or type your own. Same data syncs on web and mobile.
+          Works across India — pick a popular city or type your own. Available in the web console and the Android app.
         </p>
       </header>
 
