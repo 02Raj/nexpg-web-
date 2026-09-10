@@ -54,14 +54,14 @@ export default function SignupPage() {
       <div className={styles.brandPanel}>
         <div>
           <Link href="/" className={styles.brandHeader}>
-            <span className={styles.brandMark}>N</span>
-            <span className={styles.brandName}>NexPG</span>
+            <span className={styles.brandMark}>R</span>
+            <span className={styles.brandName}>RunMyPG</span>
           </Link>
           <div className={styles.brandContent}>
             <p className={styles.kicker}>OWNER CONSOLE</p>
             <h1 className={styles.headline}>Set up your PG<br />in a few minutes.</h1>
             <p className={styles.description}>
-              Add your property, beds and rooms. Then let NexPG handle the daily details of running your business.
+              Add your property, beds and rooms. Then let RunMyPG handle the daily details of running your business.
             </p>
             <ul className={styles.benefitList}>
               <li className={styles.benefitItem}>
@@ -81,7 +81,7 @@ export default function SignupPage() {
             {/* Real-looking Product Preview */}
             <div className={styles.previewWrap}>
               <div className={styles.previewHeader}>
-                <span className={styles.previewTitle}>NexPG</span>
+                <span className={styles.previewTitle}>RunMyPG</span>
                 <span className={styles.previewSubtitle}>Bed Status</span>
               </div>
               <div className={styles.previewBody}>

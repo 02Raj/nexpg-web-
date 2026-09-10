@@ -6,14 +6,15 @@ import { AuthProvider } from '@/providers/AuthProvider';
 import type { Metadata, Viewport } from 'next';
 
 export const metadata: Metadata = {
-  title: 'NexPG — PG Management Made Simple',
+  title: 'RunMyPG — PG Management Made Simple',
   description:
-    'Manage beds, tenants, rent, bills, deposits and daily PG operations from one place with NexPG.',
+    'Manage beds, tenants, rent, bills, deposits and daily PG operations from one place with RunMyPG.',
   manifest: '/manifest.json',
+  metadataBase: new URL('https://www.runmypg.in'),
   appleWebApp: {
     capable: true,
     statusBarStyle: 'black-translucent',
-    title: 'NexPG',
+    title: 'RunMyPG',
   },
 };
 

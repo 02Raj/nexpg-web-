@@ -52,7 +52,7 @@ export default function DownloadPage() {
             <p className="kicker" style={{ marginBottom: 12 }}>Android app</p>
             <h1 className="display" style={{ marginBottom: 16 }}>Manage your PG from your pocket.</h1>
             <p className="bodyMuted" style={{ fontSize: 16, maxWidth: 500, lineHeight: 1.6 }}>
-              NexPG is your desktop web console for serious PG operations.
+              RunMyPG is your desktop web console for serious PG operations.
               Use the Android companion app for on-site daily operations.
             </p>
           </div>

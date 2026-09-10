@@ -40,8 +40,8 @@ export default function LoginPage() {
       <div className={styles.brandPanel}>
         <div>
           <Link href="/" className={styles.brandHeader}>
-            <span className={styles.brandMark}>N</span>
-            <span className={styles.brandName}>NexPG</span>
+            <span className={styles.brandMark}>R</span>
+            <span className={styles.brandName}>RunMyPG</span>
           </Link>
           <div className={styles.brandContent}>
             <p className={styles.kicker}>WELCOME BACK</p>
@@ -53,7 +53,7 @@ export default function LoginPage() {
             {/* Real-looking Product Preview */}
             <div className={styles.previewWrap}>
               <div className={styles.previewHeader}>
-                <span className={styles.previewTitle}>NexPG</span>
+                <span className={styles.previewTitle}>RunMyPG</span>
                 <span className={styles.previewSubtitle}>Overview · Today</span>
               </div>
               <div className={styles.previewBody}>

@@ -1,6 +1,6 @@
 {
-  "name": "NexPG — PG Management",
-  "short_name": "NexPG",
+  "name": "RunMyPG — PG Management",
+  "short_name": "RunMyPG",
   "description": "Manage beds, tenants, rent, bills, deposits and daily PG operations from one place.",
   "start_url": "/dashboard",
   "display": "standalone",

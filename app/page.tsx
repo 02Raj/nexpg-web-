@@ -13,8 +13,8 @@ const CITIES = ['Noida', 'Gurgaon', 'Delhi', 'Ghaziabad', 'Bangalore', 'Pune', '
 
 const FAQS: { q: string; a: string }[] = [
   {
-    q: 'Is NexPG really free?',
-    a: "Yes. NexPG is completely free while we're in beta. We want to build the best PG management tool in India, and your feedback during this period is invaluable. When we introduce paid plans, early users will receive special benefits.",
+    q: 'Is RunMyPG really free?',
+    a: "Yes. RunMyPG is completely free while we're in beta. We want to build the best PG management tool in India, and your feedback during this period is invaluable. When we introduce paid plans, early users will receive special benefits.",
   },
   {
     q: 'How does the Android app work?',
@@ -22,7 +22,7 @@ const FAQS: { q: string; a: string }[] = [
   },
   {
     q: 'Is my data secure?',
-    a: 'Absolutely. NexPG is built on Supabase with Row-Level Security (RLS). Your data is encrypted at rest and in transit. Only you can access your own property and tenant data — even we cannot see it.',
+    a: 'Absolutely. RunMyPG is built on Supabase with Row-Level Security (RLS). Your data is encrypted at rest and in transit. Only you can access your own property and tenant data — even we cannot see it.',
   },
   {
     q: 'Can I manage multiple PGs?',
@@ -30,7 +30,7 @@ const FAQS: { q: string; a: string }[] = [
   },
   {
     q: 'Which cities do you support?',
-    a: 'NexPG works across India. Pick popular cities like Noida, Gurgaon, or Bangalore — or type any city name and select your state. Smaller IT hubs like Lucknow, Ahmedabad, and Chandigarh are fully supported.',
+    a: 'RunMyPG works across India. Pick popular cities like Noida, Gurgaon, or Bangalore — or type any city name and select your state. Smaller IT hubs like Lucknow, Ahmedabad, and Chandigarh are fully supported.',
   },
   {
     q: 'Do I need both the web and mobile app?',
@@ -298,7 +298,7 @@ export default function MarketingPage() {
               <p className={s.sectionKicker}>Pricing</p>
               <h2 className={s.sectionTitle}>Simple pricing. No surprises.</h2>
               <p className={s.sectionSubtitle} style={{ marginTop: 16 }}>
-                NexPG is free while we&apos;re in beta. When we launch paid plans, early adopters will get priority access and special rates.
+                RunMyPG is free while we&apos;re in beta. When we launch paid plans, early adopters will get priority access and special rates.
               </p>
             </Reveal>
             <Reveal delay={100}>
@@ -369,7 +369,7 @@ export default function MarketingPage() {
           <div className={s.finalCtaInner}>
             <h2 className={s.finalCtaTitle}>Start managing your PG today.</h2>
             <p className={s.finalCtaSubtitle}>
-              Join PG owners across India who&apos;ve moved beyond spreadsheets and switched to NexPG.
+              Join PG owners across India who&apos;ve moved beyond spreadsheets and switched to RunMyPG.
             </p>
             <Link href={primaryHref} className={s.finalCtaBtn}>
               {isLoggedIn ? 'Go to Dashboard →' : 'Create free account →'}
@@ -383,8 +383,8 @@ export default function MarketingPage() {
         <div className={s.footerInner}>
           <div>
             <div className={s.footerBrand}>
-              <span className={s.footerBrandMark}>N</span>
-              <span className={s.footerBrandName}>NexPG</span>
+              <span className={s.footerBrandMark}>R</span>
+              <span className={s.footerBrandName}>RunMyPG</span>
             </div>
             <p className={s.footerDesc}>
               PG management platform for Indian owners. Beds, rent, tenants, deposits — simplified.
@@ -415,7 +415,7 @@ export default function MarketingPage() {
           </div>
         </div>
         <div className={s.footerBottom}>
-          <p className={s.footerCopy}>© {new Date().getFullYear()} NexPG. All rights reserved.</p>
+          <p className={s.footerCopy}>© {new Date().getFullYear()} RunMyPG. All rights reserved.</p>
           <p className={s.footerCities}>Delhi NCR · Noida · Gurgaon · Bengaluru · Pune · Hyderabad</p>
         </div>
       </footer>
@@ -449,8 +449,8 @@ function Navbar({
       <nav className={`${s.navbar} ${scrolled ? s.navbarScrolled : ''}`}>
         <div className={s.navLeft}>
           <Link href="/" className={s.navBrand}>
-            <span className={s.navBrandMark}>N</span>
-            <span className={s.navBrandName}>NexPG</span>
+            <span className={s.navBrandMark}>R</span>
+            <span className={s.navBrandName}>RunMyPG</span>
           </Link>
           <ul className={s.navLinks}>
             <li><button type="button" className={s.navLink} onClick={() => onNav('product')}>Product</button></li>
@@ -511,13 +511,13 @@ function WebConsoleMockup({ large }: { large?: boolean }) {
         <span className={`${s.mockupDot} ${s.mockupDotRed}`} />
         <span className={`${s.mockupDot} ${s.mockupDotYellow}`} />
         <span className={`${s.mockupDot} ${s.mockupDotGreen}`} />
-        <span className={s.mockupLabel}>NexPG — Dashboard</span>
+        <span className={s.mockupLabel}>RunMyPG — Dashboard</span>
       </div>
       <div className={s.webMockBody}>
         <aside className={s.webSidebar}>
           <div className={s.webSidebarBrand}>
-            <span className={s.webSidebarMark}>N</span>
-            {large ? <span className={s.webSidebarName}>NexPG</span> : null}
+            <span className={s.webSidebarMark}>R</span>
+            {large ? <span className={s.webSidebarName}>RunMyPG</span> : null}
           </div>
           {large ? (
             <p className={s.webSidebarProperty}>
@@ -719,7 +719,7 @@ function DashboardMockup() {
         <span className={`${s.mockupDot} ${s.mockupDotRed}`} />
         <span className={`${s.mockupDot} ${s.mockupDotYellow}`} />
         <span className={`${s.mockupDot} ${s.mockupDotGreen}`} />
-        <span className={s.mockupLabel}>NexPG — Dashboard</span>
+        <span className={s.mockupLabel}>RunMyPG — Dashboard</span>
       </div>
       <div className={s.mockupBody}>
         <div className={s.mockupHeader}>

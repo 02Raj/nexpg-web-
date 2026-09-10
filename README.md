@@ -1,6 +1,6 @@
-# NexPG Web
+# RunMyPG Web
 
-**Next.js owner console** for NexPG — separate from the mobile app, same Supabase backend and design tokens.
+**Next.js owner console** for [RunMyPG](https://www.runmypg.in/) — separate from the mobile app, same Supabase backend and design tokens.
 
 | | Mobile | Web |
 |---|--------|-----|
@@ -8,6 +8,12 @@
 | **Stack** | Expo / React Native | Next.js 15 (App Router) |
 | **Port** | 3000 | 3001 |
 | **Backend** | Supabase (shared) | Supabase (shared) |
+
+## Production domain
+
+Everything runs on **[www.runmypg.in](https://www.runmypg.in/)** (marketing, login, signup, owner console). Apex `runmypg.in` redirects to `www`.
+
+Do **not** use `app.runmypg.in` unless you add that hostname in Vercel with a valid SSL certificate. The app redirects `app.runmypg.in` → `www.runmypg.in`.
 
 ## Quick start
 
@@ -29,7 +35,9 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ...
 NEXT_PUBLIC_SITE_URL=http://localhost:3001
 ```
 
-Add `http://localhost:3001/**` and your production URL to Supabase **Authentication → URL configuration**.
+For production, set `NEXT_PUBLIC_SITE_URL=https://www.runmypg.in`.
+
+Add `http://localhost:3001/**` and `https://www.runmypg.in/**` to Supabase **Authentication → URL configuration** (Site URL + Redirect URLs).
 
 ## Sync with mobile
 

@@ -21,7 +21,7 @@ export function AuthGate({ children }: { children: ReactNode }) {
         <p className="kicker">Setup</p>
         <h1 className="display">Supabase not configured</h1>
         <p className="bodyMuted" style={{ marginTop: 12, lineHeight: 1.6 }}>
-          Create <code>NexPG-Web/.env.local</code> with the same project as mobile:
+          Create <code>.env.local</code> with the same project as mobile:
         </p>
         <pre
           style={{
@@ -35,7 +35,7 @@ export function AuthGate({ children }: { children: ReactNode }) {
         >
           {`NEXT_PUBLIC_SUPABASE_URL=https://YOUR_REF.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ...   # anon public key (JWT)
-NEXT_PUBLIC_SITE_URL=http://localhost:3001`}
+NEXT_PUBLIC_SITE_URL=https://www.runmypg.in`}
         </pre>
         <p className="small" style={{ marginTop: 12 }}>
           Copy values from mobile <code>.env</code> — use <code>EXPO_PUBLIC_*</code> values with{' '}
@@ -46,7 +46,7 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3001`}
   }
 
   if (loading || !session) {
-    return <div style={{ padding: 32 }} className="bodyMuted">Opening NexPG…</div>;
+    return <div style={{ padding: 32 }} className="bodyMuted">Opening RunMyPG…</div>;
   }
 
   return <>{children}</>;

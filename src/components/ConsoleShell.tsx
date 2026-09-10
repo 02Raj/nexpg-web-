@@ -41,7 +41,7 @@ function pageMeta(pathname: string, buildingName?: string) {
   if (pathname.startsWith('/setup/rooms')) {
     return { kicker: 'Setup · Step 2', title: 'Add rooms', showActions: false };
   }
-  return { kicker: 'NexPG', title: 'Console', showActions: true };
+  return { kicker: 'RunMyPG', title: 'Console', showActions: true };
 }
 
 export function ConsoleShell({ children }: { children: React.ReactNode }) {
@@ -81,10 +81,10 @@ export function ConsoleShell({ children }: { children: React.ReactNode }) {
           <Menu size={22} />
         </button>
         <Link href="/dashboard" className={styles.mobileHeaderBrand}>
-          <span className={styles.brandMark}>N</span>
+          <span className={styles.brandMark}>R</span>
           <span className={styles.mobileHeaderText}>
             <strong>{meta.title}</strong>
-            <small>{building?.name ?? 'NexPG'}</small>
+            <small>{building?.name ?? 'RunMyPG'}</small>
           </span>
         </Link>
         {meta.showActions ? (
@@ -119,9 +119,9 @@ export function ConsoleShell({ children }: { children: React.ReactNode }) {
             </button>
           )}
           <Link href="/dashboard" className={styles.brand}>
-            <span className={styles.brandMark}>N</span>
+            <span className={styles.brandMark}>R</span>
             <span>
-              <strong>NexPG</strong>
+              <strong>RunMyPG</strong>
               <small>Owner console</small>
             </span>
           </Link>
