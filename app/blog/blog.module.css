@@ -1,0 +1,243 @@
+.page {
+  padding: 108px 24px 0;
+  background: var(--paper);
+  min-height: 100vh;
+}
+
+.hero {
+  max-width: 760px;
+  margin: 0 auto 48px;
+  text-align: center;
+}
+
+.kicker {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ochre-deep);
+  margin: 0 0 14px;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  margin: 0 0 14px;
+  color: var(--ink);
+}
+
+.lead {
+  font-size: 17px;
+  line-height: 1.65;
+  color: var(--ink-muted);
+  margin: 0;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin: 0 auto 40px;
+  max-width: 720px;
+}
+
+.filter {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--white);
+  color: var(--ink-muted);
+  cursor: pointer;
+}
+
+.filterOn {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  max-width: 1100px;
+  margin: 0 auto 80px;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  background: var(--white);
+  border: 1px solid rgba(22, 48, 43, 0.08);
+  border-radius: 16px;
+  padding: 22px 22px 20px;
+  text-decoration: none;
+  color: inherit;
+  min-height: 220px;
+  box-shadow: 0 8px 24px rgba(22, 48, 43, 0.04);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(22, 48, 43, 0.07);
+}
+
+.cardMeta {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ochre-deep);
+  margin-bottom: 12px;
+}
+
+.cardTitle {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.25;
+  margin: 0 0 10px;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+}
+
+.cardDesc {
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--ink-muted);
+  margin: 0 0 auto;
+}
+
+.cardMore {
+  margin-top: 16px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ochre-deep);
+}
+
+.article {
+  max-width: 720px;
+  margin: 0 auto 88px;
+}
+
+.back {
+  display: inline-block;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink-muted);
+  text-decoration: none;
+  margin-bottom: 28px;
+}
+
+.back:hover {
+  color: var(--ink);
+}
+
+.articleKicker {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ochre-deep);
+  margin: 0 0 12px;
+}
+
+.articleTitle {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  margin: 0 0 16px;
+  color: var(--ink);
+}
+
+.articleLead {
+  font-size: 18px;
+  line-height: 1.6;
+  color: var(--ink-muted);
+  margin: 0 0 32px;
+}
+
+.prose p {
+  font-size: 16px;
+  line-height: 1.75;
+  color: var(--ink);
+  margin: 0 0 18px;
+}
+
+.prose h2 {
+  font-family: var(--font-display);
+  font-size: 1.45rem;
+  font-weight: 600;
+  margin: 32px 0 12px;
+  letter-spacing: -0.02em;
+}
+
+.prose ul {
+  margin: 0 0 18px;
+  padding-left: 20px;
+}
+
+.prose li {
+  font-size: 16px;
+  line-height: 1.65;
+  margin-bottom: 8px;
+}
+
+.cta {
+  margin-top: 40px;
+  padding: 24px 26px;
+  background: var(--ink);
+  color: var(--paper);
+  border-radius: 14px;
+}
+
+.cta p {
+  margin: 0 0 14px;
+  font-size: 15px;
+  line-height: 1.55;
+  opacity: 0.88;
+}
+
+.cta a {
+  display: inline-flex;
+  font-weight: 600;
+  color: var(--paper);
+  background: var(--ochre);
+  padding: 10px 16px;
+  border-radius: 8px;
+  text-decoration: none;
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .page {
+    padding: 92px 16px 0;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+    margin-bottom: 56px;
+  }
+
+  .articleLead {
+    font-size: 16px;
+  }
+}

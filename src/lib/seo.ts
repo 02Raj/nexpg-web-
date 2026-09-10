@@ -56,7 +56,7 @@ export function pageMetadata({
       url,
       siteName: SITE_NAME,
       locale: 'en_IN',
-      type: 'website',
+      type: path.startsWith('/blog/') ? 'article' : 'website',
     },
     twitter: {
       card: 'summary_large_image',

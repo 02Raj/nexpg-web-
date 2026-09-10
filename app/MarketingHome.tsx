@@ -3,8 +3,10 @@
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import { CITIES, MARKETING_FAQS, PRICING_ITEMS } from '@/content/marketing';
+import { getLatestPosts } from '@/content/blog';
 import { useAuth } from '@/providers/AuthProvider';
 import s from './marketing.module.css';
+import b from './blog/blog.module.css';
 
 /* ══════════════════════════════════════════════════
    PAGE
@@ -26,6 +28,7 @@ export function MarketingHome() {
 
   const closeMenu = () => setMobileMenuOpen(false);
 
+  const latestPosts = getLatestPosts(3);
   const primaryHref = isLoggedIn ? '/dashboard' : '/signup';
   const primaryLabel = isLoggedIn ? 'Go to Dashboard' : 'Get started';
 
@@ -320,6 +323,37 @@ export function MarketingHome() {
         </div>
       </section>
 
+      {/* ── BLOG ── */}
+      <section id="blog" className={s.sectionWrap}>
+        <div className={s.sectionInner}>
+          <Reveal className={s.featuresHeader}>
+            <p className={s.sectionKicker}>Blog</p>
+            <h2 className={s.sectionTitle}>Guides for PG owners.</h2>
+            <p className={s.sectionSubtitle}>
+              Occupancy, rent, deposits and software — written for Indian PG operators, not hotel chains.
+            </p>
+          </Reveal>
+          <div className={b.grid} style={{ marginBottom: 28 }}>
+            {latestPosts.map((post) => (
+              <Link key={post.slug} href={`/blog/${post.slug}`} className={b.card}>
+                <div className={b.cardMeta}>
+                  <span>{post.category}</span>
+                  <span>{post.readMins} min</span>
+                </div>
+                <h3 className={b.cardTitle}>{post.title}</h3>
+                <p className={b.cardDesc}>{post.description}</p>
+                <span className={b.cardMore}>Read guide →</span>
+              </Link>
+            ))}
+          </div>
+          <p style={{ textAlign: 'center', margin: 0 }}>
+            <Link href="/blog" className={s.footerLink} style={{ fontWeight: 600 }}>
+              View all guides →
+            </Link>
+          </p>
+        </div>
+      </section>
+
       {/* ── FINAL CTA ── */}
       <section className={s.finalCta}>
         <div className={s.finalCtaGrain} />
@@ -357,6 +391,7 @@ export function MarketingHome() {
               <li><a href="#features" className={s.footerLink}>Features</a></li>
               <li><a href="#pricing" className={s.footerLink}>Pricing</a></li>
               <li><Link href="/download" prefetch={false} className={s.footerLink}>Android App</Link></li>
+              <li><Link href="/blog" className={s.footerLink}>Blog</Link></li>
             </ul>
           </div>
           <div>
@@ -417,7 +452,7 @@ function Navbar({
             <li><a href="#product" className={s.navLink}>Product</a></li>
             <li><a href="#features" className={s.navLink}>Features</a></li>
             <li><a href="#pricing" className={s.navLink}>Pricing</a></li>
-            <li><a href="#faq" className={s.navLink}>FAQ</a></li>
+            <li><Link href="/blog" className={s.navLink}>Blog</Link></li>
           </ul>
         </div>
         <div className={s.navRight}>
@@ -447,6 +482,7 @@ function Navbar({
           <a href="#product" className={s.mobileMenuLink} onClick={onCloseMenu}>Product</a>
           <a href="#features" className={s.mobileMenuLink} onClick={onCloseMenu}>Features</a>
           <a href="#pricing" className={s.mobileMenuLink} onClick={onCloseMenu}>Pricing</a>
+          <Link href="/blog" className={s.mobileMenuLink} onClick={onCloseMenu}>Blog</Link>
           <a href="#faq" className={s.mobileMenuLink} onClick={onCloseMenu}>FAQ</a>
           <div className={s.mobileMenuDivider} />
           {!isLoggedIn && <Link href="/login" className={s.mobileMenuLink} onClick={onCloseMenu}>Log in</Link>}
