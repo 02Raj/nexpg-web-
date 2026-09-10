@@ -13,7 +13,7 @@ export const PRIVACY_SECTIONS: LegalSection[] = [
   {
     heading: 'What we collect',
     paragraphs: [
-      'Account data: name, email, and password (stored hashed by our auth provider). We send a confirmation email when you sign up and a reset link if you forget your password.',
+      'Account data: name, email, and password (stored hashed). We send a confirmation email when you sign up and a reset link if you forget your password.',
       'Property and operations data you enter: building name, address, city, state, rooms, beds, tenant names and contacts, rent amounts, bill status, and security deposits. That data belongs to your account. Other owners cannot see it.',
       'If you email or WhatsApp us, we receive whatever you send (for example a screenshot of an error). We use that only to reply and fix the issue.',
       'Technical logs: browser type, approximate time of requests, and crash or error messages needed to keep the service up. We do not sell this.',
@@ -30,7 +30,7 @@ export const PRIVACY_SECTIONS: LegalSection[] = [
   {
     heading: 'Processors',
     paragraphs: [
-      'Hosting and database/auth currently run on infrastructure from our cloud providers (including Supabase for authentication and data). They process data on our instructions, not as a public directory of your tenants.',
+      'Hosting, authentication and database currently run on our cloud providers. They process data on our instructions, not as a public directory of your tenants.',
       'WhatsApp and email are third-party networks. If you contact us there, those providers’ terms also apply to the message in transit.',
     ],
   },

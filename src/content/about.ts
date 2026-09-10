@@ -32,6 +32,6 @@ export const ABOUT_REASONS = [
   },
   {
     title: 'Your data stays yours',
-    text: 'Row-level security on the database. You see your properties; other owners do not.',
+    text: 'You see your properties and tenants. Other owners do not.',
   },
 ] as const;

@@ -32,10 +32,6 @@ export const MARKETING_FAQS: { q: string; a: string }[] = [
     a: 'Open Android app from the menu (or /download). Sign in with the same email as the website, tap Request Android app if asked, then install when Download is ready.',
   },
   {
-    q: 'Is my data secure?',
-    a: 'Absolutely. RunMyPG is built on Supabase with Row-Level Security (RLS). Your data is encrypted at rest and in transit. Only you can access your own property and tenant data — even we cannot see it.',
-  },
-  {
     q: 'Can I manage multiple PGs?',
     a: 'Yes. You can add as many properties as you want. Each property has its own rooms, beds, tenants, and billing — but you manage everything from a single dashboard with a simple property switcher.',
   },

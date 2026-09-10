@@ -31,7 +31,7 @@ export const HELP_CATEGORIES: HelpCategory[] = [
         title: 'Password will not work',
         steps: [
           'Use Forgot password, enter the same email, and open the reset mail.',
-          'If the mail is missing, check spam. Confirmation and reset both come from our auth provider.',
+          'If the mail is missing, check spam. Confirmation and reset mails come from RunMyPG.',
           'Still stuck? Email support@runmypg.in from that address.',
         ],
       },
