@@ -64,10 +64,10 @@ export default function SignupPage() {
             <span className={styles.brandName}>RunMyPG</span>
           </Link>
           <div className={styles.brandContent}>
-            <p className={styles.kicker}>OWNER CONSOLE</p>
+            <p className={styles.kicker}>PG MANAGEMENT SOFTWARE</p>
             <h1 className={styles.headline}>Set up your PG<br />in a few minutes.</h1>
             <p className={styles.description}>
-              Add your property, beds and rooms. Then let RunMyPG handle the daily details of running your business.
+              Free PG management software for Indian owners. Add your property, beds and rooms — then track occupancy, rent and deposits.
             </p>
             <ul className={styles.benefitList}>
               <li className={styles.benefitItem}>
@@ -125,7 +125,7 @@ export default function SignupPage() {
       <div className={styles.formPanel}>
         <div className={styles.formCard}>
           <p className={styles.kicker}>NEW OWNER</p>
-          <h2 className={styles.formTitle}>Create account</h2>
+          <h2 className={styles.formTitle}>Create free account</h2>
           <form className={styles.form} onSubmit={onSubmit}>
             <Field label="Your name" value={fullName} onChange={setFullName} placeholder="Rahul Sharma" />
             <Field label="Email" value={email} onChange={setEmail} type="email" placeholder="owner@example.com" />

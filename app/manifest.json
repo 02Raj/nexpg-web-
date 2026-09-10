@@ -1,7 +1,7 @@
 {
   "name": "RunMyPG — PG Management",
   "short_name": "RunMyPG",
-  "description": "Manage beds, tenants, rent, bills, deposits and daily PG operations from one place.",
+  "description": "PG management software for Indian owners. Track beds, rent, tenants, bills and deposits from web and Android.",
   "start_url": "/dashboard",
   "display": "standalone",
   "background_color": "#F7F5F1",

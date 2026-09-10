@@ -11,6 +11,8 @@ const securityHeaders = [
   },
 ];
 
+const noIndexHeaders = [{ key: 'X-Robots-Tag', value: 'noindex, nofollow' }];
+
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
@@ -27,6 +29,26 @@ const nextConfig: NextConfig = {
         source: '/(.*\\.(?:ico|png|jpg|jpeg|gif|webp|svg|woff2))',
         headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }],
       },
+      ...[
+        '/dashboard',
+        '/dashboard/:path*',
+        '/beds',
+        '/beds/:path*',
+        '/bills',
+        '/bills/:path*',
+        '/tenant',
+        '/tenant/:path*',
+        '/setup',
+        '/setup/:path*',
+        '/more',
+        '/more/:path*',
+        '/platform',
+        '/platform/:path*',
+        '/auth',
+        '/auth/:path*',
+        '/login',
+        '/forgot-password',
+      ].map((source) => ({ source, headers: noIndexHeaders })),
     ];
   },
 };

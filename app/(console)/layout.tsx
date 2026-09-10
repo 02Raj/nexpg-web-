@@ -1,17 +1,13 @@
-'use client';
+import { ConsoleLayoutClient } from './ConsoleLayoutClient';
+import { pageMetadata } from '@/lib/seo';
 
-import { ConsoleShell } from '@/components/ConsoleShell';
-import { AuthGate } from '@/components/AuthGate';
-import { OnboardingRedirect } from '@/components/OnboardingRedirect';
-import { BuildingProvider } from '@/providers/BuildingProvider';
+export const metadata = pageMetadata({
+  title: 'Owner console',
+  description: 'RunMyPG owner console.',
+  path: '/dashboard',
+  index: false,
+});
 
 export default function ConsoleLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <AuthGate>
-      <BuildingProvider>
-        <OnboardingRedirect />
-        <ConsoleShell>{children}</ConsoleShell>
-      </BuildingProvider>
-    </AuthGate>
-  );
+  return <ConsoleLayoutClient>{children}</ConsoleLayoutClient>;
 }

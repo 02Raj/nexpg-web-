@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react'
-import MarketingPage from '../app/page'
+import { MarketingHome } from '../app/MarketingHome'
 
 // Mock the AuthProvider
 jest.mock('@/providers/AuthProvider', () => ({
@@ -15,9 +15,11 @@ jest.mock('next/link', () => {
 
 describe('MarketingPage', () => {
   it('renders the hero section correctly', () => {
-    render(<MarketingPage />)
-    
+    render(<MarketingHome />)
+
     const headings = screen.getAllByText(/Run your PG/i)
     expect(headings[0]).toBeInTheDocument()
+    expect(screen.getAllByText(/PG Management Software/i).length).toBeGreaterThan(0)
+    expect(screen.getByText(/What is RunMyPG\?/i)).toBeInTheDocument()
   })
 })

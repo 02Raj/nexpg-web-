@@ -651,11 +651,13 @@
    ═══════════════════════════════════════════════ */
 .sectionWrap {
   padding: 128px 40px;
+  scroll-margin-top: 88px;
 }
 
 .sectionWrapAlt {
   padding: 128px 40px;
   background: var(--paper-deep);
+  scroll-margin-top: 88px;
 }
 
 .sectionInner {
@@ -2103,6 +2105,7 @@
   padding: 100px 40px;
   background: var(--paper);
   border-top: 1px solid var(--line);
+  scroll-margin-top: 88px;
 }
 
 .productHeader {

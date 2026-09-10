@@ -128,10 +128,10 @@ export default function DownloadPage() {
 
       <div className={styles.layout}>
         <div className={styles.intro}>
-          <p className="kicker">Mobile + web</p>
+          <p className="kicker">PG owner Android app</p>
           <h1 className="display">Android app — same PG, same login.</h1>
           <p className={styles.lead}>
-            Use the website on your laptop. Use the phone app when you are at the PG. No extra setup — one account
+            Download the RunMyPG Android app for on-site PG operations. Use the website on your laptop. One account
             syncs beds, rent and bills.
           </p>
           <ul className={styles.syncList}>
