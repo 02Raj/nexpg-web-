@@ -36,6 +36,10 @@ export const MARKETING_FAQS: { q: string; a: string }[] = [
     a: 'RunMyPG works across India. Pick popular cities like Noida, Gurgaon, or Bangalore — or type any city name and select your state. Smaller IT hubs like Lucknow, Ahmedabad, and Chandigarh are fully supported.',
   },
   {
+    q: 'How do I contact RunMyPG?',
+    a: 'WhatsApp +91 87070 54586, or email contact@runmypg.in, sales@runmypg.in, or support@runmypg.in. There is also a Contact page on the website.',
+  },
+  {
     q: 'Do I need both the web and mobile app?',
     a: "No. The web console is the full-featured owner dashboard — best used on a laptop or desktop. The Android app is designed for on-the-go operations when you're on-site at your PG. Use one or both — your data stays in sync.",
   },

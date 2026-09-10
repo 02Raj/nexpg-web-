@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import { CITIES, MARKETING_FAQS, PRICING_ITEMS } from '@/content/marketing';
 import { getLatestPosts } from '@/content/blog';
+import { MAILTO, WHATSAPP_URL } from '@/content/contact';
+import { WhatsAppFab } from '@/components/marketing/WhatsAppFab';
 import { useAuth } from '@/providers/AuthProvider';
 import s from '@/components/marketing/marketing.module.css';
 import b from './blog/blog.module.css';
@@ -316,6 +318,24 @@ export function MarketingHome() {
         </div>
       </section>
 
+      {/* ── ABOUT ── */}
+      <section id="about" className={s.sectionWrapAlt}>
+        <div className={s.sectionInner}>
+          <Reveal className={s.featuresHeader}>
+            <p className={s.sectionKicker}>Our story</p>
+            <h2 className={s.sectionTitle}>Built for Indian PG &amp; hostel operators.</h2>
+            <p className={s.sectionSubtitle}>
+              RunMyPG exists so owners can run occupancy, rent and deposits from one desk — not from Excel, WhatsApp and a walk through every floor.
+            </p>
+          </Reveal>
+          <p style={{ textAlign: 'center', margin: 0 }}>
+            <Link href="/about" className={s.footerLink} style={{ fontWeight: 600 }}>
+              Read about RunMyPG →
+            </Link>
+          </p>
+        </div>
+      </section>
+
       {/* ── BLOG ── */}
       <section id="blog" className={s.sectionWrap}>
         <div className={s.sectionInner}>
@@ -384,6 +404,7 @@ export function MarketingHome() {
               <li><a href="#features" className={s.footerLink}>Features</a></li>
               <li><a href="#pricing" className={s.footerLink}>Pricing</a></li>
               <li><Link href="/download" prefetch={false} className={s.footerLink}>Android App</Link></li>
+              <li><Link href="/about" className={s.footerLink}>About</Link></li>
               <li><Link href="/blog" className={s.footerLink}>Blog</Link></li>
             </ul>
           </div>
@@ -399,6 +420,9 @@ export function MarketingHome() {
             <p className={s.footerColTitle}>Support</p>
             <ul className={s.footerLinks}>
               <li><a href="#faq" className={s.footerLink}>FAQ</a></li>
+              <li><Link href="/contact" className={s.footerLink}>Contact</Link></li>
+              <li><a href={WHATSAPP_URL} className={s.footerLink} target="_blank" rel="noopener noreferrer">WhatsApp</a></li>
+              <li><a href={MAILTO.support} className={s.footerLink}>support@runmypg.in</a></li>
             </ul>
           </div>
         </div>
@@ -407,6 +431,7 @@ export function MarketingHome() {
           <p className={s.footerCities}>Delhi NCR · Noida · Gurgaon · Bengaluru · Pune · Hyderabad</p>
         </div>
       </footer>
+      <WhatsAppFab />
     </>
   );
 }
@@ -445,7 +470,9 @@ function Navbar({
             <li><a href="#product" className={s.navLink}>Product</a></li>
             <li><a href="#features" className={s.navLink}>Features</a></li>
             <li><a href="#pricing" className={s.navLink}>Pricing</a></li>
+            <li><Link href="/about" className={s.navLink}>About</Link></li>
             <li><Link href="/blog" className={s.navLink}>Blog</Link></li>
+            <li><Link href="/contact" className={s.navLink}>Contact</Link></li>
           </ul>
         </div>
         <div className={s.navRight}>
@@ -475,7 +502,9 @@ function Navbar({
           <a href="#product" className={s.mobileMenuLink} onClick={onCloseMenu}>Product</a>
           <a href="#features" className={s.mobileMenuLink} onClick={onCloseMenu}>Features</a>
           <a href="#pricing" className={s.mobileMenuLink} onClick={onCloseMenu}>Pricing</a>
+          <Link href="/about" className={s.mobileMenuLink} onClick={onCloseMenu}>About</Link>
           <Link href="/blog" className={s.mobileMenuLink} onClick={onCloseMenu}>Blog</Link>
+          <Link href="/contact" className={s.mobileMenuLink} onClick={onCloseMenu}>Contact</Link>
           <a href="#faq" className={s.mobileMenuLink} onClick={onCloseMenu}>FAQ</a>
           <div className={s.mobileMenuDivider} />
           {!isLoggedIn && <Link href="/login" className={s.mobileMenuLink} onClick={onCloseMenu}>Log in</Link>}

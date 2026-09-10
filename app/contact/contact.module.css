@@ -1,0 +1,82 @@
+.wrap {
+  max-width: 920px;
+  margin: 0 auto 88px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: var(--white);
+  border: 1px solid rgba(22, 48, 43, 0.08);
+  border-radius: 16px;
+  padding: 22px 22px 20px;
+  text-decoration: none;
+  color: inherit;
+  box-shadow: 0 8px 24px rgba(22, 48, 43, 0.04);
+}
+
+.card:hover {
+  border-color: rgba(22, 48, 43, 0.16);
+}
+
+.label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ochre-deep);
+  margin: 0;
+}
+
+.value {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--ink);
+  margin: 0;
+  word-break: break-word;
+}
+
+.hint {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--ink-muted);
+  margin: 0;
+}
+
+.wa {
+  grid-column: 1 / -1;
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.wa .label {
+  color: var(--ochre);
+}
+
+.wa .value,
+.wa .hint {
+  color: var(--paper);
+}
+
+.wa .hint {
+  opacity: 0.72;
+}
+
+@media (max-width: 700px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .wa {
+    grid-column: auto;
+  }
+}

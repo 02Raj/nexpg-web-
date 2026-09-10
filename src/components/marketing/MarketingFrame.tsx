@@ -3,6 +3,8 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { useAuth } from '@/providers/AuthProvider';
+import { MAILTO, WHATSAPP_URL } from '@/content/contact';
+import { WhatsAppFab } from '@/components/marketing/WhatsAppFab';
 import s from './marketing.module.css';
 
 export function MarketingFrame({
@@ -44,8 +46,18 @@ export function MarketingFrame({
                 </Link>
               </li>
               <li>
+                <Link href="/about" className={s.navLink}>
+                  About
+                </Link>
+              </li>
+              <li>
                 <Link href="/blog" className={s.navLink}>
                   Blog
+                </Link>
+              </li>
+              <li>
+                <Link href="/contact" className={s.navLink}>
+                  Contact
                 </Link>
               </li>
             </ul>
@@ -86,8 +98,14 @@ export function MarketingFrame({
           <Link href="/#pricing" className={s.mobileMenuLink} onClick={() => setMobileMenuOpen(false)}>
             Pricing
           </Link>
+          <Link href="/about" className={s.mobileMenuLink} onClick={() => setMobileMenuOpen(false)}>
+            About
+          </Link>
           <Link href="/blog" className={s.mobileMenuLink} onClick={() => setMobileMenuOpen(false)}>
             Blog
+          </Link>
+          <Link href="/contact" className={s.mobileMenuLink} onClick={() => setMobileMenuOpen(false)}>
+            Contact
           </Link>
           <div className={s.mobileMenuDivider} />
           {!isLoggedIn && (
@@ -141,14 +159,34 @@ export function MarketingFrame({
             <p className={s.footerColTitle}>Resources</p>
             <ul className={s.footerLinks}>
               <li>
+                <Link href="/about" className={s.footerLink}>
+                  About
+                </Link>
+              </li>
+              <li>
                 <Link href="/blog" className={s.footerLink}>
                   Blog
+                </Link>
+              </li>
+              <li>
+                <Link href="/contact" className={s.footerLink}>
+                  Contact
                 </Link>
               </li>
               <li>
                 <Link href="/#faq" className={s.footerLink}>
                   FAQ
                 </Link>
+              </li>
+              <li>
+                <a href={WHATSAPP_URL} className={s.footerLink} target="_blank" rel="noopener noreferrer">
+                  WhatsApp
+                </a>
+              </li>
+              <li>
+                <a href={MAILTO.support} className={s.footerLink}>
+                  support@runmypg.in
+                </a>
               </li>
             </ul>
           </div>
@@ -173,6 +211,7 @@ export function MarketingFrame({
           <p className={s.footerCities}>Delhi NCR · Noida · Gurgaon · Bengaluru · Pune · Hyderabad</p>
         </div>
       </footer>
+      <WhatsAppFab />
     </>
   );
 }

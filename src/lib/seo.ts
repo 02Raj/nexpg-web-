@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { MARKETING_FAQS } from '@/content/marketing';
+import { CONTACT } from '@/content/contact';
 
 export const SITE_URL = 'https://www.runmypg.in';
 export const SITE_NAME = 'RunMyPG';
@@ -81,6 +82,24 @@ export function homeJsonLd() {
         },
         description: DEFAULT_DESCRIPTION,
         areaServed: { '@type': 'Country', name: 'India' },
+        email: CONTACT.emails.contact,
+        telephone: CONTACT.phoneE164,
+        contactPoint: [
+          {
+            '@type': 'ContactPoint',
+            contactType: 'customer support',
+            email: CONTACT.emails.support,
+            telephone: CONTACT.phoneE164,
+            availableLanguage: ['English', 'Hindi'],
+          },
+          {
+            '@type': 'ContactPoint',
+            contactType: 'sales',
+            email: CONTACT.emails.sales,
+            telephone: CONTACT.phoneE164,
+            availableLanguage: ['English', 'Hindi'],
+          },
+        ],
       },
       {
         '@type': 'WebSite',
