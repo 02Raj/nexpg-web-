@@ -1,5 +1,5 @@
-import { LoadingCenter } from '@/components/Loading';
+import { PageSkeleton } from '@/components/Loading';
 
 export default function RootLoading() {
-  return <LoadingCenter message="Loading…" />;
+  return <PageSkeleton variant="default" />;
 }

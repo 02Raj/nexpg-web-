@@ -4,7 +4,7 @@ import { fetchDashboard, generateInvoices, maybeGenerateInvoices } from '@/api/n
 import { BedGrid } from '@/components/BedGrid';
 import { Button } from '@/components/Button';
 import { EmptyState } from '@/components/EmptyState';
-import { LoadingCenter, Skeleton } from '@/components/Loading';
+import { PageSkeleton } from '@/components/Loading';
 import { NoBuilding } from '@/components/NoBuilding';
 import { formatBuildingLocation } from '@/lib/locations';
 import { inr, monthLabel, rpcMessage } from '@/lib/format';
@@ -52,22 +52,7 @@ export default function DashboardPage() {
   if (!building) return <NoBuilding />;
 
   if (dash.isLoading) {
-    return (
-      <div className={styles.page}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <Skeleton style={{ width: 150, height: 20 }} />
-        </div>
-        <div className="statGrid">
-          {[1, 2, 3, 4].map((i) => (
-            <div key={i} className="statCard">
-              <Skeleton style={{ width: 100, height: 14, marginBottom: 8 }} />
-              <Skeleton style={{ width: 60, height: 28 }} />
-            </div>
-          ))}
-        </div>
-        <LoadingCenter message="Loading dashboard…" />
-      </div>
-    );
+    return <PageSkeleton variant="dashboard" />;
   }
 
   if (dash.error) {

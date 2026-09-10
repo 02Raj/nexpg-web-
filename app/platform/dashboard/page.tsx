@@ -1,7 +1,7 @@
 'use client';
 
 import { fetchPlatformDashboard } from '@/api/platform-admin';
-import { LoadingCenter } from '@/components/Loading';
+import { PageSkeleton } from '@/components/Loading';
 import { keys } from '@/lib/query';
 import { useToastOnError } from '@/hooks/useToastOnError';
 import { useQuery } from '@tanstack/react-query';
@@ -25,7 +25,7 @@ export default function PlatformDashboardPage() {
 
   useToastOnError(q.error, 'Could not load dashboard');
 
-  if (q.isLoading) return <LoadingCenter message="Loading dashboard…" />;
+  if (q.isLoading) return <PageSkeleton variant="stats" />;
 
   const d = q.data;
   if (!d) return null;

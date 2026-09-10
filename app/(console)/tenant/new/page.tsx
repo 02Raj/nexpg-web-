@@ -5,6 +5,7 @@ import { BedGrid } from '@/components/BedGrid';
 import { Button } from '@/components/Button';
 import { EmptyState } from '@/components/EmptyState';
 import { Field } from '@/components/Field';
+import { PageSkeleton } from '@/components/Loading';
 import { rpcMessage, todayIST } from '@/lib/format';
 import { toast } from '@/lib/toast';
 import { keys, queryClient } from '@/lib/query';
@@ -68,7 +69,7 @@ export default function NewTenantPage() {
     Number(security) >= 0 &&
     !mutate.isPending;
 
-  if (!building || occ.isLoading) return <p className="bodyMuted">Loading…</p>;
+  if (!building || occ.isLoading) return <PageSkeleton variant="default" />;
 
   return (
     <div className={styles.page}>

@@ -3,7 +3,7 @@
 import { fetchOccupancy } from '@/api/nexpg';
 import { BedGrid } from '@/components/BedGrid';
 import { EmptyState } from '@/components/EmptyState';
-import { LoadingCenter } from '@/components/Loading';
+import { PageSkeleton } from '@/components/Loading';
 import { NoBuilding } from '@/components/NoBuilding';
 import { keys } from '@/lib/query';
 import { useToastOnError } from '@/hooks/useToastOnError';
@@ -26,7 +26,7 @@ export default function BedsPage() {
   useToastOnError(q.error, 'Could not load beds');
 
   if (!building) return <NoBuilding />;
-  if (q.isLoading) return <LoadingCenter message="Loading beds…" />;
+  if (q.isLoading) return <PageSkeleton variant="dashboard" />;
 
   const beds = q.data ?? [];
 

@@ -2,7 +2,7 @@
 
 import { fetchTenantDetail, markInvoicePaid, markSecurityRefunded, vacateTenant } from '@/api/nexpg';
 import { Button } from '@/components/Button';
-import { LoadingCenter } from '@/components/Loading';
+import { PageSkeleton } from '@/components/Loading';
 import { inrExact, prettyDate, rpcMessage } from '@/lib/format';
 import { toast } from '@/lib/toast';
 import { useToastOnError } from '@/hooks/useToastOnError';
@@ -62,7 +62,7 @@ export default function TenantPage() {
 
   useToastOnError(q.error, 'Tenant not found');
 
-  if (q.isLoading) return <LoadingCenter message="Loading tenant profile…" />;
+  if (q.isLoading) return <PageSkeleton variant="profile" />;
   if (q.error || !q.data) {
     return (
       <EmptyState

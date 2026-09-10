@@ -2,7 +2,7 @@
 
 import { fetchMyApkRequest, markApkDownloaded, submitApkRequest } from '@/api/apk-request';
 import { Button } from '@/components/Button';
-import { LoadingCenter } from '@/components/Loading';
+import { PageSkeleton } from '@/components/Loading';
 import {
   ANDROID_INSTALL_STEPS,
   ANDROID_SYNC_LINES,
@@ -168,7 +168,7 @@ export default function DownloadPage() {
           </ol>
 
           {authLoading || (session && existing.isLoading) ? (
-            <LoadingCenter message="Loading your app access…" />
+            <PageSkeleton variant="download" />
           ) : !session ? (
             <div className={styles.actionBlock}>
               <p className={styles.actionLead}>Step 1 — use the same account you use on this website.</p>

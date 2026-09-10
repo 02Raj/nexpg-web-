@@ -3,7 +3,7 @@
 import { fetchInvoices, generateInvoices, markInvoicePaid } from '@/api/nexpg';
 import { Button } from '@/components/Button';
 import { EmptyState } from '@/components/EmptyState';
-import { LoadingCenter } from '@/components/Loading';
+import { PageSkeleton } from '@/components/Loading';
 import { NoBuilding } from '@/components/NoBuilding';
 import { inrExact, monthLabel, rpcMessage, todayIST } from '@/lib/format';
 import { toast } from '@/lib/toast';
@@ -52,7 +52,7 @@ export default function BillsPage() {
   });
 
   if (!building) return <NoBuilding />;
-  if (q.isLoading) return <LoadingCenter message="Loading bills…" />;
+  if (q.isLoading) return <PageSkeleton variant="table" />;
 
   const rows = q.data ?? [];
   const pending = rows.filter((r) => r.status === 'pending');

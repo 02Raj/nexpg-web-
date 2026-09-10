@@ -2,7 +2,7 @@
 
 import { fetchPlatformOwners, setOwnerActive, type PlatformOwnerRow } from '@/api/platform-admin';
 import { Button } from '@/components/Button';
-import { LoadingCenter } from '@/components/Loading';
+import { PageSkeleton } from '@/components/Loading';
 import { prettyDate, rpcMessage } from '@/lib/format';
 import { keys, queryClient } from '@/lib/query';
 import { toast } from '@/lib/toast';
@@ -48,7 +48,7 @@ export default function PlatformOwnersPage() {
     return all;
   }, [list.data, filter]);
 
-  if (list.isLoading) return <LoadingCenter message="Loading PG owners…" />;
+  if (list.isLoading) return <PageSkeleton variant="table" />;
 
   return (
     <div className={layout.panel}>

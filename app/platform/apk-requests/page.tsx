@@ -2,7 +2,7 @@
 
 import { approveApkRequest, fetchApkRequestsForAdmin, type ApkRequest } from '@/api/apk-request';
 import { Button } from '@/components/Button';
-import { LoadingCenter } from '@/components/Loading';
+import { PageSkeleton } from '@/components/Loading';
 import { getPublicApkUrl, getPublicApkVersionLabel } from '@/lib/android-app';
 import { prettyDate, rpcMessage } from '@/lib/format';
 import { keys, queryClient } from '@/lib/query';
@@ -61,7 +61,7 @@ export default function PlatformApkRequestsPage() {
   const rest = (list.data ?? []).filter((r) => r.status !== 'pending');
   const busy = approve.isPending || approveAll.isPending;
 
-  if (list.isLoading) return <LoadingCenter message="Loading requests…" />;
+  if (list.isLoading) return <PageSkeleton variant="table" />;
 
   return (
     <div className={layout.panel}>

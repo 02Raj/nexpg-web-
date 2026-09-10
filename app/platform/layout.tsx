@@ -1,6 +1,7 @@
 'use client';
 
 import { PlatformShell } from '@/components/PlatformShell';
+import { PageSkeleton } from '@/components/Loading';
 import { useAuth } from '@/providers/AuthProvider';
 import { isPlatformAdminEmail } from '@/lib/platform-admin';
 import { usePathname, useRouter } from 'next/navigation';
@@ -28,7 +29,11 @@ export default function PlatformLayout({ children }: { children: ReactNode }) {
   }, [loading, session, allowed, router]);
 
   if (loading || !session || !allowed) {
-    return <p className="bodyMuted" style={{ padding: 32 }}>Loading platform admin…</p>;
+    return (
+      <div style={{ padding: 32 }}>
+        <PageSkeleton variant="default" />
+      </div>
+    );
   }
 
   return <PlatformShell title={pageTitle(pathname)}>{children}</PlatformShell>;

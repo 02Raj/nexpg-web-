@@ -1,5 +1,5 @@
-import { LoadingCenter } from '@/components/Loading';
+import { PageSkeleton } from '@/components/Loading';
 
 export default function ConsoleLoading() {
-  return <LoadingCenter message="Loading…" />;
+  return <PageSkeleton variant="dashboard" />;
 }

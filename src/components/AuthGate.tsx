@@ -1,6 +1,7 @@
 'use client';
 
 import { fetchMyOwnerProfile } from '@/api/platform-admin';
+import { PageSkeleton } from '@/components/Loading';
 import { env } from '@/lib/env';
 import { isPlatformAdminEmail } from '@/lib/platform-admin';
 import { keys } from '@/lib/query';
@@ -64,7 +65,11 @@ NEXT_PUBLIC_SITE_URL=https://www.runmypg.in`}
   }
 
   if (loading || !session) {
-    return <div style={{ padding: 32 }} className="bodyMuted">Opening RunMyPG…</div>;
+    return (
+      <div style={{ padding: 32, maxWidth: 480, margin: '0 auto' }}>
+        <PageSkeleton variant="compact" />
+      </div>
+    );
   }
 
   if (!skipProfileCheck && profile.data && profile.data.is_active === false) {
@@ -91,7 +96,11 @@ NEXT_PUBLIC_SITE_URL=https://www.runmypg.in`}
   }
 
   if (!skipProfileCheck && profile.isLoading) {
-    return <div style={{ padding: 32 }} className="bodyMuted">Checking account…</div>;
+    return (
+      <div style={{ padding: 32, maxWidth: 480, margin: '0 auto' }}>
+        <PageSkeleton variant="compact" />
+      </div>
+    );
   }
 
   return <>{children}</>;
