@@ -1,17 +1,41 @@
 import type { ApkRequest } from '@/api/apk-request';
 
-/** Optional public beta APK — skips manual approval when set in Vercel env. */
+/**
+ * Canonical production APK (Supabase Storage public object).
+ * Same URL forever — upload a new file to that path when you ship a build.
+ * Set once in Vercel: NEXT_PUBLIC_ANDROID_APK_URL
+ */
 export function getPublicApkUrl() {
   const url = process.env.NEXT_PUBLIC_ANDROID_APK_URL?.trim() ?? '';
   if (!url || url.includes('YOUR_')) return '';
   return url;
 }
 
-export function getEffectiveApkDownloadUrl(request: ApkRequest | null | undefined) {
-  if (request?.download_url && (request.status === 'ready' || request.status === 'downloaded')) {
-    return request.download_url;
+export function getPublicApkVersionLabel() {
+  const v = process.env.NEXT_PUBLIC_ANDROID_APK_VERSION?.trim() ?? '';
+  if (!v || v.includes('YOUR_')) return '';
+  return v;
+}
+
+/** Used on approve — never type a URL per owner. */
+export function resolveApkDownloadUrl(override?: string) {
+  const url = override?.trim() || getPublicApkUrl();
+  if (!url) {
+    throw new Error(
+      'Production APK is not configured. Set NEXT_PUBLIC_ANDROID_APK_URL on the website (fixed Storage URL), upload the latest .apk to that path, then approve.',
+    );
   }
-  return getPublicApkUrl() || null;
+  return url;
+}
+
+export function getEffectiveApkDownloadUrl(request: ApkRequest | null | undefined) {
+  const approved = request?.status === 'ready' || request?.status === 'downloaded';
+  if (approved) {
+    return getPublicApkUrl() || request?.download_url || null;
+  }
+  const publicUrl = getPublicApkUrl();
+  if (publicUrl && !request) return publicUrl;
+  return null;
 }
 
 export type AndroidFlowStep = 'account' | 'request' | 'download' | 'signin';

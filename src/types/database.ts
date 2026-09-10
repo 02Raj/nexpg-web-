@@ -4,6 +4,8 @@ export type SecurityStatus = 'held' | 'refund_due' | 'refunded';
 export type InvoiceStatus = 'pending' | 'paid';
 export type PaymentMode = 'upi' | 'cash';
 
+export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
+
 export type Building = {
   id: string;
   owner_id: string;
@@ -93,6 +95,16 @@ export type ApkDownloadRequest = {
   updated_at: string;
 };
 
+export type OwnerProfile = {
+  id: string;
+  email: string;
+  full_name: string | null;
+  is_active: boolean;
+  deactivated_at: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
 export type OccupancyCell = Bed & {
   room_name: string;
   tenant?: Pick<Tenant, 'id' | 'full_name' | 'monthly_rent'> | null;
@@ -115,6 +127,7 @@ export type Database = {
       security_deposits: Table<SecurityDeposit>;
       monthly_invoices: Table<MonthlyInvoice>;
       apk_download_requests: Table<ApkDownloadRequest>;
+      owner_profiles: Table<OwnerProfile>;
     };
     Views: Record<string, never>;
     Functions: {
@@ -141,6 +154,9 @@ export type Database = {
       rpc_mark_security_refunded: { Args: { p_deposit_id: string }; Returns: undefined };
       rpc_generate_invoices: { Args: { p_building_id: string }; Returns: number };
       rpc_maybe_generate_invoices: { Args: { p_building_id: string }; Returns: number };
+      rpc_platform_dashboard: { Args: Record<string, never>; Returns: Json };
+      rpc_platform_list_owners: { Args: Record<string, never>; Returns: Json };
+      rpc_platform_set_owner_active: { Args: { p_owner_id: string; p_active: boolean }; Returns: undefined };
     };
     Enums: Record<string, never>;
     CompositeTypes: Record<string, never>;

@@ -3,14 +3,13 @@
 import { approveApkRequest, fetchApkRequestsForAdmin, type ApkRequest } from '@/api/apk-request';
 import { Button } from '@/components/Button';
 import { LoadingCenter } from '@/components/Loading';
-import { getPublicApkUrl } from '@/lib/android-app';
+import { getPublicApkUrl, getPublicApkVersionLabel } from '@/lib/android-app';
 import { prettyDate, rpcMessage } from '@/lib/format';
 import { keys, queryClient } from '@/lib/query';
 import { toast } from '@/lib/toast';
 import { useToastOnError } from '@/hooks/useToastOnError';
 import { getSlowNetworkPollMs } from '@/lib/network';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
 import layout from '../platform.module.css';
 
 function StatusBadge({ status }: { status: ApkRequest['status'] }) {
@@ -24,8 +23,9 @@ function StatusBadge({ status }: { status: ApkRequest['status'] }) {
 }
 
 export default function PlatformApkRequestsPage() {
-  const defaultApkUrl = getPublicApkUrl();
-  const [apkUrl, setApkUrl] = useState(defaultApkUrl);
+  const releaseUrl = getPublicApkUrl();
+  const releaseVersion = getPublicApkVersionLabel();
+  const releaseConfigured = Boolean(releaseUrl);
 
   const list = useQuery({
     queryKey: keys.apkRequestsAdmin,
@@ -36,42 +36,77 @@ export default function PlatformApkRequestsPage() {
   useToastOnError(list.error, 'Could not load requests');
 
   const approve = useMutation({
-    mutationFn: ({ id, url }: { id: string; url: string }) => approveApkRequest(id, url),
+    mutationFn: (id: string) => approveApkRequest(id),
     onSuccess: (row) => {
-      toast.success(`Approved — ${row.email} can download from their Mobile app page.`);
+      toast.success(`Approved — ${row.email} can download from /download.`);
       queryClient.invalidateQueries({ queryKey: keys.apkRequestsAdmin });
     },
     onError: (err) => toast.error(rpcMessage(err, 'Could not approve')),
   });
 
+  const approveAll = useMutation({
+    mutationFn: async (ids: string[]) => {
+      for (const id of ids) {
+        await approveApkRequest(id);
+      }
+    },
+    onSuccess: (_, ids) => {
+      toast.success(`Approved ${ids.length} owner(s). They can download the same latest APK.`);
+      queryClient.invalidateQueries({ queryKey: keys.apkRequestsAdmin });
+    },
+    onError: (err) => toast.error(rpcMessage(err, 'Could not approve all')),
+  });
+
   const pending = (list.data ?? []).filter((r) => r.status === 'pending');
   const rest = (list.data ?? []).filter((r) => r.status !== 'pending');
+  const busy = approve.isPending || approveAll.isPending;
 
   if (list.isLoading) return <LoadingCenter message="Loading requests…" />;
 
   return (
     <div className={layout.panel}>
-      <p className={layout.hint}>
-        When you approve, the owner sees <strong>Download Android app</strong> on{' '}
-        <strong>/download</strong> (same screen where they requested). Set the APK link below once — it is used for
-        every approval.
-      </p>
+      <div className={layout.releaseCard}>
+        <h2 className={layout.releaseTitle}>Current Android release</h2>
+        <p className={layout.hint} style={{ marginBottom: 12 }}>
+          One APK for everyone. Owners only get access after you approve — they always download from this
+          link. When you ship a new build, upload the file to the <strong>same</strong> Storage path (overwrite);
+          no URL change on this page.
+        </p>
+        {releaseConfigured ? (
+          <>
+            {releaseVersion ? (
+              <p className="small" style={{ margin: '0 0 8px' }}>
+                Version label: <strong>{releaseVersion}</strong> (bump{' '}
+                <code>NEXT_PUBLIC_ANDROID_APK_VERSION</code> on deploy when you release)
+              </p>
+            ) : null}
+            <p className={layout.releaseUrl} title={releaseUrl}>
+              {releaseUrl}
+            </p>
+          </>
+        ) : (
+          <p className={layout.releaseMissing}>
+            Set <code>NEXT_PUBLIC_ANDROID_APK_URL</code> in production (Vercel) to your public Storage URL, e.g.{' '}
+            <code>…/apk-releases/runmypg.apk</code>. Upload the APK there after each EAS build, then approve
+            requests below.
+          </p>
+        )}
+      </div>
 
-      <label className="small" htmlFor="apk-url">
-        APK download URL
-      </label>
-      <input
-        id="apk-url"
-        className={layout.urlField}
-        style={{ width: '100%', marginTop: 6, marginBottom: 24 }}
-        value={apkUrl}
-        onChange={(e) => setApkUrl(e.target.value)}
-        placeholder="https://.../runmypg.apk"
-      />
+      <div className={layout.pendingHeader}>
+        <h2 className="section">Pending ({pending.length})</h2>
+        {pending.length > 1 && releaseConfigured ? (
+          <Button
+            label={busy ? 'Approving…' : `Approve all (${pending.length})`}
+            variant="success"
+            disabled={busy}
+            onClick={() => approveAll.mutate(pending.map((r) => r.id))}
+          />
+        ) : null}
+      </div>
 
-      <h2 className="section">Pending ({pending.length})</h2>
       {pending.length === 0 ? (
-        <p className={layout.empty}>No pending requests — owners will appear here after they tap Request on /download.</p>
+        <p className={layout.empty}>No pending requests — owners appear here after they tap Request on /download.</p>
       ) : (
         <div className={[layout.tableWrap, 'tableWrap'].join(' ')}>
           <table className="dataTable">
@@ -97,10 +132,10 @@ export default function PlatformApkRequestsPage() {
                   </td>
                   <td>
                     <Button
-                      label={approve.isPending ? 'Approving…' : 'Approve'}
+                      label={busy ? 'Approving…' : 'Approve'}
                       variant="success"
-                      disabled={approve.isPending || !apkUrl.trim()}
-                      onClick={() => approve.mutate({ id: row.id, url: apkUrl.trim() })}
+                      disabled={busy || !releaseConfigured}
+                      onClick={() => approve.mutate(row.id)}
                     />
                   </td>
                 </tr>

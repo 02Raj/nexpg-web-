@@ -1,18 +1,29 @@
 'use client';
 
+import { fetchMyOwnerProfile } from '@/api/platform-admin';
 import { env } from '@/lib/env';
-import { sanitizeAuthNext } from '@/lib/auth-redirect';
+import { isPlatformAdminEmail } from '@/lib/platform-admin';
+import { keys } from '@/lib/query';
 import { useAuth } from '@/providers/AuthProvider';
+import { useQuery } from '@tanstack/react-query';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, type ReactNode } from 'react';
 
 export function AuthGate({ children }: { children: ReactNode }) {
-  const { session, loading } = useAuth();
+  const { session, loading, user, signOut } = useAuth();
   const router = useRouter();
   const pathname = usePathname() ?? '/';
   const searchParams = useSearchParams();
   const query = searchParams.toString();
   const returnPath = query ? `${pathname}?${query}` : pathname;
+  const skipProfileCheck = isPlatformAdminEmail(user?.email);
+
+  const profile = useQuery({
+    queryKey: keys.ownerProfile,
+    queryFn: fetchMyOwnerProfile,
+    enabled: Boolean(session && user && !skipProfileCheck),
+    retry: false,
+  });
 
   useEffect(() => {
     if (loading) return;
@@ -54,6 +65,33 @@ NEXT_PUBLIC_SITE_URL=https://www.runmypg.in`}
 
   if (loading || !session) {
     return <div style={{ padding: 32 }} className="bodyMuted">Opening RunMyPG…</div>;
+  }
+
+  if (!skipProfileCheck && profile.data && profile.data.is_active === false) {
+    return (
+      <div style={{ padding: '48px 24px', maxWidth: 480, margin: '0 auto', textAlign: 'center' }}>
+        <p className="kicker">Account inactive</p>
+        <h1 className="display" style={{ fontSize: '1.75rem' }}>
+          Access paused
+        </h1>
+        <p className="bodyMuted" style={{ marginTop: 12, lineHeight: 1.6 }}>
+          Your RunMyPG owner account was deactivated by platform admin. Your PG data is safe — contact support to
+          reactivate.
+        </p>
+        <button
+          type="button"
+          className="btnPrimary"
+          style={{ marginTop: 24, padding: '12px 20px', border: 'none', borderRadius: 8, cursor: 'pointer' }}
+          onClick={() => signOut()}
+        >
+          Sign out
+        </button>
+      </div>
+    );
+  }
+
+  if (!skipProfileCheck && profile.isLoading) {
+    return <div style={{ padding: 32 }} className="bodyMuted">Checking account…</div>;
   }
 
   return <>{children}</>;

@@ -49,14 +49,17 @@ Add `http://localhost:3001/**` and `https://www.runmypg.in/**` to Supabase **Aut
 
 **Optional instant beta:** set `NEXT_PUBLIC_ANDROID_APK_URL` in Vercel to a public APK URL (e.g. Supabase Storage). Platform admin uses the same URL when clicking **Approve**.
 
-### Platform admin (APK approvals)
+### Platform admin console
 
-1. Run **`supabase/platform-admin.sql`** in Supabase SQL Editor (RLS + `platform_admins` table).
-2. **Authentication → Users → Add user:** `divyanshr243@gmail.com`, set password, **Auto confirm** ON.  
-   Also add this email to `platform_admins` via SQL if you change it.
-3. Vercel env: `NEXT_PUBLIC_PLATFORM_ADMIN_EMAILS=divyanshr243@gmail.com`
-4. Sign in as admin → sidebar **Platform admin · APK** or open **`/platform/apk-requests`**
-5. Paste APK URL once → **Approve** on each pending row → owner sees **Download** on **`/download`** (auto-refresh ~20s).
+After running migrations through `0005_platform_owner_profiles.sql`:
+
+- **`/platform/dashboard`** — stats + 14-day sign-up chart
+- **`/platform/owners`** — all PG owners, filters, soft **Deactivate / Reactivate** (no hard delete)
+- **`/platform/apk-requests`** — Android approvals
+
+Run **`supabase/migrations/0005_platform_owner_profiles.sql`** in SQL Editor (after `0004`).
+
+Admin setup: add user in Supabase Auth, `platform_admins` email, `NEXT_PUBLIC_PLATFORM_ADMIN_EMAILS` on Vercel. Open **`/platform/dashboard`** from sidebar **Platform admin**.
 
 ## Sync with mobile
 

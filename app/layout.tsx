@@ -11,6 +11,14 @@ export const metadata: Metadata = {
     'Manage beds, tenants, rent, bills, deposits and daily PG operations from one place with RunMyPG.',
   manifest: '/manifest.json',
   metadataBase: new URL('https://www.runmypg.in'),
+  icons: {
+    icon: [
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+      { url: '/icon', type: 'image/png', sizes: '32x32' },
+    ],
+    apple: [{ url: '/apple-icon', type: 'image/png', sizes: '180x180' }],
+    shortcut: '/favicon.svg',
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: 'black-translucent',
@@ -28,9 +36,6 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={fontClassNames}>
-      <head>
-        <link rel="apple-touch-icon" href="/icon-192.png" />
-      </head>
       <body>
         <QueryProvider>
           <AuthProvider>

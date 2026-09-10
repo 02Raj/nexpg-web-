@@ -1,3 +1,4 @@
+import { resolveApkDownloadUrl } from '@/lib/android-app';
 import { getSupabase } from '@/lib/supabase/client';
 
 export type ApkRequest = {
@@ -87,9 +88,9 @@ export async function fetchApkRequestsForAdmin(): Promise<ApkRequest[]> {
   return (data as ApkRequest[]) ?? [];
 }
 
-export async function approveApkRequest(requestId: string, downloadUrl: string) {
-  const url = downloadUrl.trim();
-  if (!url) throw new Error('APK download URL is required.');
+/** Approves access — always uses canonical NEXT_PUBLIC_ANDROID_APK_URL (one APK for all owners). */
+export async function approveApkRequest(requestId: string, downloadUrl?: string) {
+  const url = resolveApkDownloadUrl(downloadUrl);
 
   const supabase = getSupabase();
   const { data, error } = await supabase

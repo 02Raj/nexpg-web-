@@ -173,8 +173,8 @@ export function ConsoleShell({ children }: { children: React.ReactNode }) {
 
         <div className={styles.sidebarFoot}>
           {showPlatformAdmin ? (
-            <Link href="/platform/apk-requests" className={styles.apkLink}>
-              Platform admin · APK
+            <Link href="/platform/dashboard" className={styles.apkLink}>
+              Platform admin
             </Link>
           ) : null}
           <Link href="/download" className={styles.apkLink}>

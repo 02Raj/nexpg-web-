@@ -26,4 +26,7 @@ export const keys = {
   tenant: (tenantId: string) => ['tenant', tenantId] as const,
   apkRequest: ['apk-request'] as const,
   apkRequestsAdmin: ['apk-requests-admin'] as const,
+  platformDashboard: ['platform-dashboard'] as const,
+  platformOwners: ['platform-owners'] as const,
+  ownerProfile: ['owner-profile'] as const,
 };
