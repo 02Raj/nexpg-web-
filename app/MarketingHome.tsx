@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import { CITIES, MARKETING_FAQS, PRICING_ITEMS } from '@/content/marketing';
 import { getLatestPosts } from '@/content/blog';
 import { useAuth } from '@/providers/AuthProvider';
-import s from './marketing.module.css';
+import s from '@/components/marketing/marketing.module.css';
 import b from './blog/blog.module.css';
 
 /* ══════════════════════════════════════════════════

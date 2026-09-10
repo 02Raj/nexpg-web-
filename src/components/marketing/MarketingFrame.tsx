@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { useAuth } from '@/providers/AuthProvider';
-import s from '../../app/marketing.module.css';
+import s from './marketing.module.css';
 
 export function MarketingFrame({
   children,
