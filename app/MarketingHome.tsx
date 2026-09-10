@@ -423,7 +423,11 @@ function Navbar({
         <div className={s.navRight}>
           {!isLoggedIn && <Link href="/login" className={s.navBtnLogin}>Log in</Link>}
           <Link href={primaryHref} className={s.navBtnPrimary}>
-            {primaryLabel}{!isLoggedIn && ' →'}
+            <span className={s.navCtaLong}>
+              {primaryLabel}
+              {!isLoggedIn ? ' →' : ''}
+            </span>
+            <span className={s.navCtaShort}>{isLoggedIn ? 'Open' : 'Start'}</span>
           </Link>
           <button
             type="button"

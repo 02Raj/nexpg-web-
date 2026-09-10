@@ -139,6 +139,10 @@
   transform: translateY(1px);
 }
 
+.navCtaShort {
+  display: none;
+}
+
 .mobileMenuBtn {
   display: none;
   background: none;
@@ -1599,6 +1603,7 @@
   background: var(--paper);
   border-radius: 12px;
   overflow: hidden;
+  max-width: 100%;
   box-shadow:
     0 24px 64px rgba(0, 0, 0, 0.35),
     0 0 0 1px rgba(247, 245, 241, 0.08);
@@ -2106,6 +2111,7 @@
   background: var(--paper);
   border-top: 1px solid var(--line);
   scroll-margin-top: 88px;
+  overflow-x: clip;
 }
 
 .productHeader {
@@ -2119,6 +2125,12 @@
   grid-template-columns: 1.15fr 1fr;
   gap: 48px;
   align-items: start;
+}
+
+.productWebCol,
+.productMobileCol {
+  min-width: 0;
+  max-width: 100%;
 }
 
 .productLabel {
@@ -2158,6 +2170,8 @@
   align-items: flex-end;
   gap: 12px;
   padding: 20px 0 8px;
+  max-width: 100%;
+  overflow: hidden;
   background:
     radial-gradient(ellipse 80% 60% at 50% 100%, rgba(201, 122, 43, 0.08) 0%, transparent 70%);
   border-radius: 16px;
@@ -2224,17 +2238,40 @@
 
   .productShowcase {
     grid-template-columns: 1fr;
-    gap: 56px;
+    gap: 40px;
   }
 
   .phoneRow {
-    flex-wrap: wrap;
-    gap: 20px;
+    flex-wrap: nowrap;
+    justify-content: center;
+    overflow: hidden;
+    gap: 0;
+  }
+
+  .phoneRow .phone:not(.phoneFeatured) {
+    display: none;
   }
 
   .phoneTiltLeft,
-  .phoneTiltRight {
+  .phoneTiltRight,
+  .phoneFeatured {
     transform: none;
+  }
+
+  .phoneFeatured .phoneFrame {
+    width: min(220px, 58vw);
+  }
+
+  .webMockLarge .webSidebar {
+    display: none;
+  }
+
+  .webStats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .webMockLarge .webMockBody {
+    min-height: 0;
   }
 
   .heroVisualFrame {
@@ -2303,21 +2340,53 @@
     top: 64px;
   }
 
+  .navBtnPrimary {
+    padding: 8px 14px;
+    font-size: 13px;
+    flex-shrink: 0;
+  }
+
+  .navCtaLong {
+    display: none;
+  }
+
+  .navCtaShort {
+    display: inline;
+  }
+
   .hero {
-    padding: 128px 24px 80px;
+    padding: 108px 20px 64px;
+  }
+
+  .heroCtas {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btnHeroPrimary,
+  .btnHeroSecondary {
+    justify-content: center;
+    width: 100%;
+    text-align: center;
   }
 
   .productSection {
-    padding: 72px 24px;
+    padding: 56px 16px;
+    overflow-x: clip;
   }
 
   .phoneRow {
     flex-direction: column;
     align-items: center;
+    overflow: hidden;
   }
 
   .phoneFeatured .phoneFrame {
-    width: 200px;
+    width: min(210px, calc(100vw - 64px));
+  }
+
+  .phoneFeatured .phoneScreen {
+    min-height: 280px;
   }
 
   .syncBanner {

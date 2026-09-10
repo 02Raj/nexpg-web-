@@ -425,10 +425,20 @@
     margin-bottom: 24px;
   }
 
+  .previewWrap {
+    display: none;
+  }
+
   .formPanel {
-    padding: 32px 24px 64px;
+    padding: 24px 16px 48px;
     flex: 1;
     align-items: flex-start;
+  }
+
+  .formCard {
+    padding: 24px 18px;
+    border-radius: 12px;
+    max-width: 100%;
   }
 
   .formPanel::before,
@@ -436,13 +446,7 @@
     display: none;
   }
 
-  .formCard {
-    padding: 32px 24px;
-    border-radius: 12px;
-    max-width: 100%;
-  }
-
   .formTitle {
-    font-size: 28px;
+    font-size: 24px;
   }
 }
