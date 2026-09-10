@@ -561,8 +561,8 @@ function WebConsoleMockup({ large }: { large?: boolean }) {
             <div className={s.webRoom}>
               <span>Room 1</span>
               <div className={s.webBeds}>
-                <span className={s.webBedOn}>A · Divyansh</span>
-                <span className={s.webBedOn}>B · Hridyansh</span>
+                <span className={s.webBedOn}>A · Arjun</span>
+                <span className={s.webBedOn}>B · Kabir</span>
               </div>
             </div>
             <div className={s.webRoom}>
@@ -649,8 +649,8 @@ function MobileBedsScreen() {
       <div className={s.mRoomCard}>
         <p>Room 1 · 2/2 filled</p>
         <div className={s.mBedRow}>
-          <span className={s.mBedFilled}>A Divyansh</span>
-          <span className={s.mBedFilled}>B Hridyansh</span>
+          <span className={s.mBedFilled}>A Arjun</span>
+          <span className={s.mBedFilled}>B Kabir</span>
         </div>
       </div>
       <div className={s.mRoomCard}>
@@ -677,14 +677,14 @@ function MobileBillsScreen() {
       <h4 className={s.mTitle}>September 2026</h4>
       <div className={s.mBillRow}>
         <div>
-          <strong>Divyansh</strong>
+          <strong>Arjun</strong>
           <span>Room 1-A</span>
         </div>
         <span className={s.mBillPaid}>Paid</span>
       </div>
       <div className={s.mBillRow}>
         <div>
-          <strong>Hridyansh</strong>
+          <strong>Kabir</strong>
           <span>Room 1-B</span>
         </div>
         <span className={s.mBillPaid}>Paid</span>
