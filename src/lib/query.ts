@@ -1,14 +1,23 @@
-import { QueryClient } from '@tanstack/react-query';
+import { QueryClient, keepPreviousData } from '@tanstack/react-query';
 
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 30_000,
+      staleTime: 2 * 60_000,
+      gcTime: 15 * 60_000,
       retry: 1,
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: true,
+      refetchIntervalInBackground: false,
+      networkMode: 'offlineFirst',
+      placeholderData: keepPreviousData,
+    },
+    mutations: {
+      retry: 0,
+      networkMode: 'offlineFirst',
     },
   },
 });
-
 export const keys = {
   buildings: ['buildings'] as const,
   dashboard: (buildingId: string) => ['dashboard', buildingId] as const,
@@ -16,4 +25,5 @@ export const keys = {
   invoices: (buildingId: string, period: string) => ['invoices', buildingId, period] as const,
   tenant: (tenantId: string) => ['tenant', tenantId] as const,
   apkRequest: ['apk-request'] as const,
+  apkRequestsAdmin: ['apk-requests-admin'] as const,
 };

@@ -73,8 +73,8 @@ export async function fetchOccupancy(buildingId: string): Promise<OccupancyCell[
   const supabase = getSupabase();
   const [{ data: rooms, error: roomErr }, { data: beds, error: bedErr }, { data: tenants, error: tenErr }] =
     await Promise.all([
-      supabase.from('pg_rooms').select('*').eq('building_id', buildingId).order('sort_order'),
-      supabase.from('pg_beds').select('*').eq('building_id', buildingId),
+      supabase.from('pg_rooms').select('id, name, sort_order, building_id').eq('building_id', buildingId).order('sort_order'),
+      supabase.from('pg_beds').select('id, room_id, label, status, building_id').eq('building_id', buildingId),
       supabase
         .from('tenants')
         .select('id, full_name, monthly_rent, bed_id')
@@ -117,10 +117,13 @@ export async function fetchDashboard(buildingId: string) {
     fetchOccupancy(buildingId),
     supabase
       .from('monthly_invoices')
-      .select('*')
+      .select('id, tenant_id, amount, status, billing_period')
       .eq('building_id', buildingId)
       .eq('billing_period', period),
-    supabase.from('security_deposits').select('*').eq('building_id', buildingId),
+    supabase
+      .from('security_deposits')
+      .select('id, tenant_id, amount, status')
+      .eq('building_id', buildingId),
     supabase.from('tenants').select('id, full_name').eq('building_id', buildingId),
   ]);
 
@@ -199,15 +202,16 @@ export async function fetchTenantDetail(tenantId: string) {
   if (iErr) throw iErr;
 
   const t = tenant as Tenant;
-  const { data: bed } = await supabase.from('pg_beds').select('*').eq('id', t.bed_id).single();
+  const { data: bed, error: bErr } = await supabase
+    .from('pg_beds')
+    .select('id, label, room_id')
+    .eq('id', t.bed_id)
+    .single();
+  if (bErr) throw bErr;
   const bedRow = bed as Bed | null;
   let roomName = 'Room';
   if (bedRow) {
-    const { data: roomRow } = await supabase
-      .from('pg_rooms')
-      .select('name')
-      .eq('id', bedRow.room_id)
-      .single();
+    const { data: roomRow } = await supabase.from('pg_rooms').select('name').eq('id', bedRow.room_id).single();
     roomName = (roomRow as Pick<Room, 'name'> | null)?.name ?? 'Room';
   }
 

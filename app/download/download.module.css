@@ -1,82 +1,228 @@
 .page {
-  max-width: 1240px;
+  max-width: 960px;
   margin: 0 auto;
-  padding: 80px 48px;
+  padding: 24px 20px 64px;
 }
 
-.hero {
-  display: grid;
-  grid-template-columns: 1fr 400px;
-  gap: 64px;
-  align-items: start;
+.topBar {
+  margin-bottom: 32px;
 }
 
-@media (max-width: 900px) {
-  .hero {
-    grid-template-columns: 1fr;
-    gap: 40px;
-  }
-}
-
-.leftCol {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.card {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.card li {
-  padding-left: 24px;
-  position: relative;
-  font-size: 15px;
-  color: var(--ink);
-  font-weight: 500;
-}
-
-.card li::before {
-  content: '✓';
-  position: absolute;
-  left: 0;
-  top: 0;
-  color: var(--green);
-  font-weight: bold;
-}
-
-.box {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  padding: 32px;
-  background: var(--white);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-lg);
-  box-shadow: 0 8px 24px rgba(22, 48, 43, 0.04);
-}
-
-.error {
-  color: var(--red);
-  font-size: 14px;
-}
-
-.continue {
-  display: block;
-  margin-top: 24px;
+.backLink {
   font-size: 14px;
   font-weight: 500;
   color: var(--ink-muted);
-  text-decoration: underline;
-  text-decoration-color: transparent;
-  transition: text-decoration-color 0.2s;
 }
 
-.continue:hover {
-  text-decoration-color: currentColor;
+.backLink:hover {
+  color: var(--ink);
+}
+
+.layout {
+  display: grid;
+  gap: 40px;
+}
+
+@media (min-width: 880px) {
+  .layout {
+    grid-template-columns: 1fr 420px;
+    gap: 48px;
+    align-items: start;
+  }
+}
+
+.intro {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.lead {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--ink-muted);
+  max-width: 36rem;
+}
+
+.syncList {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.syncList li {
+  position: relative;
+  padding-left: 22px;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.syncList li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--green);
+  font-weight: 700;
+}
+
+.panel {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 24px 22px 28px;
+  box-shadow: 0 8px 28px rgba(22, 48, 43, 0.05);
+}
+
+.panelHead {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  color: var(--ink);
+}
+
+.panelHead h2 {
+  margin: 0;
+}
+
+.stepper {
+  list-style: none;
+  margin: 0 0 24px;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+@media (min-width: 480px) {
+  .stepper {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+  padding: 12px 8px;
+  border-radius: var(--radius-md);
+  border: 1px dashed var(--line);
+  background: var(--paper);
+}
+
+.stepDone {
+  border-style: solid;
+  border-color: rgba(60, 122, 94, 0.35);
+  background: var(--green-soft);
+}
+
+.stepActive {
+  border-style: solid;
+  border-color: var(--ochre);
+  background: var(--ochre-soft);
+}
+
+.stepIcon {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  background: var(--white);
+  color: var(--ink-muted);
+}
+
+.stepDone .stepIcon {
+  background: var(--green);
+  color: var(--white);
+}
+
+.stepActive .stepIcon {
+  color: var(--ochre-deep);
+}
+
+.stepLabel {
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--ink-muted);
+}
+
+.stepActive .stepLabel,
+.stepDone .stepLabel {
+  color: var(--ink);
+}
+
+.actionBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.actionLead {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--ink);
+}
+
+.actionRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.hint {
+  margin: 0;
+  font-size: 13px;
+  color: var(--ink-faint);
+  font-family: var(--font-mono);
+}
+
+.installBox {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+
+.installTitle {
+  margin: 0 0 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.installList {
+  margin: 0;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--ink-muted);
+}
+
+.linkBtn {
+  margin-top: 16px;
+  border: none;
+  background: none;
+  padding: 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ochre-deep);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.linkBtn:hover {
+  color: var(--ink);
 }

@@ -1,19 +1,26 @@
 'use client';
 
 import { env } from '@/lib/env';
+import { sanitizeAuthNext } from '@/lib/auth-redirect';
 import { useAuth } from '@/providers/AuthProvider';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, type ReactNode } from 'react';
 
 export function AuthGate({ children }: { children: ReactNode }) {
   const { session, loading } = useAuth();
   const router = useRouter();
+  const pathname = usePathname() ?? '/';
+  const searchParams = useSearchParams();
+  const query = searchParams.toString();
+  const returnPath = query ? `${pathname}?${query}` : pathname;
 
   useEffect(() => {
     if (loading) return;
     if (!env.isConfigured) return;
-    if (!session) router.replace('/login');
-  }, [session, loading, router]);
+    if (!session) {
+      router.replace(`/login?next=${encodeURIComponent(returnPath)}`);
+    }
+  }, [session, loading, router, returnPath]);
 
   if (!env.isConfigured) {
     return (

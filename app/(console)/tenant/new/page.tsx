@@ -6,6 +6,7 @@ import { Button } from '@/components/Button';
 import { EmptyState } from '@/components/EmptyState';
 import { Field } from '@/components/Field';
 import { rpcMessage, todayIST } from '@/lib/format';
+import { toast } from '@/lib/toast';
 import { keys, queryClient } from '@/lib/query';
 import { useBuilding } from '@/providers/BuildingProvider';
 import { useMutation, useQuery } from '@tanstack/react-query';
@@ -51,10 +52,12 @@ export default function NewTenantPage() {
         joinDate: join,
       }),
     onSuccess: async (id) => {
+      toast.success('Tenant added.');
       await queryClient.invalidateQueries({ queryKey: keys.occupancy(buildingId) });
       await queryClient.invalidateQueries({ queryKey: keys.dashboard(buildingId) });
       router.replace(`/tenant/${id}`);
     },
+    onError: (err) => toast.error(rpcMessage(err, 'Could not add tenant')),
   });
 
   const canSubmit =
@@ -100,8 +103,6 @@ export default function NewTenantPage() {
             </div>
 
             <Field label="Join date" value={join} onChange={setJoin} type="date" />
-
-            {mutate.error ? <p className={styles.error}>{rpcMessage(mutate.error)}</p> : null}
 
             <Button label={mutate.isPending ? 'Saving…' : 'Add tenant'} disabled={!canSubmit} onClick={() => mutate.mutate()} />
           </div>

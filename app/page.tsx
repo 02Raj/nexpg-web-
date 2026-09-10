@@ -18,7 +18,7 @@ const FAQS: { q: string; a: string }[] = [
   },
   {
     q: 'How does the Android app work?',
-    a: 'After you create your account on the web, request the Android APK from the Download page. We review requests within 24 hours. Once approved, download the APK, install it, and sign in with the same email. All data syncs automatically.',
+    a: 'Open Mobile app from the menu (or /download). Sign in with the same email as the website, tap Request Android app, then install when download is ready. Web and phone stay in sync automatically.',
   },
   {
     q: 'Is my data secure?',
@@ -396,7 +396,7 @@ export default function MarketingPage() {
               <li><button type="button" className={s.footerLink} onClick={() => scrollTo('product')}>Product</button></li>
               <li><button type="button" className={s.footerLink} onClick={() => scrollTo('features')}>Features</button></li>
               <li><button type="button" className={s.footerLink} onClick={() => scrollTo('pricing')}>Pricing</button></li>
-              <li><Link href="/download" className={s.footerLink}>Android App</Link></li>
+              <li><Link href="/download" prefetch={false} className={s.footerLink}>Android App</Link></li>
             </ul>
           </div>
           <div>

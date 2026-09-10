@@ -2,33 +2,35 @@
 
 import { Field } from '@/components/Field';
 import { rpcMessage } from '@/lib/format';
+import { toast } from '@/lib/toast';
 import { useAuth } from '@/providers/AuthProvider';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { sanitizeAuthNext } from '@/lib/auth-redirect';
 import styles from '../auth.module.css';
 
 export default function LoginPage() {
   const { signIn, session, loading } = useAuth();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const next = sanitizeAuthNext(searchParams.get('next'));
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [busy, setBusy] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!loading && session) router.replace('/dashboard');
-  }, [loading, session, router]);
+    if (!loading && session) router.replace(next);
+  }, [loading, session, router, next]);
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null);
     setBusy(true);
     try {
       await signIn(email, password);
-      router.replace('/dashboard');
+      router.replace(next);
     } catch (err) {
-      setError(rpcMessage(err, 'Could not sign in'));
+      toast.error(rpcMessage(err, 'Could not sign in'));
     } finally {
       setBusy(false);
     }
@@ -92,8 +94,6 @@ export default function LoginPage() {
             <Field label="Email" value={email} onChange={setEmail} type="email" placeholder="owner@example.com" />
             <Field label="Password" value={password} onChange={setPassword} type="password" placeholder="••••••••" />
             
-            {error ? <p className={styles.error}>{error}</p> : null}
-            
             <div className={styles.formRow} style={{ marginTop: 2, marginBottom: 8 }}>
               <Link href="/forgot-password" className={styles.link}>
                 Forgot password?
@@ -109,8 +109,8 @@ export default function LoginPage() {
             </button>
             
             <p className={styles.formFooter}>
-              Don't have an account?{' '}
-              <Link href="/signup">
+              Don&apos;t have an account?{' '}
+              <Link href={`/signup?next=${encodeURIComponent(next)}`}>
                 Create one
               </Link>
             </p>

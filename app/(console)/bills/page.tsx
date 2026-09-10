@@ -6,18 +6,18 @@ import { EmptyState } from '@/components/EmptyState';
 import { LoadingCenter } from '@/components/Loading';
 import { NoBuilding } from '@/components/NoBuilding';
 import { inrExact, monthLabel, rpcMessage, todayIST } from '@/lib/format';
+import { toast } from '@/lib/toast';
+import { useToastOnError } from '@/hooks/useToastOnError';
 import { keys, queryClient } from '@/lib/query';
 import { useBuilding } from '@/providers/BuildingProvider';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { Receipt } from 'lucide-react';
-import { useState } from 'react';
 import styles from './bills.module.css';
 
 export default function BillsPage() {
   const { building } = useBuilding();
   const buildingId = building?.id ?? '';
   const period = `${todayIST().slice(0, 8)}01`;
-  const [flash, setFlash] = useState<string | null>(null);
 
   const q = useQuery({
     queryKey: keys.invoices(buildingId, period),
@@ -25,13 +25,16 @@ export default function BillsPage() {
     enabled: Boolean(buildingId),
   });
 
+  useToastOnError(q.error, 'Could not load bills');
+
   const pay = useMutation({
     mutationFn: ({ id, mode }: { id: string; mode: 'upi' | 'cash' }) => markInvoicePaid(id, mode),
     onSuccess: () => {
-      setFlash('Payment recorded.');
+      toast.success('Payment recorded.');
       queryClient.invalidateQueries({ queryKey: keys.invoices(buildingId, period) });
       queryClient.invalidateQueries({ queryKey: keys.dashboard(buildingId) });
     },
+    onError: (err) => toast.error(rpcMessage(err, 'Could not record payment')),
   });
 
   const gen = useMutation({
@@ -39,12 +42,13 @@ export default function BillsPage() {
     onSuccess: (count) => {
       queryClient.invalidateQueries({ queryKey: keys.invoices(buildingId, period) });
       queryClient.invalidateQueries({ queryKey: keys.dashboard(buildingId) });
-      setFlash(
+      toast.success(
         count === 0
           ? 'All active tenants already have a bill for this month.'
           : `${count} new bill${count === 1 ? '' : 's'} generated.`,
       );
     },
+    onError: (err) => toast.error(rpcMessage(err, 'Could not generate bills')),
   });
 
   if (!building) return <NoBuilding />;
@@ -85,9 +89,6 @@ export default function BillsPage() {
           disabled={gen.isPending}
         />
       </div>
-
-      {flash ? <p className={styles.flash}>{flash}</p> : null}
-      {gen.error ? <p className={styles.error}>{rpcMessage(gen.error)}</p> : null}
 
       {rows.length === 0 ? (
         <EmptyState
@@ -179,7 +180,6 @@ export default function BillsPage() {
           ) : null}
         </div>
       )}
-      {pay.error ? <p className={styles.error}>{rpcMessage(pay.error)}</p> : null}
     </div>
   );
 }

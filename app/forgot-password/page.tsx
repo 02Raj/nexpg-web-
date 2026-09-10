@@ -2,6 +2,7 @@
 
 import { Field } from '@/components/Field';
 import { rpcMessage } from '@/lib/format';
+import { toast } from '@/lib/toast';
 import { useAuth } from '@/providers/AuthProvider';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -11,18 +12,17 @@ export default function ForgotPasswordPage() {
   const { requestPasswordReset } = useAuth();
   const [email, setEmail] = useState('');
   const [busy, setBusy] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [sent, setSent] = useState(false);
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null);
     setBusy(true);
     try {
       await requestPasswordReset(email);
+      toast.success('If an account exists, a reset link was sent to your email.');
       setSent(true);
     } catch (err) {
-      setError(rpcMessage(err, 'Could not send reset email'));
+      toast.error(rpcMessage(err, 'Could not send reset email'));
     } finally {
       setBusy(false);
     }
@@ -44,7 +44,6 @@ export default function ForgotPasswordPage() {
           ) : (
             <form className={styles.form} onSubmit={onSubmit}>
               <Field label="Email" value={email} onChange={setEmail} type="email" placeholder="owner@example.com" />
-              {error ? <p className={styles.error}>{error}</p> : null}
               <button type="submit" className={styles.submitBtn} disabled={busy || !email}>
                 {busy ? 'Sending…' : 'Send reset link'}
               </button>

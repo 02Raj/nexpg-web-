@@ -4,12 +4,12 @@ import { addRoomWithBeds } from '@/api/nexpg';
 import { Button } from '@/components/Button';
 import { Field } from '@/components/Field';
 import { rpcMessage } from '@/lib/format';
+import { toast } from '@/lib/toast';
 import { keys, queryClient } from '@/lib/query';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import styles from '../../form-page.module.css';
-import setupStyles from '../setup.module.css';
 
 export default function SetupRoomsPage() {
   const router = useRouter();
@@ -24,8 +24,10 @@ export default function SetupRoomsPage() {
     onSuccess: async () => {
       setRoomName('');
       setAdded((n) => n + 1);
+      toast.success('Room added.');
       await queryClient.invalidateQueries({ queryKey: keys.occupancy(buildingId) });
     },
+    onError: (err) => toast.error(rpcMessage(err, 'Could not add room')),
   });
 
   if (!buildingId) {
@@ -47,7 +49,6 @@ export default function SetupRoomsPage() {
         <div className={styles.form}>
           <Field label="Room name" value={roomName} onChange={setRoomName} placeholder="101" />
           <Field label="Beds in this room" value={beds} onChange={setBeds} type="number" hint="1 to 8" />
-          {mutate.error ? <p className={setupStyles.error}>{rpcMessage(mutate.error)}</p> : null}
           <Button
             label={mutate.isPending ? 'Adding…' : 'Add room'}
             disabled={!roomName || mutate.isPending}

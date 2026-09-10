@@ -36,6 +36,16 @@ export async function submitApkRequest(input: {
   const ownerId = userData.user?.id;
   if (!ownerId) throw new Error('Sign in to request the Android app.');
 
+  const existing = await fetchMyApkRequest();
+  if (existing) {
+    if (existing.status === 'pending' || existing.status === 'ready') {
+      return existing;
+    }
+    if (existing.status === 'downloaded' && existing.download_url) {
+      return existing;
+    }
+  }
+
   const { data, error } = await supabase
     .from('apk_download_requests')
     .insert({
@@ -46,7 +56,14 @@ export async function submitApkRequest(input: {
     })
     .select('*')
     .single();
-  if (error) throw error;
+
+  if (error) {
+    if (error.code === '23505') {
+      const again = await fetchMyApkRequest();
+      if (again) return again;
+    }
+    throw error;
+  }
   return data as ApkRequest;
 }
 
@@ -57,4 +74,34 @@ export async function markApkDownloaded(requestId: string) {
     .update({ status: 'downloaded', downloaded_at: new Date().toISOString() })
     .eq('id', requestId);
   if (error) throw error;
+}
+
+/** Platform admin — requires Supabase RLS (see supabase/platform-admin.sql). */
+export async function fetchApkRequestsForAdmin(): Promise<ApkRequest[]> {
+  const supabase = getSupabase();
+  const { data, error } = await supabase
+    .from('apk_download_requests')
+    .select('*')
+    .order('requested_at', { ascending: false });
+  if (error) throw error;
+  return (data as ApkRequest[]) ?? [];
+}
+
+export async function approveApkRequest(requestId: string, downloadUrl: string) {
+  const url = downloadUrl.trim();
+  if (!url) throw new Error('APK download URL is required.');
+
+  const supabase = getSupabase();
+  const { data, error } = await supabase
+    .from('apk_download_requests')
+    .update({
+      status: 'ready',
+      download_url: url,
+      download_ready_at: new Date().toISOString(),
+    })
+    .eq('id', requestId)
+    .select('*')
+    .single();
+  if (error) throw error;
+  return data as ApkRequest;
 }

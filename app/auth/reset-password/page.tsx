@@ -3,6 +3,7 @@
 import { Button } from '@/components/Button';
 import { Field } from '@/components/Field';
 import { rpcMessage } from '@/lib/format';
+import { toast } from '@/lib/toast';
 import { useAuth } from '@/providers/AuthProvider';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -13,16 +14,16 @@ export default function ResetPasswordPage() {
   const router = useRouter();
   const [password, setPassword] = useState('');
   const [busy, setBusy] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setBusy(true);
     try {
       await updatePassword(password);
+      toast.success('Password updated.');
       router.replace('/dashboard');
     } catch (err) {
-      setError(rpcMessage(err, 'Could not update password'));
+      toast.error(rpcMessage(err, 'Could not update password'));
     } finally {
       setBusy(false);
     }
@@ -33,7 +34,6 @@ export default function ResetPasswordPage() {
       <h1 className="display">New password</h1>
       <form className={styles.form} onSubmit={onSubmit}>
         <Field label="Password" value={password} onChange={setPassword} type="password" />
-        {error ? <p className={styles.error}>{error}</p> : null}
         <Button type="submit" label={busy ? 'Saving…' : 'Update password'} disabled={busy || password.length < 6} />
       </form>
     </div>

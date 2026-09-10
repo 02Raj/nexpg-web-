@@ -11,6 +11,8 @@ import { Field } from '@/components/Field';
 import { NoBuilding } from '@/components/NoBuilding';
 import { formatBuildingLocation } from '@/lib/locations';
 import { inr, rpcMessage } from '@/lib/format';
+import { toast } from '@/lib/toast';
+import { useToastOnError } from '@/hooks/useToastOnError';
 import { keys, queryClient } from '@/lib/query';
 import { useBuilding } from '@/providers/BuildingProvider';
 import { useMutation, useQuery } from '@tanstack/react-query';
@@ -25,7 +27,6 @@ export default function MorePage() {
   const [billing, setBilling] = useState(String(building?.billing_date ?? 5));
   const [roomName, setRoomName] = useState('');
   const [beds, setBeds] = useState('2');
-  const [msg, setMsg] = useState<string | null>(null);
 
   useEffect(() => {
     if (building) setBilling(String(building.billing_date));
@@ -40,28 +41,34 @@ export default function MorePage() {
   const saveBilling = useMutation({
     mutationFn: () => updateBillingDate(building!.id, Number(billing)),
     onSuccess: () => {
-      setMsg('Billing date saved. Bills auto-create on this day (IST).');
+      toast.success('Billing date saved. Bills auto-create on this day (IST).');
       queryClient.invalidateQueries({ queryKey: keys.buildings });
     },
+    onError: (err) => toast.error(rpcMessage(err, 'Could not save billing date')),
   });
 
   const addRoom = useMutation({
     mutationFn: () => addRoomWithBeds(building!.id, roomName, Number(beds)),
     onSuccess: () => {
       setRoomName('');
-      setMsg('Room added.');
+      toast.success('Room added.');
       queryClient.invalidateQueries({ queryKey: keys.occupancy(building!.id) });
       queryClient.invalidateQueries({ queryKey: keys.dashboard(building!.id) });
     },
+    onError: (err) => toast.error(rpcMessage(err, 'Could not add room')),
   });
 
   const refund = useMutation({
     mutationFn: (id: string) => markSecurityRefunded(id),
     onSuccess: () => {
+      toast.success('Security deposit marked as refunded.');
       queryClient.invalidateQueries({ queryKey: ['refunds', building?.id] });
       queryClient.invalidateQueries({ queryKey: keys.dashboard(building!.id) });
     },
+    onError: (err) => toast.error(rpcMessage(err, 'Could not update refund')),
   });
+
+  useToastOnError(refunds.error, 'Could not load refunds');
 
   if (!building) return <NoBuilding />;
 
@@ -148,14 +155,6 @@ export default function MorePage() {
       <div className={styles.foot}>
         <Button label="Add another PG" variant="secondary" onClick={() => router.push('/setup/building')} />
       </div>
-
-      {(saveBilling.error || addRoom.error || refund.error || msg) && (
-        <p className={styles.msg}>
-          {saveBilling.error || addRoom.error || refund.error
-            ? rpcMessage(saveBilling.error || addRoom.error || refund.error)
-            : msg}
-        </p>
-      )}
     </div>
   );
 }

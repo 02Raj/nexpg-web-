@@ -6,6 +6,7 @@ import { EmptyState } from '@/components/EmptyState';
 import { LoadingCenter } from '@/components/Loading';
 import { NoBuilding } from '@/components/NoBuilding';
 import { keys } from '@/lib/query';
+import { useToastOnError } from '@/hooks/useToastOnError';
 import { useBuilding } from '@/providers/BuildingProvider';
 import { useQuery } from '@tanstack/react-query';
 import { BedDouble } from 'lucide-react';
@@ -21,6 +22,8 @@ export default function BedsPage() {
     queryFn: () => fetchOccupancy(buildingId),
     enabled: Boolean(buildingId),
   });
+
+  useToastOnError(q.error, 'Could not load beds');
 
   if (!building) return <NoBuilding />;
   if (q.isLoading) return <LoadingCenter message="Loading beds…" />;

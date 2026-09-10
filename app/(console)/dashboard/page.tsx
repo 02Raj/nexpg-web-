@@ -8,19 +8,20 @@ import { LoadingCenter, Skeleton } from '@/components/Loading';
 import { NoBuilding } from '@/components/NoBuilding';
 import { formatBuildingLocation } from '@/lib/locations';
 import { inr, monthLabel, rpcMessage } from '@/lib/format';
+import { toast } from '@/lib/toast';
+import { useToastOnError } from '@/hooks/useToastOnError';
 import { keys, queryClient } from '@/lib/query';
 import { useBuilding } from '@/providers/BuildingProvider';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { AlertCircle, Banknote, BedDouble, Users } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import styles from './dashboard.module.css';
 
 export default function DashboardPage() {
   const router = useRouter();
   const { building } = useBuilding();
   const buildingId = building?.id ?? '';
-  const [flash, setFlash] = useState<string | null>(null);
 
   const dash = useQuery({
     queryKey: keys.dashboard(buildingId),
@@ -37,12 +38,15 @@ export default function DashboardPage() {
       .catch(() => undefined);
   }, [buildingId]);
 
+  useToastOnError(dash.error, 'Could not load dashboard');
+
   const gen = useMutation({
     mutationFn: () => generateInvoices(buildingId),
     onSuccess: (n) => {
-      setFlash(n === 0 ? 'Bills for this month are already generated.' : `${n} invoice${n === 1 ? '' : 's'} created.`);
+      toast.success(n === 0 ? 'Bills for this month are already generated.' : `${n} invoice${n === 1 ? '' : 's'} created.`);
       queryClient.invalidateQueries({ queryKey: keys.dashboard(buildingId) });
     },
+    onError: (err) => toast.error(rpcMessage(err, 'Could not generate bills')),
   });
 
   if (!building) return <NoBuilding />;
@@ -66,7 +70,16 @@ export default function DashboardPage() {
     );
   }
 
-  if (dash.error) return <p className={styles.error}>{rpcMessage(dash.error)}</p>;
+  if (dash.error) {
+    return (
+      <EmptyState
+        icon={<AlertCircle size={28} />}
+        title="Dashboard unavailable"
+        message="We could not load your data. Check your connection and try again."
+        action={{ label: 'Retry', onClick: () => dash.refetch() }}
+      />
+    );
+  }
 
   const d = dash.data!;
   const totalBeds = d.occupied + d.empty;
@@ -141,8 +154,6 @@ export default function DashboardPage() {
                 onClick={() => gen.mutate()}
               />
             </div>
-            {gen.error ? <p className={styles.error}>{rpcMessage(gen.error)}</p> : null}
-            {flash ? <p className="small">{flash}</p> : null}
             {d.refundDueCount > 0 ? (
               <p className={styles.alertOchre}>
                 Security refund due: {inr(d.refundDueAmount)} ({d.refundDueCount})

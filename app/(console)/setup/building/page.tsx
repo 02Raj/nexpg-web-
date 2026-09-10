@@ -6,6 +6,7 @@ import { Field } from '@/components/Field';
 import { LocationFields } from '@/components/LocationFields';
 import { CITY_STATE_HINT } from '@/lib/locations';
 import { rpcMessage } from '@/lib/format';
+import { toast } from '@/lib/toast';
 import { keys, queryClient } from '@/lib/query';
 import { useBuilding } from '@/providers/BuildingProvider';
 import { useMutation } from '@tanstack/react-query';
@@ -33,10 +34,12 @@ export default function SetupBuildingPage() {
         billing_date: Number(billing),
       }),
     onSuccess: async (building) => {
+      toast.success('Property saved.');
       selectBuilding(building.id);
       await queryClient.invalidateQueries({ queryKey: keys.buildings });
       router.replace(`/setup/rooms?buildingId=${building.id}`);
     },
+    onError: (err) => toast.error(rpcMessage(err, 'Could not save property')),
   });
 
   const day = Number(billing);
@@ -79,7 +82,6 @@ export default function SetupBuildingPage() {
             type="number"
             hint="Rent invoices generate on this day each month (IST)."
           />
-          {mutate.error ? <p className={styles.error}>{rpcMessage(mutate.error)}</p> : null}
           <Button
             label={mutate.isPending ? 'Saving…' : 'Continue to rooms →'}
             disabled={!valid || mutate.isPending}

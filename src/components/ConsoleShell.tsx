@@ -5,6 +5,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useAuth } from '@/providers/AuthProvider';
 import { useBuilding } from '@/providers/BuildingProvider';
 import { formatBuildingLocation } from '@/lib/locations';
+import { isPlatformAdminEmail } from '@/lib/platform-admin';
 import { LayoutDashboard, BedDouble, Receipt, Settings, Menu, X } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import styles from './console-shell.module.css';
@@ -67,6 +68,7 @@ export function ConsoleShell({ children }: { children: React.ReactNode }) {
   }, [mobileOpen]);
 
   const meta = pageMeta(pathname, building?.name);
+  const showPlatformAdmin = isPlatformAdminEmail(user?.email);
 
   return (
     <div className={styles.root}>
@@ -170,8 +172,13 @@ export function ConsoleShell({ children }: { children: React.ReactNode }) {
         </nav>
 
         <div className={styles.sidebarFoot}>
+          {showPlatformAdmin ? (
+            <Link href="/platform/apk-requests" className={styles.apkLink}>
+              Platform admin · APK
+            </Link>
+          ) : null}
           <Link href="/download" className={styles.apkLink}>
-            Get Android app
+            Mobile app
           </Link>
           <p className={styles.userEmail}>{user?.email}</p>
           <button type="button" className={styles.signOut} onClick={() => signOut()}>

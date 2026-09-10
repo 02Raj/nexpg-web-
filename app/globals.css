@@ -1,5 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,600&family=IBM+Plex+Mono:wght@500;600&family=Inter:wght@400;500;600&display=swap');
-
+/* Fonts: next/font in app/layout.tsx (self-hosted, swap, no extra round-trip) */
 :root {
   --paper: #f7f5f1;
   --paper-deep: #efebe3;
@@ -15,9 +14,9 @@
   --red: #b8433d;
   --red-soft: rgba(184, 67, 61, 0.12);
   --white: #fffcf7;
-  --font-display: 'Fraunces', Georgia, serif;
-  --font-body: 'Inter', system-ui, sans-serif;
-  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+  --font-display: var(--font-run-display), Georgia, serif;
+  --font-body: var(--font-run-body), system-ui, sans-serif;
+  --font-mono: var(--font-run-mono), ui-monospace, monospace;
   --radius-sm: 4px;
   --radius-md: 10px;
   --radius-lg: 16px;

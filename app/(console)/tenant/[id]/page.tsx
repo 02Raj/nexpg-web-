@@ -4,10 +4,13 @@ import { fetchTenantDetail, markInvoicePaid, markSecurityRefunded, vacateTenant 
 import { Button } from '@/components/Button';
 import { LoadingCenter } from '@/components/Loading';
 import { inrExact, prettyDate, rpcMessage } from '@/lib/format';
+import { toast } from '@/lib/toast';
+import { useToastOnError } from '@/hooks/useToastOnError';
+import { EmptyState } from '@/components/EmptyState';
 import { keys, queryClient } from '@/lib/query';
 import { useBuilding } from '@/providers/BuildingProvider';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { ArrowLeft, Calendar, CheckCircle2, Clock, Phone, ShieldCheck, Wallet } from 'lucide-react';
+import { ArrowLeft, Calendar, CheckCircle2, Clock, Phone, ShieldCheck, UserX, Wallet } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
 import styles from './tenant.module.css';
 
@@ -31,19 +34,45 @@ export default function TenantPage() {
     ]);
   };
 
-  const vacate = useMutation({ mutationFn: () => vacateTenant(id), onSuccess: invalidate });
+  const vacate = useMutation({
+    mutationFn: () => vacateTenant(id),
+    onSuccess: async () => {
+      toast.success('Tenant vacated. Bed is now empty.');
+      await invalidate();
+    },
+    onError: (err) => toast.error(rpcMessage(err, 'Could not vacate tenant')),
+  });
   const refund = useMutation({
     mutationFn: (depositId: string) => markSecurityRefunded(depositId),
-    onSuccess: invalidate,
+    onSuccess: async () => {
+      toast.success('Security deposit marked as refunded.');
+      await invalidate();
+    },
+    onError: (err) => toast.error(rpcMessage(err, 'Could not update refund')),
   });
   const pay = useMutation({
     mutationFn: ({ invoiceId, mode }: { invoiceId: string; mode: 'upi' | 'cash' }) =>
       markInvoicePaid(invoiceId, mode),
-    onSuccess: invalidate,
+    onSuccess: async () => {
+      toast.success('Payment recorded.');
+      await invalidate();
+    },
+    onError: (err) => toast.error(rpcMessage(err, 'Could not record payment')),
   });
 
+  useToastOnError(q.error, 'Tenant not found');
+
   if (q.isLoading) return <LoadingCenter message="Loading tenant profile…" />;
-  if (q.error || !q.data) return <p style={{ color: 'var(--red)', padding: 40 }}>{rpcMessage(q.error, 'Tenant not found')}</p>;
+  if (q.error || !q.data) {
+    return (
+      <EmptyState
+        icon={<UserX size={28} />}
+        title="Tenant not found"
+        message="This profile may have been removed or you may not have access."
+        action={{ label: 'Back to beds', onClick: () => router.push('/beds') }}
+      />
+    );
+  }
 
   const { tenant, deposit, invoices, bedLabel } = q.data;
 

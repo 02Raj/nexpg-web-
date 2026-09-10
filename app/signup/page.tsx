@@ -2,31 +2,35 @@
 
 import { Field } from '@/components/Field';
 import { rpcMessage } from '@/lib/format';
+import { toast } from '@/lib/toast';
 import { useAuth } from '@/providers/AuthProvider';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
+import { sanitizeAuthNext } from '@/lib/auth-redirect';
 import styles from '../auth.module.css';
 
 export default function SignupPage() {
   const { signUp } = useAuth();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const returnTo = sanitizeAuthNext(searchParams.get('next'));
+  const loginHref = `/login?next=${encodeURIComponent(returnTo)}`;
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [busy, setBusy] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [done, setDone] = useState(false);
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null);
     setBusy(true);
     try {
       await signUp(email, password, fullName);
+      toast.success('Account created — check your email to confirm.');
       setDone(true);
     } catch (err) {
-      setError(rpcMessage(err, 'Could not create account'));
+      toast.error(rpcMessage(err, 'Could not create account'));
     } finally {
       setBusy(false);
     }
@@ -38,8 +42,10 @@ export default function SignupPage() {
         <div className={styles.formPanel} style={{ gridColumn: '1 / -1' }}>
           <div className={styles.formCard} style={{ textAlign: 'center' }}>
             <h1 className={styles.formTitle}>Check your email</h1>
-            <p className="bodyMuted" style={{ marginBottom: 24 }}>Confirm your address, then sign in on web or mobile.</p>
-            <button type="button" className={styles.submitBtn} onClick={() => router.push('/login')} style={{ width: '100%' }}>
+            <p className="bodyMuted" style={{ marginBottom: 24 }}>
+              Confirm your address, then sign in on web or mobile.
+            </p>
+            <button type="button" className={styles.submitBtn} onClick={() => router.push(loginHref)} style={{ width: '100%' }}>
               Go to sign in →
             </button>
           </div>
@@ -125,8 +131,6 @@ export default function SignupPage() {
             <Field label="Email" value={email} onChange={setEmail} type="email" placeholder="owner@example.com" />
             <Field label="Password" value={password} onChange={setPassword} type="password" placeholder="••••••••" />
             
-            {error ? <p className={styles.error}>{error}</p> : null}
-            
             <button
               type="submit"
               className={styles.submitBtn}
@@ -137,7 +141,7 @@ export default function SignupPage() {
             
             <p className={styles.formFooter}>
               Already have an account?{' '}
-              <Link href="/login">
+              <Link href={loginHref}>
                 Sign in
               </Link>
             </p>
