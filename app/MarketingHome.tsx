@@ -126,13 +126,6 @@ export function MarketingHome() {
               </div>
             </div>
 
-            <div className={s.syncBanner}>
-              <span className={s.syncBannerIcon}>⟷</span>
-              <div>
-                <p className={s.syncBannerTitle}>Real-time sync</p>
-                <p className={s.syncBannerText}>Add a tenant on web → shows on phone. Mark paid on phone → updates dashboard.</p>
-              </div>
-            </div>
           </Reveal>
         </div>
       </section>
