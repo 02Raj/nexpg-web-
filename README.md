@@ -51,14 +51,14 @@ Add `http://localhost:3001/**` and `https://www.runmypg.in/**` to Supabase **Aut
 
 ### Platform admin console
 
-After running migrations through `0006_contact_inquiries.sql`:
+After running migrations through `0008_scale_and_lockdown.sql` (after `0007`):
 
 - **`/platform/dashboard`** — stats + 14-day sign-up chart
 - **`/platform/owners`** — all PG owners, filters, soft **Deactivate / Reactivate** (no hard delete)
 - **`/platform/contact`** — messages from the public contact form
 - **`/platform/apk-requests`** — Android approvals
 
-Run **`supabase/migrations/0006_contact_inquiries.sql`** in SQL Editor (after `0005`).
+Run **`supabase/migrations/0008_scale_and_lockdown.sql`** in SQL Editor last. It locks deactivated owners out of PG data, adds indexes, and rate-limits public contact + feedback.
 
 Admin setup: add user in Supabase Auth, `platform_admins` email, `NEXT_PUBLIC_PLATFORM_ADMIN_EMAILS` on Vercel. Open **`/platform/dashboard`** from sidebar **Platform admin**.
 

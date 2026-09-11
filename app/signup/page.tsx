@@ -25,6 +25,11 @@ export default function SignupPage() {
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setBusy(true);
+    if (password.length < 8) {
+      toast.error('Password must be at least 8 characters.');
+      setBusy(false);
+      return;
+    }
     try {
       await signUp(email, password, fullName);
       toast.success('Account created — check your email to confirm.');
@@ -134,7 +139,7 @@ export default function SignupPage() {
             <button
               type="submit"
               className={styles.submitBtn}
-              disabled={busy || fullName.length < 2 || !email || password.length < 6}
+              disabled={busy || fullName.length < 2 || !email || password.length < 8}
             >
               {busy ? 'Creating account…' : 'Create account →'}
             </button>

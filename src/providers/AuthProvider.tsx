@@ -30,12 +30,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     const supabase = getSupabase();
     let mounted = true;
-    supabase.auth.getSession().then(({ data }) => {
-      if (mounted) {
-        setSession(data.session);
+    (async () => {
+      const { data: userData } = await supabase.auth.getUser();
+      if (!mounted) return;
+      if (!userData.user) {
+        setSession(null);
         setLoading(false);
+        return;
       }
-    });
+      const { data: sessionData } = await supabase.auth.getSession();
+      if (!mounted) return;
+      setSession(sessionData.session);
+      setLoading(false);
+    })();
 
     const { data: sub } = supabase.auth.onAuthStateChange((_event, next) => {
       setSession(next);
