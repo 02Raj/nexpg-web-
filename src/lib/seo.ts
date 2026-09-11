@@ -1,14 +1,19 @@
 import type { Metadata } from 'next';
 import { MARKETING_FAQS } from '@/content/marketing';
 import { CONTACT } from '@/content/contact';
+import {
+  DEFAULT_DESCRIPTION,
+  GEO_ALTERNATE_NAMES,
+  GEO_ENTITY_SUMMARY,
+  GEO_SEARCH_PHRASES,
+  SITE_NAME,
+  SITE_TAGLINE,
+  SITE_URL,
+} from '@/content/geo';
 
-export const SITE_URL = 'https://www.runmypg.in';
-export const SITE_NAME = 'RunMyPG';
-export const SITE_TAGLINE = 'PG Management Software for Hostels & Paying Guest Homes in India';
+export { DEFAULT_DESCRIPTION, SITE_NAME, SITE_TAGLINE, SITE_URL } from '@/content/geo';
 
 export const DEFAULT_TITLE = `${SITE_NAME} | ${SITE_TAGLINE}`;
-export const DEFAULT_DESCRIPTION =
-  'PG management software in India for hostels and paying guest homes. Manage tenants, rooms, occupancy, rent and deposits from one dashboard — on the web and on Android. Free while in beta.';
 
 export const OG_IMAGE_ALT = 'RunMyPG — PG management software for owners in India';
 
@@ -75,12 +80,14 @@ export function homeJsonLd() {
         '@type': 'Organization',
         '@id': `${SITE_URL}/#organization`,
         name: SITE_NAME,
+        alternateName: [...GEO_ALTERNATE_NAMES],
         url: SITE_URL,
         logo: {
           '@type': 'ImageObject',
           url: `${SITE_URL}/icon-512.svg`,
         },
         description: DEFAULT_DESCRIPTION,
+        knowsAbout: [...GEO_SEARCH_PHRASES],
         areaServed: { '@type': 'Country', name: 'India' },
         email: CONTACT.emails.contact,
         telephone: CONTACT.phoneE164,
@@ -105,19 +112,28 @@ export function homeJsonLd() {
         '@type': 'WebSite',
         '@id': `${SITE_URL}/#website`,
         name: SITE_NAME,
+        alternateName: [...GEO_ALTERNATE_NAMES],
         url: SITE_URL,
-        description: DEFAULT_DESCRIPTION,
+        description: GEO_ENTITY_SUMMARY,
         inLanguage: 'en-IN',
         publisher: { '@id': `${SITE_URL}/#organization` },
+        about: { '@id': `${SITE_URL}/#app` },
       },
       {
         '@type': 'SoftwareApplication',
         '@id': `${SITE_URL}/#app`,
         name: SITE_NAME,
+        alternateName: [...GEO_ALTERNATE_NAMES],
         url: SITE_URL,
         applicationCategory: 'BusinessApplication',
+        applicationSubCategory: 'Property Management',
         operatingSystem: 'Web, Android',
-        description: DEFAULT_DESCRIPTION,
+        description: GEO_ENTITY_SUMMARY,
+        audience: {
+          '@type': 'Audience',
+          audienceType: 'PG and hostel owners in India',
+          geographicArea: { '@type': 'Country', name: 'India' },
+        },
         offers: {
           '@type': 'Offer',
           price: '0',

@@ -134,7 +134,22 @@ Supabase bhejta hai: **signup confirm**, **password reset**.
 5. [ ] **URL inspection** → homepage → **Request indexing** (naya domain)
 6. [ ] 1–2 week baad: **Performance** → queries “PG management”, “PG software India” etc.
 
-### G4. Optional (baad mein)
+### G4. GEO — AI search (ChatGPT, Perplexity, Google AI)
+
+Code mein already:
+
+- [ ] **`https://www.runmypg.in/llms.txt`** — short facts for AI (deploy ke baad open karo)
+- [ ] **`/llms-full.txt`** — poora FAQ + contact
+- [ ] Homepage **JSON-LD** (Organization, SoftwareApplication, FAQPage)
+- [ ] Homepage **“About RunMyPG”** section (same facts as llms.txt)
+- [ ] **`robots.txt`** — AI bots ko marketing pages allow (console block)
+
+Tum verify karo:
+
+- [ ] Deploy ke baad AI se poocho: *“What is RunMyPG?”* / *“PG management software India free”* — answer mein **runmypg.in** aur sahi description aaye (100% guarantee nahi, lekin GEO iske liye hai)
+- [ ] Blog + city pages regularly update karo (fresh citations)
+
+### G5. Optional (baad mein)
 
 - [ ] Google Business Profile — agar local office dikhani ho
 - [ ] Bing Webmaster Tools — copy from GSC

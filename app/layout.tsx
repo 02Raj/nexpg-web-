@@ -41,6 +41,9 @@ export const metadata: Metadata = {
       'en-IN': '/',
       'x-default': '/',
     },
+    types: {
+      'text/plain': '/llms.txt',
+    },
   },
   openGraph: {
     type: 'website',

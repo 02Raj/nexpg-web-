@@ -47,6 +47,14 @@ export const MARKETING_FAQS: { q: string; a: string }[] = [
     q: 'Do I need both the web and mobile app?',
     a: 'No. The website is the full owner dashboard. The Android app is for when you are at the property. Use either, or both.',
   },
+  {
+    q: 'Who is RunMyPG for?',
+    a: 'RunMyPG is for paying guest (PG) and hostel owners in India — not for tenants searching for a room. Owners use it to track beds, tenants, rent bills and security deposits.',
+  },
+  {
+    q: 'Is RunMyPG PG management software for India?',
+    a: 'Yes. RunMyPG is built for Indian PG and hostel operators, with multi-city support, INR rent tracking, and an owner web console plus Android app at runmypg.in.',
+  },
 ];
 
 export const PRICING_ITEMS = [

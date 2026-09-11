@@ -6,6 +6,7 @@ import { CITIES, MARKETING_CAPABILITIES, MARKETING_FAQS, PRICING_ITEMS } from '@
 import { getLatestPosts } from '@/content/blog';
 import { getCityGuides } from '@/content/cities';
 import { MarketingFooter } from '@/components/marketing/MarketingFooter';
+import { GeoEntitySection } from '@/components/marketing/GeoEntitySection';
 import { useAuth } from '@/providers/AuthProvider';
 import s from '@/components/marketing/marketing.module.css';
 import b from './blog/blog.module.css';
@@ -399,6 +400,7 @@ export function MarketingHome() {
       </section>
       </main>
 
+      <GeoEntitySection />
       <MarketingFooter />
     </>
   );
