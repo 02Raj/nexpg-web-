@@ -138,6 +138,17 @@ export type Database = {
         status: string;
         created_at: string;
       }>;
+      user_feedback: Table<{
+        id: string;
+        owner_id: string;
+        owner_email: string | null;
+        building_id: string | null;
+        kind: string;
+        message: string;
+        app_source: string;
+        status: string;
+        created_at: string;
+      }>;
     };
     Views: Record<string, never>;
     Functions: {

@@ -23,6 +23,8 @@ Use this list top-to-bottom. Har section ke boxes tick karo jab kaam ho jaye.
   - [ ] `0002` APK table (if separate)
   - [ ] **`0004_platform_admin_apk_rls.sql`**
   - [ ] **`0005_platform_owner_profiles.sql`**
+  - [ ] **`0006_contact_inquiries.sql`** (public `/contact` form)
+  - [ ] **`0007_user_feedback.sql`** (owner feedback web + app)
 - [ ] **Authentication → URL configuration**
   - [ ] **Site URL:** `https://www.runmypg.in`
   - [ ] **Redirect URLs:** `https://www.runmypg.in/**`, `http://localhost:3001/**`
@@ -172,6 +174,8 @@ Supabase bhejta hai: **signup confirm**, **password reset**.
 | 7 | Login mobile — same data | [ ] |
 | 8 | Admin deactivate owner (soft) — login block | [ ] |
 | 9 | Reactivate — login works | [ ] |
+| 10 | Owner feedback: web `/feedback` or app **More → Send feedback** | [ ] |
+| 11 | Admin **Platform → Owner feedback** inbox | [ ] |
 
 ---
 

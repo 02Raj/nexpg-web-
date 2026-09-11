@@ -10,6 +10,7 @@ import { useEffect, type ReactNode } from 'react';
 function pageTitle(pathname: string) {
   if (pathname.startsWith('/platform/owners')) return 'PG owners';
   if (pathname.startsWith('/platform/contact')) return 'Contact inbox';
+  if (pathname.startsWith('/platform/feedback')) return 'Owner feedback';
   if (pathname.startsWith('/platform/apk-requests')) return 'Android APK requests';
   return 'Dashboard';
 }

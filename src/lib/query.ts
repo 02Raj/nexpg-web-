@@ -27,6 +27,7 @@ export const keys = {
   apkRequest: ['apk-request'] as const,
   apkRequestsAdmin: ['apk-requests-admin'] as const,
   contactInquiries: ['contact-inquiries'] as const,
+  userFeedback: ['user-feedback'] as const,
   platformDashboard: ['platform-dashboard'] as const,
   platformOwners: ['platform-owners'] as const,
   ownerProfile: ['owner-profile'] as const,

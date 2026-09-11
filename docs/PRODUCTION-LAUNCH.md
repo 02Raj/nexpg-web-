@@ -6,7 +6,7 @@
 
 ## 1. Supabase
 
-- [ ] Run migrations `0001`–`0003` (NexPG repo) + `0002` APK + **`0004_platform_admin_apk_rls`** + **`0005_platform_owner_profiles`** + **`0006_contact_inquiries`**
+- [ ] Run migrations `0001`–`0003` (NexPG repo) + `0002` APK + **`0004_platform_admin_apk_rls`** + **`0005_platform_owner_profiles`** + **`0006_contact_inquiries`** + **`0007_user_feedback`**
 - [ ] Auth: Site URL = your production domain (e.g. `https://www.runmypg.in`)
 - [ ] Redirect URLs include `https://www.runmypg.in/**` and `http://localhost:3001/**` for dev
 - [ ] Create platform admin user in Authentication (email in `platform_admins`)

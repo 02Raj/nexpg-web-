@@ -6,7 +6,7 @@ import { useAuth } from '@/providers/AuthProvider';
 import { useBuilding } from '@/providers/BuildingProvider';
 import { formatBuildingLocation } from '@/lib/locations';
 import { isPlatformAdminEmail } from '@/lib/platform-admin';
-import { LayoutDashboard, BedDouble, Receipt, Settings, Menu, X } from 'lucide-react';
+import { LayoutDashboard, BedDouble, MessageSquare, Receipt, Settings, Menu, X } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import styles from './console-shell.module.css';
 
@@ -15,6 +15,7 @@ const NAV = [
   { href: '/beds', label: 'Beds', desc: 'Room-wise map', icon: BedDouble },
   { href: '/bills', label: 'Bills', desc: 'Rent invoices', icon: Receipt },
   { href: '/more', label: 'Settings', desc: 'PG & account', icon: Settings },
+  { href: '/feedback', label: 'Feedback', desc: 'Bug or idea', icon: MessageSquare },
 ];
 
 function pageMeta(pathname: string, buildingName?: string) {
@@ -29,6 +30,9 @@ function pageMeta(pathname: string, buildingName?: string) {
   }
   if (pathname.startsWith('/more')) {
     return { kicker: 'Settings', title: 'Property settings', showActions: true };
+  }
+  if (pathname.startsWith('/feedback')) {
+    return { kicker: 'Feedback', title: 'Help us improve', showActions: false };
   }
   if (pathname.startsWith('/tenant/new')) {
     return { kicker: 'Tenant', title: 'Add tenant', showActions: false };

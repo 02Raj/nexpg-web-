@@ -2,13 +2,14 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, Mail, Smartphone, Users } from 'lucide-react';
+import { LayoutDashboard, Mail, MessageSquare, Smartphone, Users } from 'lucide-react';
 import styles from './platform-shell.module.css';
 
 const NAV = [
   { href: '/platform/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/platform/owners', label: 'PG owners', icon: Users },
   { href: '/platform/contact', label: 'Contact inbox', icon: Mail },
+  { href: '/platform/feedback', label: 'Owner feedback', icon: MessageSquare },
   { href: '/platform/apk-requests', label: 'Android APK', icon: Smartphone },
 ];
 

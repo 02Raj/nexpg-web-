@@ -18,6 +18,7 @@ import { useBuilding } from '@/providers/BuildingProvider';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { Building2 } from 'lucide-react';
 import { CONTACT, MAILTO, WHATSAPP_URL } from '@/content/contact';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import styles from './more.module.css';
@@ -155,7 +156,12 @@ export default function MorePage() {
 
       <section className="panel">
         <h2 className="panelTitle">Help & contact</h2>
-        <p className="panelMuted">WhatsApp or email — we reply on the official RunMyPG addresses.</p>
+        <p className="panelMuted">WhatsApp or email — or send feedback from the sidebar (bugs, ideas, “too hectic”).</p>
+        <p className={styles.msg}>
+          <Link href="/feedback" style={{ fontWeight: 600 }}>
+            Send feedback →
+          </Link>
+        </p>
         <p className={styles.msg}>
           <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
             WhatsApp {CONTACT.phoneDisplay}
