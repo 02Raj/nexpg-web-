@@ -67,8 +67,10 @@ export function ContactForm() {
 
   return (
     <form className={c.formCard} onSubmit={onSubmit} noValidate>
-      <h2 className={c.formTitle}>Write to us</h2>
-      <p className={c.formLead}>Name, email and a short note. We reply from a runmypg.in inbox.</p>
+      <h2 id="contact-form-title" className={c.formTitle}>
+        Contact form
+      </h2>
+      <p className={c.formLead}>Your name, email, and message. We reply from a @runmypg.in inbox.</p>
 
       <label className={c.hp} aria-hidden="true">
         Company website

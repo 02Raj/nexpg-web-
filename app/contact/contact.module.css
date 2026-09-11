@@ -1,6 +1,25 @@
 .wrap {
-  max-width: 1080px;
+  max-width: 720px;
   margin: 0 auto 88px;
+}
+
+.formSection {
+  margin-bottom: 40px;
+}
+
+.sectionHeading {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 600;
+  margin: 0 0 8px;
+  color: var(--ink);
+}
+
+.sectionLead {
+  margin: 0 0 20px;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--ink-muted);
 }
 
 .layout {
@@ -78,10 +97,10 @@
 
 .formCard {
   background: var(--white);
-  border: 1px solid rgba(22, 48, 43, 0.08);
+  border: 1px solid rgba(22, 48, 43, 0.12);
   border-radius: 16px;
-  padding: 24px 22px;
-  box-shadow: 0 8px 24px rgba(22, 48, 43, 0.04);
+  padding: 28px 24px 26px;
+  box-shadow: 0 12px 32px rgba(22, 48, 43, 0.06);
   display: flex;
   flex-direction: column;
   gap: 14px;
@@ -89,7 +108,7 @@
 
 .formTitle {
   font-family: var(--font-display);
-  font-size: 1.45rem;
+  font-size: 1.65rem;
   font-weight: 600;
   margin: 0;
 }
