@@ -7,6 +7,7 @@ import {
   type ContactInquiry,
   type ContactInquiryStatus,
 } from '@/api/contact';
+import { fetchContactReplyDraft } from '@/api/growth-agent';
 import { Button } from '@/components/Button';
 import { PageSkeleton } from '@/components/Loading';
 import { prettyDateTime, rpcMessage } from '@/lib/format';
@@ -30,6 +31,7 @@ function StatusBadge({ status }: { status: ContactInquiryStatus }) {
 export default function PlatformContactPage() {
   const [filter, setFilter] = useState<'all' | ContactInquiryStatus>('new');
   const [openId, setOpenId] = useState<string | null>(null);
+  const [draft, setDraft] = useState('');
 
   const list = useQuery({
     queryKey: keys.contactInquiries,
@@ -37,6 +39,15 @@ export default function PlatformContactPage() {
   });
 
   useToastOnError(list.error, 'Could not load messages — run SQL migration 0006 if the table is missing');
+
+  const draftMutation = useMutation({
+    mutationFn: (id: string) => fetchContactReplyDraft(id),
+    onSuccess: (text) => {
+      setDraft(text);
+      toast.success('Draft ready — edit before you send.');
+    },
+    onError: (err) => toast.error(rpcMessage(err, 'Could not draft reply')),
+  });
 
   const setStatus = useMutation({
     mutationFn: ({ id, status }: { id: string; status: ContactInquiryStatus }) =>
@@ -56,6 +67,7 @@ export default function PlatformContactPage() {
 
   async function openRow(row: ContactInquiry) {
     setOpenId(row.id);
+    setDraft('');
     if (row.status === 'new') {
       setStatus.mutate({ id: row.id, status: 'read' });
     }
@@ -135,12 +147,20 @@ export default function PlatformContactPage() {
             {open.phone ? ` · ${open.phone}` : ''} · {topicLabel(open.topic)}
           </p>
           <p style={{ whiteSpace: 'pre-wrap', margin: '0 0 16px', lineHeight: 1.6 }}>{open.message}</p>
-          <div className={layout.approveRow}>
+          <div className={layout.approveRow} style={{ marginBottom: 12 }}>
+            <Button
+              label={draftMutation.isPending ? 'Drafting…' : 'Draft reply (Sarvam)'}
+              variant="secondary"
+              disabled={draftMutation.isPending}
+              onClick={() => draftMutation.mutate(open.id)}
+            />
             <Button
               label="Reply by email"
               variant="primary"
               onClick={() => {
-                window.location.href = `mailto:${open.email}`;
+                const subject = encodeURIComponent('Re: Your message to RunMyPG');
+                const body = encodeURIComponent(draft || '');
+                window.location.href = `mailto:${open.email}?subject=${subject}${draft ? `&body=${body}` : ''}`;
               }}
             />
             {open.status !== 'archived' ? (
@@ -159,6 +179,41 @@ export default function PlatformContactPage() {
               />
             )}
           </div>
+          {draft ? (
+            <div>
+              <p className="small" style={{ margin: '0 0 8px', fontWeight: 600 }}>AI draft (edit before send)</p>
+              <textarea
+                readOnly={false}
+                value={draft}
+                onChange={(e) => setDraft(e.target.value)}
+                rows={10}
+                style={{
+                  width: '100%',
+                  fontFamily: 'var(--font-body)',
+                  fontSize: 14,
+                  lineHeight: 1.55,
+                  padding: 12,
+                  borderRadius: 8,
+                  border: '1px solid var(--line)',
+                }}
+              />
+              <button
+                type="button"
+                className={layout.filterBtn}
+                style={{ marginTop: 8 }}
+                onClick={() => {
+                  void navigator.clipboard.writeText(draft);
+                  toast.success('Copied');
+                }}
+              >
+                Copy draft
+              </button>
+            </div>
+          ) : (
+            <p className="small" style={{ margin: 0, color: 'var(--ink-muted)' }}>
+              Uses Sarvam only when you click Draft — keeps credits low. Set SARVAM_API_KEY on Vercel.
+            </p>
+          )}
         </div>
       ) : null}
     </div>

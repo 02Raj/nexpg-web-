@@ -60,7 +60,7 @@ After running migrations through `0008_scale_and_lockdown.sql` (after `0007`):
 
 Run **`supabase/migrations/0008_scale_and_lockdown.sql`** in SQL Editor last. It locks deactivated owners out of PG data, adds indexes, and rate-limits public contact + feedback.
 
-Admin setup: add user in Supabase Auth, `platform_admins` email, `NEXT_PUBLIC_PLATFORM_ADMIN_EMAILS` on Vercel. Open **`/platform/dashboard`** from sidebar **Platform admin**.
+Admin setup: add user in Supabase Auth, `platform_admins` email, `NEXT_PUBLIC_PLATFORM_ADMIN_EMAILS` on Vercel. Open **`/platform/dashboard`** from sidebar **Platform admin**. **How to use (Hinglish):** [docs/PLATFORM-ADMIN-GUIDE.md](./docs/PLATFORM-ADMIN-GUIDE.md).
 
 ## Sync with mobile
 

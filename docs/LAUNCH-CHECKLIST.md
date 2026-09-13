@@ -55,6 +55,8 @@ Copy from `.env.production.example`:
 
 ## D. Platform admin account
 
+**Day-to-day use:** [PLATFORM-ADMIN-GUIDE.md](./PLATFORM-ADMIN-GUIDE.md)
+
 - [ ] Email in table **`platform_admins`** (SQL migration adds `divyanshr243@gmail.com`)
 - [ ] Same email in **`NEXT_PUBLIC_PLATFORM_ADMIN_EMAILS`**
 - [ ] Auth user created (Dashboard or `node scripts/set-platform-admin-user.mjs`)
@@ -217,4 +219,4 @@ Tum verify karo:
 
 ---
 
-**Related docs:** [PRODUCTION-LAUNCH.md](./PRODUCTION-LAUNCH.md) · [APK-FLOW.md](./APK-FLOW.md) · [mobile-performance.md](./mobile-performance.md)
+**Related docs:** [PLATFORM-ADMIN-GUIDE.md](./PLATFORM-ADMIN-GUIDE.md) · [PRODUCTION-LAUNCH.md](./PRODUCTION-LAUNCH.md) · [APK-FLOW.md](./APK-FLOW.md) · [SARVAM-AGENT-IMPLEMENTATION.md](./SARVAM-AGENT-IMPLEMENTATION.md) · [mobile-performance.md](./mobile-performance.md) · [AI-AGENTS-USER-ACQUISITION.md](./AI-AGENTS-USER-ACQUISITION.md)
