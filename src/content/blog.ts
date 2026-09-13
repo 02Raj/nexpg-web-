@@ -19,6 +19,116 @@ export type BlogPost = {
 
 export const BLOG_POSTS: BlogPost[] = [
   {
+    slug: 'how-to-fill-pg-vacant-rooms',
+    title: 'How to fill your PG: why beds stay empty and what owners can fix',
+    description:
+      'A practical guide for Indian PG owners — find why rooms stay vacant, fix listing and trust gaps, and grow occupancy without guessing every night.',
+    category: 'Guides',
+    date: '2026-09-13',
+    readMins: 9,
+    blocks: [
+      {
+        type: 'p',
+        text: 'An empty bed is not “bad luck”. It is rent you already lost today. Most owners feel the pain — WhatsApp full of enquiries but no move-ins, or one floor always half empty — and the fix is rarely “build more rooms”. It is seeing why tenants say no, how fast you refill after checkout, and whether your price and promise match what is actually on site.',
+      },
+      {
+        type: 'h2',
+        text: 'Why PG owners struggle (and it is not only “market slow”)',
+      },
+      {
+        type: 'ul',
+        items: [
+          'You do not know exact vacancy — you find out when someone asks “any bed?” and you walk the floor',
+          'Checkout to new tenant takes too long: paint, cleaning, broker delay, or deposit arguments',
+          'Rent is right for you but high for the room quality or location tenants compare you to',
+          'Photos and listing say “premium”; visit shows shared bathroom issues, Wi‑Fi down, or strict rules surprise',
+          'Enquiries come from wrong segment — family callers for a boys PG, or interns for a corporate hostel',
+          'One bad review or neighbour complaint scares off repeat referrals',
+          'Seasonality: colleges, IT parks, and exam months empty beds in waves — you treat every month the same',
+        ],
+      },
+      {
+        type: 'h2',
+        text: 'Step 1: Count vacancy honestly, every week',
+      },
+      {
+        type: 'p',
+        text: 'Before marketing, write down: total beds, occupied, empty, and “reserved but not moved in”. If that number lives in three places — caretaker’s head, a sheet, and a group chat — you will overestimate how full you are. Weekly, ask: which rooms have been empty more than 14 days? Those need a plan, not another generic post.',
+      },
+      {
+        type: 'ul',
+        items: [
+          'Mark checkout date the day the tenant leaves — not when you remember to update',
+          'Note why the last tenant left (job change, price, food, commute) — patterns show up after five exits',
+          'Split vacancy by room type: single vs sharing often empty for different reasons',
+        ],
+      },
+      {
+        type: 'h2',
+        text: 'Step 2: Fix the reasons tenants walk away',
+      },
+      {
+        type: 'p',
+        text: 'Walk your building like a new tenant. Same route they take from the gate to the room. Smell, lighting, lock, water pressure, and how the caretaker speaks matter as much as rent.',
+      },
+      {
+        type: 'ul',
+        items: [
+          'Price: compare two nearby PGs with similar food and AC — adjust sharing rent before single',
+          'Trust: show deposit rules and notice period upfront; hidden charges kill word-of-mouth',
+          'Food: if you promise meals, keep timing stable; if you do not, say so clearly in the listing',
+          'Photos: real room photos beat stock images; update after you repaint or add furniture',
+          'Rules: visitors, timing, smoking — state them before visit so serious tenants self-filter',
+          'Maintenance: fix leaking taps and broken locks before listing “immediate move-in”',
+        ],
+      },
+      {
+        type: 'h2',
+        text: 'Step 3: Fill faster — reduce days between tenants',
+      },
+      {
+        type: 'p',
+        text: 'Every empty day is the same cost whether you advertise or not. Owners who stay fuller treat checkout like a small project: clean, minor repair, re-list within 48 hours, broker or referral message the same week.',
+      },
+      {
+        type: 'ul',
+        items: [
+          'Keep a short “ready to show” checklist: cleaned, mattress cover, working fan/AC, Wi‑Fi password ready',
+          'Tell past tenants you have a bed — many workplaces have newcomers; offer a small referral thank-you if policy allows',
+          'Use brokers where they work for your segment, but track which broker actually sends move-ins, not only calls',
+          'List on maps and local search with correct pin, phone, and “single / double / triple” clarity',
+          'Reply to enquiries in hours, not days; first serious visit often goes to whoever confirms slot first',
+        ],
+      },
+      {
+        type: 'h2',
+        text: 'Step 4: Grow occupancy without opening a second building too early',
+      },
+      {
+        type: 'p',
+        text: 'Growth for most owners means higher fill rate on existing beds first, then add rooms or a second property when the first runs above ~85% for months — not when one floor is empty and you already struggle to follow up leads.',
+      },
+      {
+        type: 'ul',
+        items: [
+          'Corporate tie-ups: one HR contact at a nearby company beats ten random online leads',
+          'Student cycles: start outreach 3–4 weeks before college intake in your city',
+          'Retention: a tenant who stays 11 months beats chasing twelve new ones — listen at renewal time',
+          'Mix of tenure: some monthly, some longer lock-in — but do not block quick move-in for rigid rules',
+          'Second PG only when one dashboard of beds, rent and deposits is under control — not duplicated chaos',
+        ],
+      },
+      {
+        type: 'h2',
+        text: 'Where software helps (and where it does not)',
+      },
+      {
+        type: 'p',
+        text: 'No app replaces good food, fair rent, or a honest caretaker. Software helps you stop flying blind: see which beds are empty, who has not paid, and how long a room has been vacant so you act this week — not at month end. RunMyPG keeps occupancy, tenants, bills and deposits in one place on web and Android, free while we are in beta — so your energy goes to filling beds, not reconciling Excel and WhatsApp at night.',
+      },
+    ],
+  },
+  {
     slug: 'pg-management-software-india',
     title: 'PG management software in India: what owners actually need',
     description:

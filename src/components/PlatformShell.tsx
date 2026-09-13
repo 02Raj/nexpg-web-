@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, Mail, MessageSquare, Smartphone, Users } from 'lucide-react';
+import { LayoutDashboard, Mail, MessageSquare, Smartphone, Users, Video } from 'lucide-react';
 import styles from './platform-shell.module.css';
 
 const NAV = [
@@ -11,6 +11,7 @@ const NAV = [
   { href: '/platform/contact', label: 'Contact inbox', icon: Mail },
   { href: '/platform/feedback', label: 'Owner feedback', icon: MessageSquare },
   { href: '/platform/apk-requests', label: 'Android APK', icon: Smartphone },
+  { href: '/platform/video-shorts', label: 'Video shorts', icon: Video },
 ];
 
 export function PlatformShell({

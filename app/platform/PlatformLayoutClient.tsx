@@ -12,6 +12,7 @@ function pageTitle(pathname: string) {
   if (pathname.startsWith('/platform/contact')) return 'Contact inbox';
   if (pathname.startsWith('/platform/feedback')) return 'Owner feedback';
   if (pathname.startsWith('/platform/apk-requests')) return 'Android APK requests';
+  if (pathname.startsWith('/platform/video-shorts')) return 'Video shorts';
   return 'Dashboard';
 }
 

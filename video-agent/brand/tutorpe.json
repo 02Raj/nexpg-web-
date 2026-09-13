@@ -1,0 +1,13 @@
+{
+  "slug": "tutorpe",
+  "name": "TutorPe",
+  "domain": "tutorpe.in",
+  "audience": "Indian tuition teachers and small coaching centres",
+  "product_line": "free fee tracking, WhatsApp reminders, PDF receipts, Fee Intelligence AI",
+  "hook_examples": [
+    "Stop tracking tuition fees in Excel.",
+    "Three parents owe you money right now.",
+    "Your fee register is lying to you."
+  ],
+  "default_hashtags": ["#tuition", "#coachingcentre", "#feemanagement", "#TutorPe", "#India"]
+}

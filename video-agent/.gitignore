@@ -1,0 +1,7 @@
+.env
+.env.local
+.venv/
+out/
+clips/*.mp4
+clips/*.mov
+__pycache__/

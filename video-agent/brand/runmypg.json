@@ -1,0 +1,13 @@
+{
+  "slug": "runmypg",
+  "name": "RunMyPG",
+  "domain": "runmypg.in",
+  "audience": "Indian PG and hostel owners",
+  "product_line": "tenant and bed management, rent collection, occupancy, security deposits, owner Android app",
+  "hook_examples": [
+    "Still chasing PG rent on WhatsApp?",
+    "You do not know which bed is empty right now.",
+    "One notebook cannot run three properties."
+  ],
+  "default_hashtags": ["#PGmanagement", "#hostel", "#payingguest", "#RunMyPG", "#India"]
+}
