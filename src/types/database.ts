@@ -99,6 +99,7 @@ export type OwnerProfile = {
   id: string;
   email: string;
   full_name: string | null;
+  phone: string | null;
   is_active: boolean;
   deactivated_at: string | null;
   created_at: string;

@@ -4,22 +4,34 @@ export type OwnerProfile = {
   id: string;
   email: string;
   full_name: string | null;
+  phone: string | null;
   is_active: boolean;
   deactivated_at: string | null;
   created_at: string;
   updated_at: string;
 };
 
+export type PlatformOwnerProperty = {
+  id: string;
+  name: string;
+  city: string;
+  state: string | null;
+  address: string | null;
+  created_at: string;
+};
+
 export type PlatformOwnerRow = {
   id: string;
   email: string;
   full_name: string | null;
+  phone: string | null;
   is_active: boolean;
   created_at: string;
   deactivated_at: string | null;
   building_count: number;
   active_tenant_count: number;
   latest_apk_status: string | null;
+  properties?: PlatformOwnerProperty[];
 };
 
 export type PlatformDashboard = {

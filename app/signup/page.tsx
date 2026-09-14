@@ -18,6 +18,7 @@ export default function SignupPage() {
   const loginHref = `/login?next=${encodeURIComponent(returnTo)}`;
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [busy, setBusy] = useState(false);
   const [done, setDone] = useState(false);
@@ -30,8 +31,14 @@ export default function SignupPage() {
       setBusy(false);
       return;
     }
+    const phoneDigits = phone.replace(/\D/g, '').slice(-10);
+    if (phone.trim() && phoneDigits.length !== 10) {
+      toast.error('Enter a valid 10-digit mobile number.');
+      setBusy(false);
+      return;
+    }
     try {
-      await signUp(email, password, fullName);
+      await signUp(email, password, fullName, phoneDigits || undefined);
       toast.success('Account created — check your email to confirm.');
       setDone(true);
     } catch (err) {
@@ -134,6 +141,12 @@ export default function SignupPage() {
           <form className={styles.form} onSubmit={onSubmit}>
             <Field label="Your name" value={fullName} onChange={setFullName} placeholder="Rahul Sharma" />
             <Field label="Email" value={email} onChange={setEmail} type="email" placeholder="owner@example.com" />
+            <Field
+              label="Mobile (WhatsApp)"
+              value={phone}
+              onChange={(v) => setPhone(v.replace(/\D/g, '').slice(0, 10))}
+              placeholder="10-digit number"
+            />
             <Field label="Password" value={password} onChange={setPassword} type="password" placeholder="••••••••" />
             
             <button

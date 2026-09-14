@@ -10,7 +10,7 @@ type AuthContextValue = {
   user: User | null;
   loading: boolean;
   signIn: (email: string, password: string) => Promise<void>;
-  signUp: (email: string, password: string, fullName: string) => Promise<void>;
+  signUp: (email: string, password: string, fullName: string, phone?: string) => Promise<void>;
   requestPasswordReset: (email: string) => Promise<void>;
   updatePassword: (password: string) => Promise<void>;
   signOut: () => Promise<void>;
@@ -66,12 +66,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         });
         if (error) throw error;
       },
-      signUp: async (email, password, fullName) => {
+      signUp: async (email, password, fullName, phone) => {
+        const digits = (phone ?? '').replace(/\D/g, '').slice(-10);
         const { error } = await getSupabase().auth.signUp({
           email: email.trim(),
           password,
           options: {
-            data: { full_name: fullName.trim() },
+            data: {
+              full_name: fullName.trim(),
+              ...(digits.length === 10 ? { phone: digits } : {}),
+            },
             emailRedirectTo: `${env.siteUrl}/auth/callback`,
           },
         });
