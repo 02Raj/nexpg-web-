@@ -74,6 +74,12 @@ export function MarketingHome() {
                 See the product
               </a>
             </div>
+            <div style={{ marginTop: '24px' }}>
+              <a href="https://forg.to/projects/runmypg" target="_blank" rel="noopener noreferrer">
+                <img src="https://forg.to/api/badges/featured/runmypg?theme=dark&shape=rounded"
+                     alt="RunMyPG - Featured on Forg on forg." height="48" style={{ display: 'block' }} />
+              </a>
+            </div>
           </div>
 
           <div className={s.heroVisual}>
