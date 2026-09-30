@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { JsonLd } from '@/components/JsonLd';
 import { MarketingFrame } from '@/components/marketing/MarketingFrame';
-import { getBlogPost, getBlogPosts } from '@/content/blog';
+import { getBlogPost, getBlogPosts, getRelatedPosts } from '@/content/blog';
 import { pageMetadata, SITE_NAME, SITE_URL } from '@/lib/seo';
 import b from '../blog.module.css';
 
@@ -29,6 +29,7 @@ export default async function BlogPostPage({ params }: { params: Promise<Params>
   if (!post) notFound();
 
   const url = `${SITE_URL}/blog/${post.slug}`;
+  const related = getRelatedPosts(post.slug, 3);
   const jsonLd = {
     '@context': 'https://schema.org',
     '@graph': [
@@ -46,10 +47,46 @@ export default async function BlogPostPage({ params }: { params: Promise<Params>
         description: post.description,
         datePublished: post.date,
         dateModified: post.date,
+        inLanguage: 'en-IN',
         mainEntityOfPage: url,
-        author: { '@type': 'Organization', name: SITE_NAME },
-        publisher: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+        image: `${SITE_URL}/opengraph-image`,
+        author: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+        publisher: {
+          '@type': 'Organization',
+          name: SITE_NAME,
+          url: SITE_URL,
+          logo: { '@type': 'ImageObject', url: `${SITE_URL}/icon-512.svg` },
+        },
       },
+      ...(post.slug === 'track-pg-occupancy'
+        ? [
+            {
+              '@type': 'HowTo',
+              name: 'How to track PG occupancy without walking every floor',
+              description: post.description,
+              step: [
+                {
+                  '@type': 'HowToStep',
+                  position: 1,
+                  name: 'Keep one bed map',
+                  text: 'List rooms, then beds. Mark each bed occupied or empty. Do not keep a separate WhatsApp occupancy chat as the source of truth.',
+                },
+                {
+                  '@type': 'HowToStep',
+                  position: 2,
+                  name: 'Update the same day as move-in or checkout',
+                  text: 'Update occupancy the day someone moves in or out so the map cannot drift from the building.',
+                },
+                {
+                  '@type': 'HowToStep',
+                  position: 3,
+                  name: 'Use the same data on phone and laptop',
+                  text: 'Check occupancy on site and plan filling vacancies at the desk on one system — web and Android with the same login.',
+                },
+              ],
+            },
+          ]
+        : []),
     ],
   };
 
@@ -86,6 +123,18 @@ export default async function BlogPostPage({ params }: { params: Promise<Params>
               <p>Run occupancy, rent and deposits from one dashboard — web console and Android app, free in beta.</p>
               <Link href="/signup">Create free account →</Link>
             </div>
+            {related.length > 0 ? (
+              <>
+                <p className={b.relatedKicker}>Related guides</p>
+                <div className={b.relatedList}>
+                  {related.map((item) => (
+                    <Link key={item.slug} href={`/blog/${item.slug}`}>
+                      {item.title}
+                    </Link>
+                  ))}
+                </div>
+              </>
+            ) : null}
           </div>
         </article>
       </MarketingFrame>

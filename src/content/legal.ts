@@ -63,7 +63,7 @@ export const PRIVACY_SECTIONS: LegalSection[] = [
   {
     heading: 'Contact',
     paragraphs: [
-      'Privacy questions: contact@runmypg.in. Support: support@runmypg.in. WhatsApp: +91 87070 54586.',
+      'Privacy questions: contact@runmypg.in. Support: support@runmypg.in.',
     ],
   },
 ];

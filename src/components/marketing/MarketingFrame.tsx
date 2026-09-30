@@ -45,6 +45,11 @@ export function MarketingFrame({
                 </Link>
               </li>
               <li>
+                <Link href="/cities" className={s.navLink}>
+                  Cities
+                </Link>
+              </li>
+              <li>
                 <Link href="/about" className={s.navLink}>
                   About
                 </Link>
@@ -96,6 +101,9 @@ export function MarketingFrame({
           </Link>
           <Link href="/#pricing" className={s.mobileMenuLink} onClick={() => setMobileMenuOpen(false)}>
             Pricing
+          </Link>
+          <Link href="/cities" className={s.mobileMenuLink} onClick={() => setMobileMenuOpen(false)}>
+            Cities
           </Link>
           <Link href="/about" className={s.mobileMenuLink} onClick={() => setMobileMenuOpen(false)}>
             About

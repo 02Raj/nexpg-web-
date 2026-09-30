@@ -13,7 +13,7 @@ export const ABOUT_VALUES = [
   },
   {
     title: 'Reachable people',
-    text: 'WhatsApp and official runmypg.in inboxes. If something breaks in the console, you can talk to us.',
+    text: 'Official runmypg.in inboxes. If something breaks in the console, you can talk to us.',
   },
 ] as const;
 

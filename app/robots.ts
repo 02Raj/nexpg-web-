@@ -14,6 +14,7 @@ const DISALLOW = [
   '/auth',
   '/login',
   '/forgot-password',
+  '/cookies/preferences',
 ];
 
 /** Allow marketing pages for generative / AI crawlers (same rules as default). */

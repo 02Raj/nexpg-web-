@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { JsonLd } from '@/components/JsonLd';
 import { MarketingFrame } from '@/components/marketing/MarketingFrame';
-import { getCityGuide, getCityGuides } from '@/content/cities';
+import { getCityGuide, getCityGuides, getCityFaqs } from '@/content/cities';
 import { pageMetadata, SITE_NAME, SITE_URL } from '@/lib/seo';
 import c from '../cities.module.css';
 
@@ -20,6 +20,12 @@ export async function generateMetadata({ params }: { params: Promise<Params> }) 
     title: city.title,
     description: city.description,
     path: `/cities/${city.slug}`,
+    keywords: [
+      `PG management software ${city.name}`,
+      `PG software ${city.name}`,
+      `hostel management software ${city.name}`,
+      `PG occupancy ${city.name}`,
+    ],
   });
 }
 
@@ -32,6 +38,7 @@ export default async function CityGuidePage({ params }: { params: Promise<Params
   const related = city.related
     .map((s) => getCityGuide(s))
     .filter((x): x is NonNullable<typeof x> => Boolean(x));
+  const faqs = getCityFaqs(city);
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -54,7 +61,7 @@ export default async function CityGuidePage({ params }: { params: Promise<Params
       },
       {
         '@type': 'FAQPage',
-        mainEntity: city.faqs.map((faq) => ({
+        mainEntity: faqs.map((faq) => ({
           '@type': 'Question',
           name: faq.q,
           acceptedAnswer: { '@type': 'Answer', text: faq.a },
@@ -128,12 +135,19 @@ export default async function CityGuidePage({ params }: { params: Promise<Params
             </p>
 
             <div className={c.faqs}>
-              {city.faqs.map((faq) => (
+              {faqs.map((faq) => (
                 <div key={faq.q} className={c.faq}>
                   <h3>{faq.q}</h3>
                   <p>{faq.a}</p>
                 </div>
               ))}
+            </div>
+
+            <p className={c.kicker}>Owner software</p>
+            <div className={c.related}>
+              <Link href="/pg-management-software">PG management software</Link>
+              <Link href="/hostel-management-software">Hostel software</Link>
+              <Link href="/pg-rent-collection-software">Rent collection</Link>
             </div>
 
             {related.length > 0 ? (
@@ -150,7 +164,7 @@ export default async function CityGuidePage({ params }: { params: Promise<Params
             ) : null}
 
             <p>
-              Questions? {SITE_NAME} is on WhatsApp and{' '}
+              Questions? Email{' '}
               <Link href="/contact">contact@runmypg.in</Link>.
             </p>
           </article>

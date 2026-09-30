@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { MAILTO, WHATSAPP_URL } from '@/content/contact';
+import { MAILTO, SHOW_PUBLIC_SUPPORT_PHONE, WHATSAPP_URL } from '@/content/contact';
 import { CookieBanner } from '@/components/marketing/CookieBanner';
 import { WhatsAppFab } from '@/components/marketing/WhatsAppFab';
 import s from './marketing.module.css';
@@ -21,6 +21,21 @@ export function MarketingFooter() {
           <div>
             <p className={s.footerColTitle}>Product</p>
             <ul className={s.footerLinks}>
+              <li>
+                <Link href="/pg-management-software" className={s.footerLink}>
+                  PG software
+                </Link>
+              </li>
+              <li>
+                <Link href="/hostel-management-software" className={s.footerLink}>
+                  Hostel software
+                </Link>
+              </li>
+              <li>
+                <Link href="/pg-rent-collection-software" className={s.footerLink}>
+                  Rent collection
+                </Link>
+              </li>
               <li>
                 <Link href="/#features" className={s.footerLink}>
                   Features
@@ -86,11 +101,13 @@ export function MarketingFooter() {
                   FAQ
                 </Link>
               </li>
-              <li>
-                <a href={WHATSAPP_URL} className={s.footerLink} target="_blank" rel="noopener noreferrer">
-                  WhatsApp
-                </a>
-              </li>
+              {SHOW_PUBLIC_SUPPORT_PHONE ? (
+                <li>
+                  <a href={WHATSAPP_URL} className={s.footerLink} target="_blank" rel="noopener noreferrer">
+                    WhatsApp
+                  </a>
+                </li>
+              ) : null}
               <li>
                 <a href={MAILTO.support} className={s.footerLink}>
                   support@runmypg.in
@@ -139,7 +156,7 @@ export function MarketingFooter() {
         </div>
       </footer>
       <CookieBanner />
-      <WhatsAppFab />
+      {SHOW_PUBLIC_SUPPORT_PHONE ? <WhatsAppFab /> : null}
     </>
   );
 }

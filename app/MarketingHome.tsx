@@ -55,11 +55,11 @@ export function MarketingHome() {
           <div className={s.heroContent}>
             <p className={s.heroKicker}>PG management software · India</p>
             <h1 id="hero-heading" className={s.heroTitle}>
-              Run your PG<br />
-              from <span className={s.heroTitleAccent}>one dashboard.</span>
+              PG management software<br />
+              for <span className={s.heroTitleAccent}>Indian owners.</span>
             </h1>
             <p className={s.heroSubtitle}>
-              Manage tenants, rooms, occupancy, rent and deposits in one place. Available as a web console and an Android app.
+              Track occupancy, tenants, monthly rent and deposits from one dashboard. Web console at the desk, Android at the property. Free while in beta — not a tenant listing site.
             </p>
             <ul className={s.heroCaps}>
               {MARKETING_CAPABILITIES.map((item) => (
@@ -109,6 +109,52 @@ export function MarketingHome() {
                 </span>
               );
             })}
+          </div>
+        </div>
+      </section>
+
+      <section className={s.sectionWrap} aria-labelledby="seo-hub-heading">
+        <div className={s.sectionInner}>
+          <Reveal className={s.featuresHeader}>
+            <p className={s.sectionKicker}>For owners who search</p>
+            <h2 id="seo-hub-heading" className={s.sectionTitle}>
+              Occupancy, hostels, and rent — in plain words.
+            </h2>
+            <p className={s.sectionSubtitle}>
+              Same product. Different questions. Start here if you googled software, not “dashboard”.
+            </p>
+          </Reveal>
+          <div className={b.grid} style={{ marginBottom: 0 }}>
+            <Link href="/pg-management-software" className={b.card}>
+              <div className={b.cardMeta}>
+                <span>Software</span>
+              </div>
+              <h3 className={b.cardTitle}>PG management software</h3>
+              <p className={b.cardDesc}>
+                What Indian PG owners actually need: bed map, tenants, rent, deposits — web and Android.
+              </p>
+              <span className={b.cardMore}>Open page →</span>
+            </Link>
+            <Link href="/hostel-management-software" className={b.card}>
+              <div className={b.cardMeta}>
+                <span>Hostels</span>
+              </div>
+              <h3 className={b.cardTitle}>Hostel management software</h3>
+              <p className={b.cardDesc}>
+                Built for bed-level inventory, not hotel PMS or OTA channel managers.
+              </p>
+              <span className={b.cardMore}>Open page →</span>
+            </Link>
+            <Link href="/pg-rent-collection-software" className={b.card}>
+              <div className={b.cardMeta}>
+                <span>Rent</span>
+              </div>
+              <h3 className={b.cardTitle}>PG rent collection</h3>
+              <p className={b.cardDesc}>
+                Paid vs pending without using WhatsApp as the ledger. You still collect; we keep the record.
+              </p>
+              <span className={b.cardMore}>Open page →</span>
+            </Link>
           </div>
         </div>
       </section>
@@ -446,6 +492,7 @@ function Navbar({
             <li><a href="#product" className={s.navLink}>Product</a></li>
             <li><a href="#features" className={s.navLink}>Features</a></li>
             <li><a href="#pricing" className={s.navLink}>Pricing</a></li>
+            <li><Link href="/cities" className={s.navLink}>Cities</Link></li>
             <li><Link href="/about" className={s.navLink}>About</Link></li>
             <li><Link href="/blog" className={s.navLink}>Blog</Link></li>
             <li><Link href="/contact" className={s.navLink}>Contact</Link></li>
@@ -478,6 +525,7 @@ function Navbar({
           <a href="#product" className={s.mobileMenuLink} onClick={onCloseMenu}>Product</a>
           <a href="#features" className={s.mobileMenuLink} onClick={onCloseMenu}>Features</a>
           <a href="#pricing" className={s.mobileMenuLink} onClick={onCloseMenu}>Pricing</a>
+          <Link href="/cities" className={s.mobileMenuLink} onClick={onCloseMenu}>Cities</Link>
           <Link href="/about" className={s.mobileMenuLink} onClick={onCloseMenu}>About</Link>
           <Link href="/blog" className={s.mobileMenuLink} onClick={onCloseMenu}>Blog</Link>
           <Link href="/contact" className={s.mobileMenuLink} onClick={onCloseMenu}>Contact</Link>

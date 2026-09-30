@@ -6,6 +6,12 @@ export const metadata = pageMetadata({
   title: DEFAULT_TITLE,
   description: DEFAULT_DESCRIPTION,
   path: '/',
+  keywords: [
+    'PG management software India',
+    'hostel management software',
+    'PG rent collection software',
+    'PG occupancy tracking',
+  ],
 });
 
 export default function HomePage() {

@@ -1,8 +1,9 @@
 import type { Metadata } from 'next';
 import { MARKETING_FAQS } from '@/content/marketing';
-import { CONTACT } from '@/content/contact';
+import { CONTACT, SHOW_PUBLIC_SUPPORT_PHONE } from '@/content/contact';
 import {
   DEFAULT_DESCRIPTION,
+  DEFAULT_TITLE_HOME,
   GEO_ALTERNATE_NAMES,
   GEO_ENTITY_SUMMARY,
   GEO_SEARCH_PHRASES,
@@ -11,16 +12,28 @@ import {
   SITE_URL,
 } from '@/content/geo';
 
-export { DEFAULT_DESCRIPTION, SITE_NAME, SITE_TAGLINE, SITE_URL } from '@/content/geo';
+export {
+  DEFAULT_DESCRIPTION,
+  DEFAULT_TITLE_HOME,
+  SITE_NAME,
+  SITE_TAGLINE,
+  SITE_URL,
+} from '@/content/geo';
 
-export const DEFAULT_TITLE = `${SITE_NAME} | ${SITE_TAGLINE}`;
+export const DEFAULT_TITLE = DEFAULT_TITLE_HOME;
 
 export const OG_IMAGE_ALT = 'RunMyPG — PG management software for owners in India';
 
 const INDEXABLE = {
   index: true,
   follow: true,
-  googleBot: { index: true, follow: true },
+  googleBot: {
+    index: true,
+    follow: true,
+    'max-image-preview': 'large' as const,
+    'max-snippet': -1,
+    'max-video-preview': -1,
+  },
 } as const;
 
 const NO_INDEX = {
@@ -40,11 +53,13 @@ export function pageMetadata({
   description,
   path,
   index = true,
+  keywords,
 }: {
   title: string;
   description: string;
   path: string;
   index?: boolean;
+  keywords?: string[];
 }): Metadata {
   const url = absoluteUrl(path);
   const titleText = title;
@@ -54,6 +69,7 @@ export function pageMetadata({
   return {
     title: resolvedTitle,
     description,
+    keywords,
     alternates: { canonical: url },
     robots: index ? INDEXABLE : NO_INDEX,
     openGraph: {
@@ -63,11 +79,13 @@ export function pageMetadata({
       siteName: SITE_NAME,
       locale: 'en_IN',
       type: path.startsWith('/blog/') ? 'article' : 'website',
+      images: [{ url: '/opengraph-image', width: 1200, height: 630, alt: OG_IMAGE_ALT }],
     },
     twitter: {
       card: 'summary_large_image',
       title: ogTitle,
       description,
+      images: ['/opengraph-image'],
     },
   };
 }
@@ -90,20 +108,20 @@ export function homeJsonLd() {
         knowsAbout: [...GEO_SEARCH_PHRASES],
         areaServed: { '@type': 'Country', name: 'India' },
         email: CONTACT.emails.contact,
-        telephone: CONTACT.phoneE164,
+        ...(SHOW_PUBLIC_SUPPORT_PHONE ? { telephone: CONTACT.phoneE164 } : {}),
         contactPoint: [
           {
             '@type': 'ContactPoint',
             contactType: 'customer support',
             email: CONTACT.emails.support,
-            telephone: CONTACT.phoneE164,
+            ...(SHOW_PUBLIC_SUPPORT_PHONE ? { telephone: CONTACT.phoneE164 } : {}),
             availableLanguage: ['English', 'Hindi'],
           },
           {
             '@type': 'ContactPoint',
             contactType: 'sales',
             email: CONTACT.emails.sales,
-            telephone: CONTACT.phoneE164,
+            ...(SHOW_PUBLIC_SUPPORT_PHONE ? { telephone: CONTACT.phoneE164 } : {}),
             availableLanguage: ['English', 'Hindi'],
           },
         ],
@@ -138,7 +156,10 @@ export function homeJsonLd() {
           '@type': 'Offer',
           price: '0',
           priceCurrency: 'INR',
+          availability: 'https://schema.org/InStock',
         },
+        isAccessibleForFree: true,
+        countriesSupported: 'IN',
         featureList: [
           'Bed occupancy map',
           'Rent and bill tracking',

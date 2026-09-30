@@ -41,7 +41,7 @@ export const MARKETING_FAQS: { q: string; a: string }[] = [
   },
   {
     q: 'How do I contact RunMyPG?',
-    a: 'WhatsApp +91 87070 54586, or email contact@runmypg.in, sales@runmypg.in, or support@runmypg.in. There is also a Contact page on the website.',
+    a: 'Email contact@runmypg.in, sales@runmypg.in, or support@runmypg.in. There is also a Contact page on the website.',
   },
   {
     q: 'Do I need both the web and mobile app?',
@@ -54,6 +54,14 @@ export const MARKETING_FAQS: { q: string; a: string }[] = [
   {
     q: 'Is RunMyPG PG management software for India?',
     a: 'Yes. RunMyPG is built for Indian PG and hostel operators, with multi-city support, INR rent tracking, and an owner web console plus Android app at runmypg.in.',
+  },
+  {
+    q: 'Does RunMyPG replace Excel for occupancy and rent?',
+    a: 'For owners who outgrew a sheet: yes for beds, tenants, monthly bills and deposits. Excel still works for a tiny PG until the sheet and the building drift. RunMyPG keeps the same map on web and Android.',
+  },
+  {
+    q: 'Is RunMyPG a payment gateway or tenant app?',
+    a: 'No. Tenants pay you the way they already do (UPI, cash, bank). You mark bills paid in RunMyPG. Tenants cannot log in to find rooms — this is owner software only.',
   },
 ];
 

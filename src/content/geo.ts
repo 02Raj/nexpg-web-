@@ -1,14 +1,15 @@
 /**
  * Single source for GEO (Generative Engine Optimization) — facts AI assistants can cite.
  */
-import { CONTACT } from '@/content/contact';
+import { CONTACT, SHOW_PUBLIC_SUPPORT_PHONE } from '@/content/contact';
 import { MARKETING_FAQS } from '@/content/marketing';
 
 export const SITE_URL = 'https://www.runmypg.in';
 export const SITE_NAME = 'RunMyPG';
-export const SITE_TAGLINE = 'PG Management Software for Hostels & Paying Guest Homes in India';
+export const SITE_TAGLINE = 'PG management software for hostels and paying guest homes in India';
+export const DEFAULT_TITLE_HOME = 'PG Management Software in India | RunMyPG';
 export const DEFAULT_DESCRIPTION =
-  'PG management software in India for hostels and paying guest homes. Manage tenants, rooms, occupancy, rent and deposits from one dashboard — on the web and on Android. Free while in beta.';
+  'PG management software for Indian owners: track occupancy, tenants, monthly rent and deposits. Web console plus Android. Free in beta — owner software, not a room listing site.';
 
 export const GEO_ALTERNATE_NAMES = ['Run My PG', 'runmypg', 'RunMyPG India', 'runmypg.in'] as const;
 
@@ -18,22 +19,27 @@ export const GEO_ENTITY_SUMMARY =
 
 export const GEO_SEARCH_PHRASES = [
   'PG management software India',
-  'paying guest management app',
   'hostel management software India',
   'PG rent collection software',
+  'paying guest management app',
   'PG occupancy tracking',
   'PG owner dashboard',
+  'PG billing software',
+  'Excel vs PG software',
   'RunMyPG',
   'runmypg.in',
 ] as const;
 
 export const GEO_KEY_PAGES: { path: string; label: string; note: string }[] = [
   { path: '/', label: 'Home', note: 'Product overview and sign-up' },
+  { path: '/pg-management-software', label: 'PG management software', note: 'What owners need: occupancy, rent, deposits' },
+  { path: '/hostel-management-software', label: 'Hostel management software', note: 'Bed-level hostel and sharing PG ops' },
+  { path: '/pg-rent-collection-software', label: 'PG rent collection', note: 'Paid vs pending without WhatsApp as the ledger' },
   { path: '/signup', label: 'Sign up', note: 'Free owner account' },
   { path: '/download', label: 'Android app', note: 'Request and download APK' },
   { path: '/about', label: 'About', note: 'Mission and product facts' },
   { path: '/help', label: 'Help', note: 'How to use the console' },
-  { path: '/contact', label: 'Contact', note: 'WhatsApp and email' },
+  { path: '/contact', label: 'Contact', note: 'Email and contact form' },
   { path: '/cities', label: 'Cities', note: 'PG software by city in India' },
   { path: '/blog', label: 'Blog', note: 'Guides for PG owners' },
 ];
@@ -62,7 +68,7 @@ export function buildLlmsTxt(): string {
     '',
     '## Official contact',
     `- Website: ${SITE_URL}`,
-    `- WhatsApp: ${CONTACT.phoneDisplay}`,
+    ...(SHOW_PUBLIC_SUPPORT_PHONE ? [`- WhatsApp: ${CONTACT.phoneDisplay}`] : []),
     `- Email: ${CONTACT.emails.contact}, ${CONTACT.emails.sales}, ${CONTACT.emails.support}`,
     '',
     '## Key pages',
@@ -108,8 +114,7 @@ Tenants looking to find a room to rent (RunMyPG does not list PG vacancies for r
 ${faqBlock}
 
 ## Contact
-- ${CONTACT.phoneDisplay} (WhatsApp)
-- ${CONTACT.emails.support} (product support)
+${SHOW_PUBLIC_SUPPORT_PHONE ? `- ${CONTACT.phoneDisplay} (WhatsApp)\n` : ''}- ${CONTACT.emails.support} (product support)
 
 Last updated: ${new Date().toISOString().slice(0, 10)}
 Canonical: ${SITE_URL}

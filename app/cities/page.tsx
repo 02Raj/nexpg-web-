@@ -12,6 +12,7 @@ export const metadata = pageMetadata({
   title: 'PG software by city in India',
   description: DESCRIPTION,
   path: '/cities',
+  keywords: ['PG software India', 'PG management software Delhi', 'PG software Bangalore', 'PG software Noida'],
 });
 
 export default function CitiesPage() {
@@ -41,10 +42,10 @@ export default function CitiesPage() {
           </p>
           <header className={c.hero}>
             <p className={c.kicker}>Across India</p>
-            <h1 className={c.title}>Where owners run the desk.</h1>
+            <h1 className={c.title}>PG management software by city in India</h1>
             <p className={c.lead}>
-              RunMyPG works in any Indian city you type at setup. These guides are for local search and
-              for owners who think in corridors — not a copy of a hotel directory.
+              RunMyPG works in any Indian city you type at setup. These guides are for local search —
+              occupancy, rent and deposits for owners in that market — not a hotel directory.
             </p>
           </header>
           <div className={c.grid}>
@@ -58,7 +59,10 @@ export default function CitiesPage() {
           </div>
           <p className={c.note}>
             Your city is missing? Add it when you create a property. The console is not limited to this
-            list.
+            list. For product pages, see{' '}
+            <Link href="/pg-management-software">PG management software</Link>,{' '}
+            <Link href="/hostel-management-software">hostel software</Link>, and{' '}
+            <Link href="/pg-rent-collection-software">rent collection</Link>.
           </p>
         </div>
       </MarketingFrame>

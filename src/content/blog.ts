@@ -19,6 +19,49 @@ export type BlogPost = {
 
 export const BLOG_POSTS: BlogPost[] = [
   {
+    slug: 'pg-owner-android-app',
+    title: 'PG owner app on Android: occupancy and rent when you are at the gate',
+    description:
+      'Why PG owners need the same occupancy and rent data on the phone as on the laptop — and how RunMyPG’s Android app uses the same login as the website.',
+    category: 'Operations',
+    date: '2026-09-30',
+    readMins: 6,
+    blocks: [
+      {
+        type: 'p',
+        text: 'The empty bed is discovered in the corridor, not in a spreadsheet at 11pm. If occupancy lives only on a laptop at home, the caretaker invents a second system — usually WhatsApp. A PG owner app is useful only when it is the same account as the desk, not a separate toy.',
+      },
+      {
+        type: 'h2',
+        text: 'What to do on the phone (and what to leave for the desk)',
+      },
+      {
+        type: 'ul',
+        items: [
+          'On site: check which beds are empty, open a tenant, mark rent paid when cash or UPI lands',
+          'On site: start add-tenant from an empty bed so the map cannot lie',
+          'At the desk: set up the building, rooms, billing day, and review the month’s pending list',
+        ],
+      },
+      {
+        type: 'h2',
+        text: 'Same login, optional app',
+      },
+      {
+        type: 'p',
+        text: 'RunMyPG’s website is the full owner console. The Android app is for rounds. You request the APK from the download page when you are signed in, then install and use the same email. You do not need the app to run the PG — you need it when you are standing at the lock.',
+      },
+      {
+        type: 'h2',
+        text: 'It is not a tenant marketplace app',
+      },
+      {
+        type: 'p',
+        text: 'Tenants do not browse beds on RunMyPG. This is owner software. If someone searches “PG owner app India” meaning “find me a room”, they are in the wrong product — and you should not pretend otherwise in listings or ads.',
+      },
+    ],
+  },
+  {
     slug: 'how-to-fill-pg-vacant-rooms',
     title: 'How to fill your PG: why beds stay empty and what owners can fix',
     description:
@@ -215,6 +258,22 @@ export const BLOG_POSTS: BlogPost[] = [
         type: 'p',
         text: 'You check occupancy at the PG on your phone. You plan filling vacancies at home on a laptop. Both views must be the same data. RunMyPG shows rooms and beds on web and Android so you are not reconciling two versions at night.',
       },
+      {
+        type: 'h2',
+        text: 'A weekly occupancy habit that actually sticks',
+      },
+      {
+        type: 'ul',
+        items: [
+          'Every Sunday: count empty beds and beds empty more than 14 days',
+          'Same day as checkout: mark the bed vacant — not “when I remember”',
+          'If you run two PGs, switch property before you update — never one mixed sheet',
+        ],
+      },
+      {
+        type: 'p',
+        text: 'Software does not fill a bed. It stops you discovering vacancy a week late. Pair the map with honest listings and fast turnaround — that is operations, not a dashboard screenshot.',
+      },
     ],
   },
   {
@@ -378,4 +437,13 @@ export function getBlogPost(slug: string): BlogPost | undefined {
 
 export function getLatestPosts(count = 3): BlogPost[] {
   return getBlogPosts().slice(0, count);
+}
+
+export function getRelatedPosts(slug: string, count = 3): BlogPost[] {
+  const current = getBlogPost(slug);
+  const others = getBlogPosts().filter((p) => p.slug !== slug);
+  if (!current) return others.slice(0, count);
+  const same = others.filter((p) => p.category === current.category);
+  const rest = others.filter((p) => p.category !== current.category);
+  return [...same, ...rest].slice(0, count);
 }

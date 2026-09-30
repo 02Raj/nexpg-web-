@@ -221,6 +221,33 @@
   text-decoration: none;
 }
 
+.relatedKicker {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ochre-deep);
+  margin: 36px 0 12px;
+}
+
+.relatedList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0 0 48px;
+}
+
+.relatedList a {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.relatedList a:hover {
+  text-decoration: underline;
+}
+
 @media (max-width: 900px) {
   .grid {
     grid-template-columns: 1fr 1fr;

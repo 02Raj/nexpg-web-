@@ -49,7 +49,7 @@ export function ContactForm() {
       setMessage('');
       toast.success('Message sent. We will reply by email.');
     } catch (err) {
-      toast.error(rpcMessage(err, 'Could not send. Try WhatsApp or email.'));
+      toast.error(rpcMessage(err, 'Could not send. Try email or the contact form again.'));
     } finally {
       setBusy(false);
     }
@@ -59,7 +59,7 @@ export function ContactForm() {
     return (
       <div className={c.formCard}>
         <h2 className={c.formTitle}>Message received</h2>
-        <p className={c.formLead}>We will get back to you on the email you entered. For something urgent, WhatsApp is faster.</p>
+        <p className={c.formLead}>We will get back to you on the email you entered.</p>
         <Button label="Send another" variant="secondary" onClick={() => setSent(false)} />
       </div>
     );

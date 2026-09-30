@@ -415,3 +415,18 @@ export function getCityGuides(): CityGuide[] {
 export function getCityGuide(slug: string): CityGuide | undefined {
   return CITY_GUIDES.find((c) => c.slug === slug);
 }
+
+/** Extra Q&As unique to the city name — helps local queries without duplicating the whole guide. */
+export function getCityFaqs(city: CityGuide): CityFaq[] {
+  return [
+    ...city.faqs,
+    {
+      q: `Is RunMyPG PG management software for ${city.name}?`,
+      a: `Yes. Owners in ${city.name}, ${city.state} use RunMyPG for bed occupancy, tenants, monthly rent bills and security deposits. Add a ${city.name} property at signup — city guides are local context; the console works in any Indian city.`,
+    },
+    {
+      q: `How do I track PG occupancy and rent in ${city.name}?`,
+      a: `Keep one bed map and one paid-vs-pending list — not a WhatsApp group as the ledger. RunMyPG shows vacant and occupied beds and monthly bills for each ${city.name} property on the website and the Android app with the same login.`,
+    },
+  ];
+}

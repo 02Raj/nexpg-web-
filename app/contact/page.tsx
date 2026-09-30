@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { JsonLd } from '@/components/JsonLd';
 import { MarketingFrame } from '@/components/marketing/MarketingFrame';
-import { CONTACT, MAILTO, WHATSAPP_URL } from '@/content/contact';
+import { CONTACT, MAILTO, SHOW_PUBLIC_SUPPORT_PHONE, WHATSAPP_URL } from '@/content/contact';
 import { pageMetadata, SITE_NAME, SITE_URL } from '@/lib/seo';
 import blog from '../blog/blog.module.css';
 import { ContactForm } from './ContactForm';
@@ -10,7 +10,7 @@ import c from './contact.module.css';
 export const metadata = pageMetadata({
   title: 'Contact RunMyPG',
   description:
-    'Talk to RunMyPG — send a message, WhatsApp, or email. Sales, support and product questions for PG owners in India.',
+    'Talk to RunMyPG — send a message or email. Sales, support and product questions for PG owners in India.',
   path: '/contact',
 });
 
@@ -32,7 +32,7 @@ export default function ContactPage() {
             <p className={blog.kicker}>Contact</p>
             <h1 className={blog.title}>We’re here.</h1>
             <p className={blog.lead}>
-              Fill the form below — we reply by email. Or use WhatsApp / a direct inbox if you prefer.
+              Fill the form below — we reply by email. Or use a direct inbox if you prefer.
             </p>
           </header>
 
@@ -47,11 +47,13 @@ export default function ContactPage() {
             </p>
 
             <div className={c.channels}>
-              <a className={`${c.card} ${c.wa}`} href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
-                <p className={c.label}>WhatsApp</p>
-                <p className={c.value}>{CONTACT.phoneDisplay}</p>
-                <p className={c.hint}>Chat with us on WhatsApp — usually the fastest.</p>
-              </a>
+              {SHOW_PUBLIC_SUPPORT_PHONE ? (
+                <a className={`${c.card} ${c.wa}`} href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
+                  <p className={c.label}>WhatsApp</p>
+                  <p className={c.value}>{CONTACT.phoneDisplay}</p>
+                  <p className={c.hint}>Chat with us on WhatsApp — usually the fastest.</p>
+                </a>
+              ) : null}
               <a className={c.card} href={MAILTO.contact}>
                 <p className={c.label}>General</p>
                 <p className={c.value}>{CONTACT.emails.contact}</p>

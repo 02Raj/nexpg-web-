@@ -10,7 +10,7 @@ const DESCRIPTION =
   'RunMyPG help for PG owners: sign-up and email confirm, property and beds, occupancy, tenants, deposits, monthly bills, and the Android app.';
 
 export const metadata = pageMetadata({
-  title: 'Help Center',
+  title: 'Help Center — PG occupancy, tenants, bills and Android',
   description: DESCRIPTION,
   path: '/help',
 });
@@ -41,7 +41,7 @@ export default function HelpPage() {
           </p>
           <header className={h.hero}>
             <p className={h.kicker}>Support</p>
-            <h1 className={h.title}>How can we help?</h1>
+            <h1 className={h.title}>RunMyPG help for PG owners</h1>
             <p className={h.lead}>
               Short guides for the owner console as it exists today — not a copy of another product’s docs. Start with
               the account, then the building, then beds and bills.
