@@ -1,3 +1,5 @@
+import { INTENT_POSTS } from './blog-intent-posts';
+
 export const BLOG_CATEGORIES = ['All', 'Guides', 'Operations', 'Rent & Bills'] as const;
 
 export type BlogCategory = Exclude<(typeof BLOG_CATEGORIES)[number], 'All'>;
@@ -18,6 +20,7 @@ export type BlogPost = {
 };
 
 export const BLOG_POSTS: BlogPost[] = [
+  ...INTENT_POSTS,
   {
     slug: 'pg-owner-android-app',
     title: 'PG owner app on Android: occupancy and rent when you are at the gate',
