@@ -106,6 +106,38 @@ export type OwnerProfile = {
   updated_at: string;
 };
 
+export type ContactInquiry = {
+  id: string;
+  full_name: string;
+  email: string;
+  phone: string | null;
+  topic: string;
+  message: string;
+  status: string;
+  created_at: string;
+};
+
+export type UserFeedback = {
+  id: string;
+  owner_id: string;
+  owner_email: string | null;
+  building_id: string | null;
+  kind: 'bug' | 'feature' | 'problem' | 'ux';
+  message: string;
+  app_source: 'web' | 'android' | 'ios' | 'unknown';
+  status: 'new' | 'read' | 'archived';
+  created_at: string;
+};
+
+export type UserFeedbackInsert = {
+  owner_id: string;
+  building_id?: string | null;
+  kind: UserFeedback['kind'];
+  message: string;
+  app_source: UserFeedback['app_source'];
+  status?: UserFeedback['status'];
+};
+
 export type OccupancyCell = Bed & {
   room_name: string;
   tenant?: Pick<Tenant, 'id' | 'full_name' | 'monthly_rent'> | null;
@@ -129,27 +161,8 @@ export type Database = {
       monthly_invoices: Table<MonthlyInvoice>;
       apk_download_requests: Table<ApkDownloadRequest>;
       owner_profiles: Table<OwnerProfile>;
-      contact_inquiries: Table<{
-        id: string;
-        full_name: string;
-        email: string;
-        phone: string | null;
-        topic: string;
-        message: string;
-        status: string;
-        created_at: string;
-      }>;
-      user_feedback: Table<{
-        id: string;
-        owner_id: string;
-        owner_email: string | null;
-        building_id: string | null;
-        kind: string;
-        message: string;
-        app_source: string;
-        status: string;
-        created_at: string;
-      }>;
+      contact_inquiries: Table<ContactInquiry>;
+      user_feedback: Table<UserFeedback, UserFeedbackInsert>;
     };
     Views: Record<string, never>;
     Functions: {

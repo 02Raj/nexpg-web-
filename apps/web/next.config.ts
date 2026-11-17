@@ -34,6 +34,7 @@ const noIndexHeaders = [{ key: 'X-Robots-Tag', value: 'noindex, nofollow' }];
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
+  transpilePackages: ['@nexpg/shared'],
   experimental: {
     optimizePackageImports: ['lucide-react'],
   },

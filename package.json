@@ -1,41 +1,27 @@
 {
-  "name": "nexpg-web",
+  "name": "nexpg-platform",
   "version": "1.0.0",
   "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
-    "dev": "next dev --port 3001",
-    "build": "next build",
-    "start": "next start --port 3001",
-    "typecheck": "tsc --noEmit",
-    "lint": "next lint",
-    "test": "jest",
+    "dev:web": "npm run dev --workspace=@nexpg/web",
+    "dev:mobile": "npm run start --workspace=@nexpg/mobile",
+    "android": "npm run android --workspace=@nexpg/mobile",
+    "ios": "npm run ios --workspace=@nexpg/mobile",
+    "build:web": "npm run build --workspace=@nexpg/web",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
     "verify": "npm run typecheck && npm run test",
-    "logos:export": "node scripts/export-brand-png.mjs",
-    "test:watch": "jest --watch"
+    "clean": "node scripts/clean-workspaces.mjs"
   },
-  "dependencies": {
-    "@supabase/ssr": "^0.8.0",
-    "@supabase/supabase-js": "^2.109.0",
-    "@tanstack/react-query": "^5.102.8",
-    "lucide-react": "^1.39.0",
-    "next": "^15.5.4",
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+  "engines": {
+    "node": ">=20.19.4"
   },
   "devDependencies": {
-    "@testing-library/dom": "^10.4.1",
-    "@testing-library/jest-dom": "^6.9.1",
-    "@testing-library/react": "^16.3.3",
-    "@types/jest": "^30.0.0",
-    "@types/node": "^22.15.0",
-    "@types/react": "^19.1.0",
-    "@types/react-dom": "^19.1.0",
-    "eslint": "^9.28.0",
-    "eslint-config-next": "^15.5.4",
-    "jest": "^30.5.1",
-    "jest-environment-jsdom": "^30.5.1",
-    "sharp": "^0.34.3",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.9.2"
+    "react": "19.1.0",
+    "react-dom": "19.1.0"
   }
 }
