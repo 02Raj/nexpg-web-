@@ -7,7 +7,8 @@
     ".": "./src/index.ts",
     "./database": "./src/database.ts",
     "./format": "./src/format.ts",
-    "./locations": "./src/locations.ts"
+    "./locations": "./src/locations.ts",
+    "./reminder": "./src/reminder.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",

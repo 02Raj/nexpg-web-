@@ -12,6 +12,7 @@ import { keys, queryClient } from '@/lib/query';
 import { useBuilding } from '@/providers/BuildingProvider';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { Receipt } from 'lucide-react';
+import { rentReminderUrl } from '@nexpg/shared/reminder';
 import styles from './bills.module.css';
 
 export default function BillsPage() {
@@ -141,6 +142,9 @@ export default function BillsPage() {
                               onClick={() => pay.mutate({ id: inv.id, mode: 'cash' })}
                               disabled={pay.isPending}
                             />
+                            {inv.tenant?.phone && rentReminderUrl({ phone: inv.tenant.phone, tenantName: inv.tenant.full_name, amount: inv.amount, period, buildingName: building.name }) ? (
+                              <a href={rentReminderUrl({ phone: inv.tenant.phone, tenantName: inv.tenant.full_name, amount: inv.amount, period, buildingName: building.name })!} target="_blank" rel="noopener noreferrer" aria-label={`Remind ${inv.tenant.full_name} on WhatsApp`}>WhatsApp reminder</a>
+                            ) : null}
                           </div>
                         </td>
                       </tr>

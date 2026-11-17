@@ -59,7 +59,7 @@ export function MarketingHome() {
               for <span className={s.heroTitleAccent}>Indian owners.</span>
             </h1>
             <p className={s.heroSubtitle}>
-              Track occupancy, tenants, monthly rent and deposits from one dashboard. Web console at the desk, Android at the property. Free while in beta — not a tenant listing site.
+              Know which beds are empty, who owes rent and which deposits need a refund. Manage your PG from one simple dashboard on the web and Android. Free during beta.
             </p>
             <ul className={s.heroCaps}>
               {MARKETING_CAPABILITIES.map((item) => (

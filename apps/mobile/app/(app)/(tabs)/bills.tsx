@@ -12,6 +12,8 @@ import { type } from '@/theme/type';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import * as Haptics from 'expo-haptics';
 import { StyleSheet, Text, View } from 'react-native';
+import { Linking } from 'react-native';
+import { rentReminderUrl } from '@nexpg/shared/reminder';
 
 export default function BillsScreen() {
   const { building } = useBuilding();
@@ -86,6 +88,12 @@ export default function BillsScreen() {
               onPress={() => pay.mutate({ id: inv.id, mode: 'cash' })}
             />
           </View>
+          {inv.tenant?.phone && rentReminderUrl({ phone: inv.tenant.phone, tenantName: inv.tenant.full_name, amount: inv.amount, period, buildingName: building.name }) ? (
+            <Button label="Remind on WhatsApp" variant="secondary" onPress={() => {
+              const url = rentReminderUrl({ phone: inv.tenant!.phone, tenantName: inv.tenant!.full_name, amount: inv.amount, period, buildingName: building.name });
+              if (url) void Linking.openURL(url);
+            }} />
+          ) : null}
         </View>
       ))}
 
