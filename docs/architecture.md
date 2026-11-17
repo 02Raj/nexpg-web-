@@ -16,7 +16,8 @@ Share contracts and behavior, not platform UI. A database feature should normall
 
 ## Deployments
 
-- Vercel project root directory: `apps/web`
+- Recommended Vercel project root directory: `apps/web` (framework output stays `.next`)
+- Root-directory deployments are also supported by root `vercel.json`, which builds `@nexpg/web` and publishes `apps/web/.next`
 - EAS commands: run from `apps/mobile` or through root workspace scripts
 - Install dependencies from the repository root and commit only the root `package-lock.json`
 

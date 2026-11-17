@@ -1,0 +1,20 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "nextjs",
+  "buildCommand": "npm run vercel-build",
+  "outputDirectory": "apps/web/.next",
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "app.runmypg.in" }],
+      "destination": "https://www.runmypg.in/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "runmypg.in" }],
+      "destination": "https://www.runmypg.in/:path*",
+      "permanent": true
+    }
+  ]
+}
