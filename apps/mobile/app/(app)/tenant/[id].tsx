@@ -47,7 +47,7 @@ export default function TenantProfileScreen() {
   });
 
   const pay = useMutation({
-    mutationFn: ({ invoiceId, mode }: { invoiceId: string; mode: 'upi' | 'cash' }) =>
+    mutationFn: ({ invoiceId, mode }: { invoiceId: string; mode: 'upi' | 'bank' | 'cash' }) =>
       markInvoicePaid(invoiceId, mode),
     onSuccess: invalidate,
   });
@@ -135,6 +135,7 @@ export default function TenantProfileScreen() {
                   variant="ghost"
                   onPress={() => pay.mutate({ invoiceId: inv.id, mode: 'cash' })}
                 />
+                <Button label="Bank" variant="ghost" onPress={() => pay.mutate({ invoiceId: inv.id, mode: 'bank' })} />
               </View>
             ) : null}
           </View>

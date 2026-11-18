@@ -55,8 +55,8 @@ export function MarketingHome() {
           <div className={s.heroContent}>
             <p className={s.heroKicker}>PG management software · India</p>
             <h1 id="hero-heading" className={s.heroTitle}>
-              PG management software<br />
-              for <span className={s.heroTitleAccent}>Indian owners.</span>
+              Run your PG<br />
+              <span className={s.heroTitleAccent}>like a business.</span>
             </h1>
             <p className={s.heroSubtitle}>
               Know which beds are empty, who owes rent and which deposits need a refund. Manage your PG from one simple dashboard on the web and Android. Free during beta.
@@ -204,7 +204,7 @@ export function MarketingHome() {
         <div className={s.sectionInner}>
           <Reveal className={s.featuresHeader}>
             <p className={s.sectionKicker}>Features</p>
-            <h2 className={s.sectionTitle}>Everything you need to run your PG. Nothing you don&apos;t.</h2>
+            <h2 className={s.sectionTitle}>From empty bed to paid invoice. One connected workspace.</h2>
             <p className={s.sectionSubtitle}>
               Built for Indian PG and hostel owners: occupancy, tenants, rent and deposits — not hotel PMS.
             </p>
@@ -265,6 +265,37 @@ export function MarketingHome() {
               </div>
             </Reveal>
           </div>
+        </div>
+      </section>
+
+      <section className={s.operationsSection} aria-labelledby="operations-heading">
+        <div className={s.sectionInner}>
+          <Reveal className={s.operationsSuite} delay={120}>
+            <div className={s.operationsIntro}>
+              <p className={s.sectionKicker}>One operating system</p>
+              <h2 id="operations-heading">Every workflow, connected to the same property data.</h2>
+              <p>Start with the essentials already live. The next operations layer is being built around the same rooms, tenants and invoices—so nothing becomes another disconnected sheet.</p>
+              <Link href={primaryHref} className={s.operationsCta}>{isLoggedIn ? 'Open your workspace →' : 'Start managing free →'}</Link>
+            </div>
+            <div className={s.operationsGrid}>
+              {[
+                ['Live now', 'Tenant management', 'Profiles, bed assignment, rent and stay history.'],
+                ['Live now', 'Payment tracking', 'UPI and cash records with pending dues and reminders.'],
+                ['Live now', 'Auto invoicing', 'Generate monthly rent bills for every active tenant.'],
+                ['Live now', 'Financial reports', 'Revenue, collections and occupancy trends with CSV export.'],
+                ['Next', 'Support tickets', 'Maintenance and billing issues with one shared timeline.'],
+                ['Next', 'Guest & short stays', 'Use empty beds for clash-free nightly bookings.'],
+                ['Next', 'Bulk import & export', 'Move tenant and room data in and out of Excel safely.'],
+                ['Next', 'Smart reminders', 'Scheduled follow-ups with a clear delivery history.'],
+              ].map(([status, title, description]) => (
+                <div className={s.operationCard} key={title}>
+                  <span className={status === 'Live now' ? s.operationLive : s.operationNext}>{status}</span>
+                  <h3>{title}</h3>
+                  <p>{description}</p>
+                </div>
+              ))}
+            </div>
+          </Reveal>
         </div>
       </section>
 

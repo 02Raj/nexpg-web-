@@ -6,16 +6,18 @@ import { useAuth } from '@/providers/AuthProvider';
 import { useBuilding } from '@/providers/BuildingProvider';
 import { formatBuildingLocation } from '@/lib/locations';
 import { isPlatformAdminEmail } from '@/lib/platform-admin';
-import { LayoutDashboard, BedDouble, MessageSquare, Receipt, Settings, Menu, X } from 'lucide-react';
+import { LayoutDashboard, BedDouble, MessageSquare, Receipt, Settings, Menu, X, Users, ChartNoAxesCombined } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import styles from './console-shell.module.css';
 
 const NAV = [
-  { href: '/dashboard', label: 'Dashboard', desc: 'Overview & occupancy', icon: LayoutDashboard },
-  { href: '/beds', label: 'Beds', desc: 'Room-wise map', icon: BedDouble },
-  { href: '/bills', label: 'Bills', desc: 'Rent invoices', icon: Receipt },
-  { href: '/more', label: 'Settings', desc: 'PG & account', icon: Settings },
-  { href: '/feedback', label: 'Feedback', desc: 'Bug or idea', icon: MessageSquare },
+  { href: '/dashboard', label: 'Dashboard', desc: 'Business overview', icon: LayoutDashboard, mobile: true },
+  { href: '/beds', label: 'Rooms & beds', desc: 'Live occupancy map', icon: BedDouble, mobile: true },
+  { href: '/tenants', label: 'Tenants', desc: 'Profiles & stay status', icon: Users, mobile: false },
+  { href: '/bills', label: 'Payments', desc: 'Invoices & collections', icon: Receipt, mobile: true },
+  { href: '/reports', label: 'Reports', desc: 'Revenue & occupancy', icon: ChartNoAxesCombined, mobile: true },
+  { href: '/more', label: 'Settings', desc: 'Property & account', icon: Settings, mobile: true },
+  { href: '/feedback', label: 'Feedback', desc: 'Bug or idea', icon: MessageSquare, mobile: false },
 ];
 
 function pageMeta(pathname: string, buildingName?: string) {
@@ -26,7 +28,13 @@ function pageMeta(pathname: string, buildingName?: string) {
     return { kicker: 'Beds', title: 'Bed occupancy', showActions: true };
   }
   if (pathname.startsWith('/bills')) {
-    return { kicker: 'Bills', title: 'Rent invoices', showActions: true };
+    return { kicker: 'Payments', title: 'Invoices & collections', showActions: true };
+  }
+  if (pathname.startsWith('/tenants')) {
+    return { kicker: 'People', title: 'Tenant management', showActions: true };
+  }
+  if (pathname.startsWith('/reports')) {
+    return { kicker: 'Insights', title: 'Financial reports', showActions: true };
   }
   if (pathname.startsWith('/more')) {
     return { kicker: 'Settings', title: 'Property settings', showActions: true };
@@ -214,7 +222,7 @@ export function ConsoleShell({ children }: { children: React.ReactNode }) {
 
       {/* Bottom nav for mobile */}
       <nav className={styles.bottomNav} aria-label="Main navigation">
-        {NAV.map((item) => {
+        {NAV.filter((item) => item.mobile).map((item) => {
           const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
           const Icon = item.icon;
           return (

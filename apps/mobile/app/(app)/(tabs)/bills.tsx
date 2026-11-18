@@ -27,7 +27,7 @@ export default function BillsScreen() {
   });
 
   const pay = useMutation({
-    mutationFn: ({ id, mode }: { id: string; mode: 'upi' | 'cash' }) => markInvoicePaid(id, mode),
+    mutationFn: ({ id, mode }: { id: string; mode: 'upi' | 'bank' | 'cash' }) => markInvoicePaid(id, mode),
     onSuccess: async () => {
       await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
       queryClient.invalidateQueries({ queryKey: keys.invoices(buildingId, period) });
@@ -87,6 +87,7 @@ export default function BillsScreen() {
               disabled={pay.isPending}
               onPress={() => pay.mutate({ id: inv.id, mode: 'cash' })}
             />
+            <Button label="Bank" variant="secondary" disabled={pay.isPending} onPress={() => pay.mutate({ id: inv.id, mode: 'bank' })} />
           </View>
           {inv.tenant?.phone && rentReminderUrl({ phone: inv.tenant.phone, tenantName: inv.tenant.full_name, amount: inv.amount, period, buildingName: building.name }) ? (
             <Button label="Remind on WhatsApp" variant="secondary" onPress={() => {
@@ -105,7 +106,7 @@ export default function BillsScreen() {
             <Text style={styles.amt}>{inrExact(inv.amount)}</Text>
           </View>
           <Text style={styles.paidMeta}>
-            {inv.payment_mode === 'upi' ? 'UPI' : 'Cash'}
+            {inv.payment_mode === 'upi' ? 'UPI' : inv.payment_mode === 'bank' ? 'Bank transfer' : 'Cash'}
             {inv.is_prorated ? ' · Pro-rated' : ''}
           </Text>
         </View>

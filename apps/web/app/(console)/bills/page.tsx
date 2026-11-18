@@ -29,7 +29,7 @@ export default function BillsPage() {
   useToastOnError(q.error, 'Could not load bills');
 
   const pay = useMutation({
-    mutationFn: ({ id, mode }: { id: string; mode: 'upi' | 'cash' }) => markInvoicePaid(id, mode),
+    mutationFn: ({ id, mode }: { id: string; mode: 'upi' | 'bank' | 'cash' }) => markInvoicePaid(id, mode),
     onSuccess: () => {
       toast.success('Payment recorded.');
       queryClient.invalidateQueries({ queryKey: keys.invoices(buildingId, period) });
@@ -142,6 +142,7 @@ export default function BillsPage() {
                               onClick={() => pay.mutate({ id: inv.id, mode: 'cash' })}
                               disabled={pay.isPending}
                             />
+                            <Button label="Bank" variant="secondary" onClick={() => pay.mutate({ id: inv.id, mode: 'bank' })} disabled={pay.isPending} />
                             {inv.tenant?.phone && rentReminderUrl({ phone: inv.tenant.phone, tenantName: inv.tenant.full_name, amount: inv.amount, period, buildingName: building.name }) ? (
                               <a href={rentReminderUrl({ phone: inv.tenant.phone, tenantName: inv.tenant.full_name, amount: inv.amount, period, buildingName: building.name })!} target="_blank" rel="noopener noreferrer" aria-label={`Remind ${inv.tenant.full_name} on WhatsApp`}>WhatsApp reminder</a>
                             ) : null}
@@ -173,7 +174,7 @@ export default function BillsPage() {
                       <tr key={inv.id}>
                         <td className={styles.name}>{inv.tenant?.full_name ?? 'Tenant'}</td>
                         <td className={styles.amt}>{inrExact(inv.amount)}</td>
-                        <td className={styles.paid}>{inv.payment_mode === 'upi' ? 'UPI' : 'Cash'}</td>
+                        <td className={styles.paid}>{inv.payment_mode === 'upi' ? 'UPI' : inv.payment_mode === 'bank' ? 'Bank transfer' : 'Cash'}</td>
                         <td>{inv.is_prorated ? <span className={styles.tag}>Pro-rated</span> : '—'}</td>
                       </tr>
                     ))}

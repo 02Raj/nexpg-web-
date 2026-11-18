@@ -13,9 +13,9 @@ export const CITIES = [
 export const MARKETING_CAPABILITIES = [
   'Tenant management',
   'Rooms & beds',
-  'Rent collection',
-  'Occupancy',
-  'Security deposits',
+  'Auto invoicing',
+  'Payment tracking',
+  'Financial reports',
 ] as const;
 
 export const MARKETING_FAQS: { q: string; a: string }[] = [
@@ -70,6 +70,8 @@ export const PRICING_ITEMS = [
   'Rent & bill tracking',
   'Tenant onboarding',
   'Security deposit management',
+  'Revenue & occupancy reports',
+  'CSV exports for Excel',
   'Multi-property support',
   'Android app access',
   'Web owner console',

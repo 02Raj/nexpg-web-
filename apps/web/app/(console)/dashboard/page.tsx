@@ -15,6 +15,7 @@ import { useBuilding } from '@/providers/BuildingProvider';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { AlertCircle, Banknote, BedDouble, Users } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { useEffect } from 'react';
 import styles from './dashboard.module.css';
 
@@ -87,7 +88,18 @@ export default function DashboardPage() {
 
   return (
     <div className={styles.page}>
-      <p className="bodyMuted">{locationLine} · {monthLabel(d.period)}</p>
+      <section className={styles.commandHero}>
+        <div>
+          <p className={styles.commandKicker}>{locationLine} · {monthLabel(d.period)}</p>
+          <h2>Your property, at a glance.</h2>
+          <p>{occupancyPct}% occupied · {d.pendingCount ? `${d.pendingCount} payment${d.pendingCount === 1 ? '' : 's'} need attention` : 'all current invoices are clear'}</p>
+        </div>
+        <div className={styles.commandNumbers}>
+          <div><span>Collected</span><strong>{inr(d.collected)}</strong></div>
+          <div><span>Outstanding</span><strong className={styles.commandDue}>{inr(d.pending)}</strong></div>
+          <Link href="/reports">View reports →</Link>
+        </div>
+      </section>
 
       {/* Stat cards — auto-fit grid */}
       <div className="statGrid">

@@ -62,6 +62,8 @@ export default function DashboardScreen() {
   }
 
   const d = dash.data!;
+  const totalBeds = d.occupied + d.empty;
+  const occupancyRate = totalBeds ? Math.round((d.occupied / totalBeds) * 100) : 0;
 
   return (
     <Screen scroll>
@@ -80,10 +82,24 @@ export default function DashboardScreen() {
             ))}
           </View>
         ) : (
-          <Text style={type.kicker}>{building.city}</Text>
+          <Text style={[type.kicker, styles.kickerLight]}>{building.city}</Text>
         )}
-        <Text style={type.display}>{building.name}</Text>
-        <Text style={type.bodyMuted}>{monthLabel(d.period)}</Text>
+        <Text style={[type.display, styles.titleLight]}>{building.name}</Text>
+        <Text style={styles.periodLight}>{monthLabel(d.period)} · live overview</Text>
+        <View style={styles.heroSummary}>
+          <View>
+            <Text style={styles.heroLabel}>Occupancy</Text>
+            <Text style={styles.heroValue}>{occupancyRate}%</Text>
+          </View>
+          <View style={styles.heroRule} />
+          <View>
+            <Text style={styles.heroLabel}>Collected</Text>
+            <Text style={styles.heroValue}>{inr(d.collected)}</Text>
+          </View>
+        </View>
+        <View style={styles.progressTrack}>
+          <View style={[styles.progressFill, { width: `${occupancyRate}%` }]} />
+        </View>
       </View>
 
       <View style={styles.stats}>
@@ -99,9 +115,9 @@ export default function DashboardScreen() {
       </View>
 
       <View style={styles.money}>
-        <Text style={type.kicker}>This month</Text>
-        <Text style={type.amountLg}>{inr(d.collected)}</Text>
-        <Text style={type.small}>Collected</Text>
+        <Text style={type.kicker}>Needs attention</Text>
+        <Text style={type.amountLg}>{inr(d.pending)}</Text>
+        <Text style={type.small}>Pending this month</Text>
         <View style={styles.alerts}>
           <Text style={styles.alert}>
             Pending {inr(d.pending)}
@@ -150,12 +166,26 @@ export default function DashboardScreen() {
 
 const styles = StyleSheet.create({
   header: {
-    paddingTop: 12,
-    paddingBottom: 8,
+    paddingTop: 24,
+    paddingHorizontal: 22,
+    paddingBottom: 22,
     overflow: 'hidden',
-    minHeight: 140,
+    minHeight: 250,
     gap: 4,
+    borderRadius: 24,
+    backgroundColor: colors.ink,
+    marginTop: 8,
+    marginBottom: 18,
   },
+  kickerLight: { color: '#E6A35D' },
+  titleLight: { color: colors.paper, marginTop: 4 },
+  periodLight: { fontFamily: fonts.body, fontSize: 13, color: 'rgba(247,245,241,0.58)' },
+  heroSummary: { flexDirection: 'row', alignItems: 'center', marginTop: 24, gap: 20 },
+  heroLabel: { fontFamily: fonts.bodyMedium, fontSize: 10, color: 'rgba(247,245,241,0.5)', textTransform: 'uppercase', letterSpacing: 1 },
+  heroValue: { fontFamily: fonts.monoBold, fontSize: 24, color: colors.paper, marginTop: 5 },
+  heroRule: { width: 1, height: 38, backgroundColor: 'rgba(247,245,241,0.12)' },
+  progressTrack: { height: 7, borderRadius: 99, backgroundColor: 'rgba(247,245,241,0.1)', marginTop: 18, overflow: 'hidden' },
+  progressFill: { height: '100%', borderRadius: 99, backgroundColor: colors.ochre },
   switcher: {
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -185,10 +215,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 18,
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
+    paddingHorizontal: 18,
+    borderWidth: 1,
     borderColor: colors.line,
-    marginTop: 8,
+    borderRadius: 18,
+    backgroundColor: colors.white,
   },
   stat: {
     flex: 1,
@@ -210,8 +241,13 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   money: {
-    paddingVertical: 22,
+    padding: 20,
     gap: 4,
+    marginTop: 12,
+    borderRadius: 18,
+    borderWidth: 1,
+    borderColor: colors.line,
+    backgroundColor: colors.white,
   },
   alerts: {
     marginTop: 12,

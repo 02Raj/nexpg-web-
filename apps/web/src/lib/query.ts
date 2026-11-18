@@ -24,6 +24,8 @@ export const keys = {
   occupancy: (buildingId: string) => ['occupancy', buildingId] as const,
   invoices: (buildingId: string, period: string) => ['invoices', buildingId, period] as const,
   tenant: (tenantId: string) => ['tenant', tenantId] as const,
+  tenants: (buildingId: string) => ['tenants', buildingId] as const,
+  reports: (buildingId: string) => ['reports', buildingId] as const,
   apkRequest: ['apk-request'] as const,
   apkRequestsAdmin: ['apk-requests-admin'] as const,
   contactInquiries: ['contact-inquiries'] as const,

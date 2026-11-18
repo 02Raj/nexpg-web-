@@ -2,7 +2,7 @@ export type BedStatus = 'empty' | 'occupied';
 export type TenantStatus = 'active' | 'vacated';
 export type SecurityStatus = 'held' | 'refund_due' | 'refunded';
 export type InvoiceStatus = 'pending' | 'paid';
-export type PaymentMode = 'upi' | 'cash';
+export type PaymentMode = 'upi' | 'bank' | 'cash';
 
 export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
 

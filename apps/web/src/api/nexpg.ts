@@ -229,7 +229,7 @@ export async function vacateTenant(tenantId: string) {
   if (error) throw error;
 }
 
-export async function markInvoicePaid(invoiceId: string, mode: 'upi' | 'cash') {
+export async function markInvoicePaid(invoiceId: string, mode: 'upi' | 'bank' | 'cash') {
   const supabase = getSupabase();
   const { error } = await supabase.rpc('rpc_mark_invoice_paid', {
     p_invoice_id: invoiceId,
@@ -278,6 +278,69 @@ export async function fetchInvoices(buildingId: string, period: string) {
     ...inv,
     tenant: map.get(inv.tenant_id) ?? null,
   }));
+}
+
+export async function fetchTenantDirectory(buildingId: string) {
+  const supabase = getSupabase();
+  const [{ data: tenants, error }, { data: beds, error: bedErr }, { data: rooms, error: roomErr }] = await Promise.all([
+    supabase.from('tenants').select('*').eq('building_id', buildingId).order('created_at', { ascending: false }),
+    supabase.from('pg_beds').select('id, label, room_id').eq('building_id', buildingId),
+    supabase.from('pg_rooms').select('id, name').eq('building_id', buildingId),
+  ]);
+  if (error) throw error;
+  if (bedErr) throw bedErr;
+  if (roomErr) throw roomErr;
+
+  const roomMap = new Map((rooms ?? []).map((room) => [room.id, room.name]));
+  const bedMap = new Map((beds ?? []).map((bed) => [bed.id, `${roomMap.get(bed.room_id) ?? 'Room'} · Bed ${bed.label}`]));
+  return ((tenants as Tenant[]) ?? []).map((tenant) => ({
+    ...tenant,
+    bedLabel: bedMap.get(tenant.bed_id) ?? 'Unassigned',
+  }));
+}
+
+export async function fetchReports(buildingId: string) {
+  const supabase = getSupabase();
+  const [{ data: invoices, error }, { data: tenants, error: tenantErr }, occupancy] = await Promise.all([
+    supabase.from('monthly_invoices').select('*').eq('building_id', buildingId).order('billing_period', { ascending: true }),
+    supabase.from('tenants').select('id, full_name, phone, monthly_rent, status, join_date, vacated_at').eq('building_id', buildingId),
+    fetchOccupancy(buildingId),
+  ]);
+  if (error) throw error;
+  if (tenantErr) throw tenantErr;
+
+  const rows = (invoices as MonthlyInvoice[]) ?? [];
+  const monthMap = new Map<string, { billed: number; collected: number; pending: number }>();
+  for (const invoice of rows) {
+    const period = invoice.billing_period.slice(0, 7);
+    const month = monthMap.get(period) ?? { billed: 0, collected: 0, pending: 0 };
+    month.billed += Number(invoice.amount);
+    if (invoice.status === 'paid') month.collected += Number(invoice.amount);
+    else month.pending += Number(invoice.amount);
+    monthMap.set(period, month);
+  }
+
+  const months = Array.from(monthMap.entries())
+    .map(([period, totals]) => ({ period, ...totals }))
+    .slice(-6);
+  const collected = rows.filter((row) => row.status === 'paid').reduce((sum, row) => sum + Number(row.amount), 0);
+  const pending = rows.filter((row) => row.status === 'pending').reduce((sum, row) => sum + Number(row.amount), 0);
+  const totalBeds = occupancy.length;
+  const occupiedBeds = occupancy.filter((bed) => bed.status === 'occupied').length;
+
+  return {
+    months,
+    invoices: rows,
+    tenants: (tenants ?? []) as Pick<Tenant, 'id' | 'full_name' | 'phone' | 'monthly_rent' | 'status' | 'join_date' | 'vacated_at'>[],
+    occupancy,
+    collected,
+    pending,
+    billed: collected + pending,
+    activeTenants: (tenants ?? []).filter((tenant) => tenant.status === 'active').length,
+    totalBeds,
+    occupiedBeds,
+    occupancyRate: totalBeds ? Math.round((occupiedBeds / totalBeds) * 100) : 0,
+  };
 }
 
 export async function fetchRefundDue(buildingId: string) {

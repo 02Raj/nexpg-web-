@@ -4,6 +4,18 @@
   gap: 20px;
 }
 
+.commandHero { position:relative;overflow:hidden;display:flex;align-items:flex-end;justify-content:space-between;gap:24px;padding:28px 30px;border-radius:22px;color:var(--paper);background:linear-gradient(125deg,#122a25 0%,#1b3f36 65%,#2d6252 100%);box-shadow:0 16px 38px rgba(22,48,43,.15) }
+.commandHero::after { content:'';position:absolute;width:280px;height:280px;border-radius:50%;border:1px solid rgba(255,255,255,.09);right:-70px;top:-180px }
+.commandHero h2 { font-family:var(--font-display);font-size:clamp(1.8rem,4vw,2.65rem);line-height:1;letter-spacing:-.025em;margin:7px 0 10px }
+.commandHero p { margin:0;color:rgba(247,245,241,.65);font-size:13px }
+.commandKicker { color:#e9aa65!important;font-family:var(--font-mono);font-size:10px!important;letter-spacing:.1em;text-transform:uppercase }
+.commandNumbers { position:relative;z-index:1;display:grid;grid-template-columns:repeat(2,minmax(100px,1fr));gap:10px;min-width:320px }
+.commandNumbers>div { padding:12px 14px;border-radius:11px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.08) }
+.commandNumbers span { display:block;font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:rgba(247,245,241,.5);margin-bottom:5px }
+.commandNumbers strong { font-family:var(--font-mono);font-size:18px }
+.commandNumbers .commandDue { color:#efb778 }
+.commandNumbers a { grid-column:1/-1;text-align:right;color:#efb778;font-size:12px;font-weight:700 }
+
 /* Stat card value colors */
 .statGreen {
   color: var(--green);
@@ -199,4 +211,12 @@
   .contentGrid {
     grid-template-columns: 1fr;
   }
+
+  .commandHero { align-items:stretch;flex-direction:column;padding:22px }
+  .commandNumbers { min-width:0 }
+}
+
+@media (max-width: 400px) {
+  .commandNumbers { grid-template-columns:1fr }
+  .commandNumbers a { grid-column:1;text-align:left }
 }

@@ -207,7 +207,7 @@ export async function vacateTenant(tenantId: string) {
   if (error) throw error;
 }
 
-export async function markInvoicePaid(invoiceId: string, mode: 'upi' | 'cash') {
+export async function markInvoicePaid(invoiceId: string, mode: 'upi' | 'bank' | 'cash') {
   const { error } = await supabase.rpc('rpc_mark_invoice_paid', {
     p_invoice_id: invoiceId,
     p_payment_mode: mode,

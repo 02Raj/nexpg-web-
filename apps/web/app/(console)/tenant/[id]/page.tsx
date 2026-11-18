@@ -51,7 +51,7 @@ export default function TenantPage() {
     onError: (err) => toast.error(rpcMessage(err, 'Could not update refund')),
   });
   const pay = useMutation({
-    mutationFn: ({ invoiceId, mode }: { invoiceId: string; mode: 'upi' | 'cash' }) =>
+    mutationFn: ({ invoiceId, mode }: { invoiceId: string; mode: 'upi' | 'bank' | 'cash' }) =>
       markInvoicePaid(invoiceId, mode),
     onSuccess: async () => {
       toast.success('Payment recorded.');
@@ -163,6 +163,7 @@ export default function TenantPage() {
                       <div className={styles.payButtons}>
                         <Button label="UPI" variant="success" onClick={() => pay.mutate({ invoiceId: inv.id, mode: 'upi' })} />
                         <Button label="Cash" variant="secondary" onClick={() => pay.mutate({ invoiceId: inv.id, mode: 'cash' })} />
+                        <Button label="Bank" variant="secondary" onClick={() => pay.mutate({ invoiceId: inv.id, mode: 'bank' })} />
                       </div>
                     </div>
                   ) : (
