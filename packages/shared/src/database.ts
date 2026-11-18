@@ -80,6 +80,21 @@ export type MonthlyInvoice = {
   updated_at: string;
 };
 
+export type SupportTicket = {
+  id: string; owner_id: string; building_id: string; tenant_id: string | null;
+  title: string; description: string; category: 'maintenance' | 'billing' | 'other';
+  priority: 'low' | 'medium' | 'high'; status: 'open' | 'in_progress' | 'resolved' | 'closed';
+  created_at: string; updated_at: string;
+};
+
+export type GuestStay = {
+  id: string; owner_id: string; building_id: string; bed_id: string;
+  guest_name: string; phone: string; check_in: string; check_out: string;
+  nightly_rate: number; status: 'booked' | 'checked_in' | 'checked_out' | 'cancelled';
+  created_at: string; updated_at: string;
+};
+
+
 export type ApkDownloadRequest = {
   id: string;
   owner_id: string;
@@ -159,6 +174,8 @@ export type Database = {
       tenants: Table<Tenant>;
       security_deposits: Table<SecurityDeposit>;
       monthly_invoices: Table<MonthlyInvoice>;
+      support_tickets: Table<SupportTicket>;
+      guest_stays: Table<GuestStay>;
       apk_download_requests: Table<ApkDownloadRequest>;
       owner_profiles: Table<OwnerProfile>;
       contact_inquiries: Table<ContactInquiry>;
@@ -189,6 +206,7 @@ export type Database = {
       rpc_mark_security_refunded: { Args: { p_deposit_id: string }; Returns: undefined };
       rpc_generate_invoices: { Args: { p_building_id: string }; Returns: number };
       rpc_maybe_generate_invoices: { Args: { p_building_id: string }; Returns: number };
+      rpc_add_invoice_charge: { Args: { p_invoice_id: string; p_label: string; p_amount: number }; Returns: undefined };
       rpc_platform_dashboard: { Args: Record<string, never>; Returns: Json };
       rpc_platform_list_owners: { Args: Record<string, never>; Returns: Json };
       rpc_platform_set_owner_active: { Args: { p_owner_id: string; p_active: boolean }; Returns: undefined };

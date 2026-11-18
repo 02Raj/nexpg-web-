@@ -7,6 +7,8 @@ import type {
   OccupancyCell,
   Room,
   SecurityDeposit,
+  SupportTicket,
+  GuestStay,
   Tenant,
 } from '@/types/database';
 
@@ -270,3 +272,10 @@ export async function fetchRefundDue(buildingId: string) {
     tenant_name: map.get(d.tenant_id) ?? 'Tenant',
   }));
 }
+
+async function ownerId() { const { data, error } = await supabase.auth.getUser(); if (error) throw error; if (!data.user) throw new Error('Not authenticated'); return data.user.id; }
+export async function fetchTickets(buildingId:string){const{data,error}=await supabase.from('support_tickets').select('*').eq('building_id',buildingId).order('created_at',{ascending:false});if(error)throw error;return(data??[])as SupportTicket[]}
+export async function createTicket(buildingId:string,title:string,description:string){const uid=await ownerId();const{error}=await supabase.from('support_tickets').insert({owner_id:uid,building_id:buildingId,title:title.trim(),description:description.trim(),category:'maintenance',priority:'medium',status:'open'});if(error)throw error}
+export async function updateTicketStatus(id:string,status:SupportTicket['status']){const{error}=await supabase.from('support_tickets').update({status,updated_at:new Date().toISOString()}).eq('id',id);if(error)throw error}
+export async function fetchGuestStays(buildingId:string){const{data,error}=await supabase.from('guest_stays').select('*').eq('building_id',buildingId).order('check_in');if(error)throw error;return(data??[])as GuestStay[]}
+export async function createGuestStay(input:{building_id:string;bed_id:string;guest_name:string;phone:string;check_in:string;check_out:string;nightly_rate:number}){const uid=await ownerId();const{data:conflicts,error:conflictError}=await supabase.from('guest_stays').select('id').eq('bed_id',input.bed_id).neq('status','cancelled').lt('check_in',input.check_out).gt('check_out',input.check_in);if(conflictError)throw conflictError;if(conflicts?.length)throw new Error('This bed already has a booking for those dates.');const{error}=await supabase.from('guest_stays').insert({...input,owner_id:uid,status:'booked'});if(error)throw error}

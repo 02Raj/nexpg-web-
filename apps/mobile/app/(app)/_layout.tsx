@@ -56,6 +56,8 @@ export default function AppLayout() {
           <Stack.Screen name="setup/building" />
           <Stack.Screen name="setup/rooms" />
           <Stack.Screen name="feedback" options={{ animation: 'slide_from_right' }} />
+          <Stack.Screen name="tickets" options={{ animation: 'slide_from_right' }} />
+          <Stack.Screen name="guests" options={{ animation: 'slide_from_right' }} />
         </Stack>
       </AppGate>
     </BuildingProvider>

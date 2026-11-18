@@ -120,6 +120,15 @@ export default function MoreScreen() {
 
       <View style={styles.hr} />
 
+      <Text style={type.section}>Operations</Text>
+      <Text style={[type.bodyMuted, { marginVertical: 8 }]}>Tickets and guest stays stay synced with your owner console.</Text>
+      <View style={{ gap: 10 }}>
+        <Button label="Support tickets" variant="secondary" onPress={() => router.push('/(app)/tickets')} />
+        <Button label="Guest & short stays" variant="secondary" onPress={() => router.push('/(app)/guests')} />
+      </View>
+
+      <View style={styles.hr} />
+
       <Text style={type.section}>Feedback</Text>
       <Text style={[type.bodyMuted, { marginVertical: 8 }]}>
         Bug, feature idea, or something feels hectic — we read every note.

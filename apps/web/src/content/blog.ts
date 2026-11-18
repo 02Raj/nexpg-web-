@@ -428,6 +428,74 @@ export const BLOG_POSTS: BlogPost[] = [
       },
     ],
   },
+  {
+    slug: 'how-to-manage-pg-hostel-india-guide',
+    title: 'How to manage a PG hostel in India: step-by-step ground guide for owners',
+    description:
+      'A ground-level playbook for Indian PG owners: bed occupancy tracking, on-time rent collection, electricity sub-meter billing, and security deposit settlements without disputes.',
+    category: 'Guides',
+    date: '2026-11-18',
+    readMins: 9,
+    blocks: [
+      {
+        type: 'p',
+        text: 'Running a paying guest (PG) accommodation in India looks simple on paper: fill rooms, collect rent on the 1st, pay electricity, pocket the margin. On the ground in hubs like Bengaluru, Kota, Pune, Gurgaon, or Delhi, daily management quickly turns into friction: unpaid rent dragging into the 15th, empty beds discovered too late, surprise electricity bills, and heated arguments over security deposit refunds.',
+      },
+      {
+        type: 'h2',
+        text: 'The 4 silent leaks in daily PG operations',
+      },
+      {
+        type: 'ul',
+        items: [
+          'Ghost vacancy: A bed is vacated on the 3rd floor, but the owner or manager only discovers it days later when a walk-in asks for a sharing spot.',
+          'The delayed rent cycle: Tenants pay in piecemeal installments across 3 weeks, leaving you short on building rent, cook salaries, and utility bills.',
+          'Sub-meter chaos: Air conditioner and geyser sub-meter units are recorded haphazardly on slips of paper that get misplaced by the caretaker.',
+          'Checkout disputes: At move-out, the tenant claims the full deposit while the owner scrambles to verify unpaid bills, notice period compliance, and physical room damage.',
+        ],
+      },
+      {
+        type: 'h2',
+        text: 'Step 1: Build an unbending bed matrix (Not a tenant list)',
+      },
+      {
+        type: 'p',
+        text: 'Most owners maintain a list of tenant names in a notebook or WhatsApp chat. When someone vacates, they cross out the name. This creates blind spots. Always manage by physical inventory first: Building → Floor → Room Number → Bed (e.g. Bed A, B, C). A bed has only two valid states: Occupied (with a linked tenant and billing day) or Vacant. When you walk the floors, you audit beds against the system, not vague headcount.',
+      },
+      {
+        type: 'h2',
+        text: 'Step 2: Enforce the 1st-to-5th rent cycle with zero embarrassment',
+      },
+      {
+        type: 'p',
+        text: 'Chasing rent manually feels awkward. The secret to on-time rent recovery is predictable system notices. Set a fixed rent cycle for every tenant on move-in (e.g., due on the 1st, grace period until the 5th). Send an automated or templated WhatsApp reminder on the 1st morning stating the exact dues, electricity units, and UPI QR code. When the reminder comes as a software ledger statement rather than a personal plea, 85% of tenants pay within 48 hours.',
+      },
+      {
+        type: 'h2',
+        text: 'Step 3: Track electricity sub-meters on billing day, not checkout',
+      },
+      {
+        type: 'p',
+        text: 'Electricity is the single biggest source of friction in Indian PGs. Record starting sub-meter units on the move-in inspection sheet. On the monthly billing date, log current units, deduct the previous reading, and multiply by the per-unit commercial/domestic tariff. Add this as a line item to the monthly rent bill rather than letting it accumulate until move-out.',
+      },
+      {
+        type: 'h2',
+        text: 'Step 4: Standardize the 30-day notice and deposit deduction protocol',
+      },
+      {
+        type: 'p',
+        text: 'Never settle security deposits verbally at the gate. Require a written notice (via WhatsApp or email) 30 days prior. On checkout day, generate a simple move-out settlement: Initial Deposit minus (pending rent + pending electricity units + deep cleaning / repaint deductions per signed rules). Hand over the balance via UPI with a clear receipt link. This permanently protects your local reputation and Google review score.',
+      },
+      {
+        type: 'h2',
+        text: 'Why RunMyPG replaces the register and WhatsApp chaos',
+      },
+      {
+        type: 'p',
+        text: 'RunMyPG is built ground-up for Indian PG and hostel owners. It gives you a live visual bed map, tracks pending balances with one-tap payment marking, records security deposits, and syncs seamlessly between your desktop browser and Android mobile app. No bloated ERP features — just the core tools required to run a tight, profitable PG.',
+      },
+    ],
+  },
 ];
 
 export function getBlogPosts(): BlogPost[] {

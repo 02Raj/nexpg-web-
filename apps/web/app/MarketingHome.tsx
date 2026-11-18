@@ -283,10 +283,10 @@ export function MarketingHome() {
                 ['Live now', 'Payment tracking', 'UPI and cash records with pending dues and reminders.'],
                 ['Live now', 'Auto invoicing', 'Generate monthly rent bills for every active tenant.'],
                 ['Live now', 'Financial reports', 'Revenue, collections and occupancy trends with CSV export.'],
-                ['Next', 'Support tickets', 'Maintenance and billing issues with one shared timeline.'],
-                ['Next', 'Guest & short stays', 'Use empty beds for clash-free nightly bookings.'],
-                ['Next', 'Bulk import & export', 'Move tenant and room data in and out of Excel safely.'],
-                ['Next', 'Smart reminders', 'Scheduled follow-ups with a clear delivery history.'],
+                ['Live now', 'Support tickets', 'Triage maintenance and billing issues by priority and status.'],
+                ['Live now', 'Guest & short stays', 'Use empty beds for date-checked nightly bookings.'],
+                ['Live now', 'Bulk import & export', 'Move tenant data in and out of Excel-compatible CSV.'],
+                ['Live now', 'Manual WhatsApp reminders', 'Review each pending invoice and choose when to send the reminder.'],
               ].map(([status, title, description]) => (
                 <div className={s.operationCard} key={title}>
                   <span className={status === 'Live now' ? s.operationLive : s.operationNext}>{status}</span>

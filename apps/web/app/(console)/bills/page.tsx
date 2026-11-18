@@ -1,6 +1,6 @@
 'use client';
 
-import { fetchInvoices, generateInvoices, markInvoicePaid } from '@/api/nexpg';
+import { addInvoiceCharge, fetchInvoices, generateInvoices, markInvoicePaid } from '@/api/nexpg';
 import { Button } from '@/components/Button';
 import { EmptyState } from '@/components/EmptyState';
 import { PageSkeleton } from '@/components/Loading';
@@ -51,6 +51,20 @@ export default function BillsPage() {
     },
     onError: (err) => toast.error(rpcMessage(err, 'Could not generate bills')),
   });
+
+  const charge = useMutation({
+    mutationFn: ({ id, label, amount }: { id: string; label: string; amount: number }) => addInvoiceCharge(id, label, amount),
+    onSuccess: () => { toast.success('Charge added to invoice.'); queryClient.invalidateQueries({ queryKey: keys.invoices(buildingId, period) }); queryClient.invalidateQueries({ queryKey: keys.dashboard(buildingId) }); },
+    onError: (err) => toast.error(rpcMessage(err, 'Could not add charge')),
+  });
+
+  const promptCharge = (id: string) => {
+    const label = window.prompt('Charge name (for example: Electricity)');
+    if (!label) return;
+    const amount = Number(window.prompt('Amount in rupees'));
+    if (!Number.isFinite(amount) || amount <= 0) return toast.error('Enter a valid amount.');
+    charge.mutate({ id, label, amount });
+  };
 
   if (!building) return <NoBuilding />;
   if (q.isLoading) return <PageSkeleton variant="table" />;
@@ -143,6 +157,7 @@ export default function BillsPage() {
                               disabled={pay.isPending}
                             />
                             <Button label="Bank" variant="secondary" onClick={() => pay.mutate({ id: inv.id, mode: 'bank' })} disabled={pay.isPending} />
+                            <Button label="+ Charge" variant="ghost" onClick={() => promptCharge(inv.id)} disabled={charge.isPending} />
                             {inv.tenant?.phone && rentReminderUrl({ phone: inv.tenant.phone, tenantName: inv.tenant.full_name, amount: inv.amount, period, buildingName: building.name }) ? (
                               <a href={rentReminderUrl({ phone: inv.tenant.phone, tenantName: inv.tenant.full_name, amount: inv.amount, period, buildingName: building.name })!} target="_blank" rel="noopener noreferrer" aria-label={`Remind ${inv.tenant.full_name} on WhatsApp`}>WhatsApp reminder</a>
                             ) : null}

@@ -6,7 +6,7 @@ import { useAuth } from '@/providers/AuthProvider';
 import { useBuilding } from '@/providers/BuildingProvider';
 import { formatBuildingLocation } from '@/lib/locations';
 import { isPlatformAdminEmail } from '@/lib/platform-admin';
-import { LayoutDashboard, BedDouble, MessageSquare, Receipt, Settings, Menu, X, Users, ChartNoAxesCombined } from 'lucide-react';
+import { LayoutDashboard, BedDouble, MessageSquare, Receipt, Settings, Menu, X, Users, ChartNoAxesCombined, Wrench, CalendarDays, Upload } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import styles from './console-shell.module.css';
 
@@ -16,6 +16,9 @@ const NAV = [
   { href: '/tenants', label: 'Tenants', desc: 'Profiles & stay status', icon: Users, mobile: false },
   { href: '/bills', label: 'Payments', desc: 'Invoices & collections', icon: Receipt, mobile: true },
   { href: '/reports', label: 'Reports', desc: 'Revenue & occupancy', icon: ChartNoAxesCombined, mobile: true },
+  { href: '/tickets', label: 'Support tickets', desc: 'Maintenance & billing', icon: Wrench, mobile: false },
+  { href: '/guests', label: 'Guest stays', desc: 'Short-stay bookings', icon: CalendarDays, mobile: false },
+  { href: '/tools', label: 'Import & export', desc: 'Tenant CSV tools', icon: Upload, mobile: false },
   { href: '/more', label: 'Settings', desc: 'Property & account', icon: Settings, mobile: true },
   { href: '/feedback', label: 'Feedback', desc: 'Bug or idea', icon: MessageSquare, mobile: false },
 ];
@@ -36,6 +39,9 @@ function pageMeta(pathname: string, buildingName?: string) {
   if (pathname.startsWith('/reports')) {
     return { kicker: 'Insights', title: 'Financial reports', showActions: true };
   }
+  if (pathname.startsWith('/tickets')) return { kicker: 'Operations', title: 'Support tickets', showActions: true };
+  if (pathname.startsWith('/guests')) return { kicker: 'Revenue', title: 'Guest & short stays', showActions: true };
+  if (pathname.startsWith('/tools')) return { kicker: 'Tools', title: 'Import & export', showActions: true };
   if (pathname.startsWith('/more')) {
     return { kicker: 'Settings', title: 'Property settings', showActions: true };
   }

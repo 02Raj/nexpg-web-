@@ -17,4 +17,6 @@ export const keys = {
     ['invoices', buildingId, period] as const,
   tenant: (id: string) => ['tenant', id] as const,
   emptyBeds: (buildingId: string) => ['empty-beds', buildingId] as const,
+  tickets: (buildingId: string) => ['tickets', buildingId] as const,
+  guests: (buildingId: string) => ['guests', buildingId] as const,
 };

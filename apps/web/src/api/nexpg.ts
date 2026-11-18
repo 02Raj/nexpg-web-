@@ -7,6 +7,8 @@ import type {
   OccupancyCell,
   Room,
   SecurityDeposit,
+  SupportTicket,
+  GuestStay,
   Tenant,
 } from '@/types/database';
 
@@ -341,6 +343,65 @@ export async function fetchReports(buildingId: string) {
     occupiedBeds,
     occupancyRate: totalBeds ? Math.round((occupiedBeds / totalBeds) * 100) : 0,
   };
+}
+
+async function currentOwnerId() {
+  const { data, error } = await getSupabase().auth.getUser();
+  if (error) throw error;
+  if (!data.user) throw new Error('Not authenticated');
+  return data.user.id;
+}
+
+export async function fetchTickets(buildingId: string) {
+  const { data, error } = await getSupabase().from('support_tickets').select('*').eq('building_id', buildingId).order('created_at', { ascending: false });
+  if (error) throw error;
+  return (data ?? []) as SupportTicket[];
+}
+
+export async function createTicket(input: { buildingId: string; title: string; description: string; category: SupportTicket['category']; priority: SupportTicket['priority'] }) {
+  const ownerId = await currentOwnerId();
+  const { data, error } = await getSupabase().from('support_tickets').insert({ owner_id: ownerId, building_id: input.buildingId, title: input.title.trim(), description: input.description.trim(), category: input.category, priority: input.priority }).select('*').single();
+  if (error) throw error;
+  return data as SupportTicket;
+}
+
+export async function updateTicketStatus(id: string, status: SupportTicket['status']) {
+  const { error } = await getSupabase().from('support_tickets').update({ status, updated_at: new Date().toISOString() }).eq('id', id);
+  if (error) throw error;
+}
+
+export async function fetchGuestStays(buildingId: string) {
+  const supabase = getSupabase();
+  const [{ data, error }, { data: beds }, { data: rooms }] = await Promise.all([
+    supabase.from('guest_stays').select('*').eq('building_id', buildingId).order('check_in', { ascending: true }),
+    supabase.from('pg_beds').select('id,label,room_id').eq('building_id', buildingId),
+    supabase.from('pg_rooms').select('id,name').eq('building_id', buildingId),
+  ]);
+  if (error) throw error;
+  const roomMap = new Map((rooms ?? []).map((room) => [room.id, room.name]));
+  const bedMap = new Map((beds ?? []).map((bed) => [bed.id, `${roomMap.get(bed.room_id) ?? 'Room'} · Bed ${bed.label}`]));
+  return ((data ?? []) as GuestStay[]).map((stay) => ({ ...stay, bedLabel: bedMap.get(stay.bed_id) ?? 'Bed' }));
+}
+
+export async function createGuestStay(input: Omit<GuestStay, 'id' | 'owner_id' | 'status' | 'created_at' | 'updated_at'>) {
+  const ownerId = await currentOwnerId();
+  const supabase = getSupabase();
+  const { data: conflicts, error: conflictError } = await supabase.from('guest_stays').select('id').eq('bed_id', input.bed_id).neq('status', 'cancelled').lt('check_in', input.check_out).gt('check_out', input.check_in);
+  if (conflictError) throw conflictError;
+  if (conflicts?.length) throw new Error('This bed already has a booking for those dates.');
+  const { data, error } = await supabase.from('guest_stays').insert({ ...input, owner_id: ownerId, status: 'booked' }).select('*').single();
+  if (error) throw error;
+  return data as GuestStay;
+}
+
+export async function updateGuestStatus(id: string, status: GuestStay['status']) {
+  const { error } = await getSupabase().from('guest_stays').update({ status, updated_at: new Date().toISOString() }).eq('id', id);
+  if (error) throw error;
+}
+
+export async function addInvoiceCharge(invoiceId: string, label: string, amount: number) {
+  const { error } = await getSupabase().rpc('rpc_add_invoice_charge', { p_invoice_id: invoiceId, p_label: label, p_amount: amount });
+  if (error) throw error;
 }
 
 export async function fetchRefundDue(buildingId: string) {
