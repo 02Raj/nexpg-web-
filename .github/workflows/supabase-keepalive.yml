@@ -1,0 +1,30 @@
+name: Keep Supabase Alive
+
+on:
+  schedule:
+    # Runs every 3 days at 06:00 UTC to ensure Supabase project never pauses from inactivity
+    - cron: '0 6 */3 * *'
+  workflow_dispatch: # Allows manual trigger from GitHub Actions tab
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Supabase REST API
+        run: |
+          SUPABASE_URL="${{ secrets.NEXT_PUBLIC_SUPABASE_URL || 'https://cthkfzilfqxjgarzrtrw.supabase.co' }}"
+          SUPABASE_ANON_KEY="${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'sb_publishable_METQi-etH6_jPOVjnz3_Hg_by8E1cRy' }}"
+          
+          echo "Pinging Supabase at $SUPABASE_URL ..."
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$SUPABASE_URL/rest/v1/" \
+            -H "apikey: $SUPABASE_ANON_KEY" \
+            -H "Authorization: Bearer $SUPABASE_ANON_KEY")
+
+          echo "HTTP Response Status: $STATUS"
+          if [ "$STATUS" -eq 200 ] || [ "$STATUS" -eq 404 ]; then
+            echo "✅ Supabase is awake and activity was recorded successfully!"
+          elif [ "$STATUS" -eq 503 ]; then
+            echo "⚠️ Warning: Supabase returned 503. The project might currently be paused. Check your Supabase Dashboard."
+          else
+            echo "Received status $STATUS from Supabase."
+          fi

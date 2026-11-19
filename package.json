@@ -16,6 +16,7 @@
     "typecheck": "npm run typecheck --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",
     "verify": "npm run typecheck && npm run test",
+    "ping:supabase": "node scripts/keep-supabase-alive.mjs",
     "clean": "node scripts/clean-workspaces.mjs"
   },
   "engines": {
