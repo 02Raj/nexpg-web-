@@ -56,6 +56,11 @@ export function MarketingFooter() {
                   Android App
                 </Link>
               </li>
+              <li>
+                <Link href="/trackmypg-alternative" className={s.footerLink}>
+                  TrackMyPG Alternative
+                </Link>
+              </li>
             </ul>
           </div>
           <div>

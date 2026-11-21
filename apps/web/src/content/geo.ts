@@ -7,7 +7,7 @@ import { MARKETING_FAQS } from '@/content/marketing';
 export const SITE_URL = 'https://www.runmypg.in';
 export const SITE_NAME = 'RunMyPG';
 export const SITE_TAGLINE = 'PG management software for hostels and paying guest homes in India';
-export const DEFAULT_TITLE_HOME = 'PG Management Software in India | RunMyPG';
+export const DEFAULT_TITLE_HOME = 'PG Management Software & Owner App in India | RunMyPG';
 export const DEFAULT_DESCRIPTION =
   'PG management software for Indian owners: track occupancy, tenants, monthly rent and deposits. Web console plus Android. Free in beta — owner software, not a room listing site.';
 

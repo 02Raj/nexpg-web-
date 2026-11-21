@@ -279,3 +279,22 @@ export async function createTicket(buildingId:string,title:string,description:st
 export async function updateTicketStatus(id:string,status:SupportTicket['status']){const{error}=await supabase.from('support_tickets').update({status,updated_at:new Date().toISOString()}).eq('id',id);if(error)throw error}
 export async function fetchGuestStays(buildingId:string){const{data,error}=await supabase.from('guest_stays').select('*').eq('building_id',buildingId).order('check_in');if(error)throw error;return(data??[])as GuestStay[]}
 export async function createGuestStay(input:{building_id:string;bed_id:string;guest_name:string;phone:string;check_in:string;check_out:string;nightly_rate:number}){const uid=await ownerId();const{data:conflicts,error:conflictError}=await supabase.from('guest_stays').select('id').eq('bed_id',input.bed_id).neq('status','cancelled').lt('check_in',input.check_out).gt('check_out',input.check_in);if(conflictError)throw conflictError;if(conflicts?.length)throw new Error('This bed already has a booking for those dates.');const{error}=await supabase.from('guest_stays').insert({...input,owner_id:uid,status:'booked'});if(error)throw error}
+export async function addInvoiceCharge(invoiceId: string, label: string, amount: number) {
+  const { error } = await supabase.rpc('rpc_add_invoice_charge', {
+    p_invoice_id: invoiceId,
+    p_label: label,
+    p_amount: amount,
+  });
+  if (error) throw error;
+}
+
+export async function fetchTenantDirectory(buildingId: string) {
+  const { data, error } = await supabase
+    .from('tenants')
+    .select('id, full_name, phone, status, monthly_rent, join_date')
+    .eq('building_id', buildingId)
+    .order('full_name');
+  if (error) throw error;
+  return (data ?? []) as Tenant[];
+}
+

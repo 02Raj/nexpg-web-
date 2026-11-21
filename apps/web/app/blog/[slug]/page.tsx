@@ -120,8 +120,12 @@ export default async function BlogPostPage({ params }: { params: Promise<Params>
               })}
             </div>
             <div className={b.cta}>
-              <p>Run occupancy, rent and deposits from one dashboard — web console and Android app, free in beta.</p>
-              <Link href="/signup">Create free account →</Link>
+              <p>Run occupancy, rent and deposits from one dashboard — web console and Android app, 100% free in beta.</p>
+              <div style={{ display: 'flex', gap: '16px', alignItems: 'center', flexWrap: 'wrap', marginTop: '12px' }}>
+                <Link href="/signup">Create free account →</Link>
+                <Link href="/download" style={{ fontSize: '14px', textDecoration: 'underline', color: 'inherit', opacity: 0.85 }}>Download Android App</Link>
+                <Link href="/trackmypg-alternative" style={{ fontSize: '14px', textDecoration: 'underline', color: 'inherit', opacity: 0.85 }}>TrackMyPG Alternative</Link>
+              </div>
             </div>
             {related.length > 0 ? (
               <>

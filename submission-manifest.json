@@ -1,0 +1,48 @@
+{
+  "product": {
+    "name": "RunMyPG",
+    "slug": "runmypg",
+    "domain": "runmypg.in",
+    "url": "https://www.runmypg.in",
+    "pricing_url": "https://www.runmypg.in/#pricing",
+    "contact_email": "support@runmypg.in",
+    "contact_page": "https://www.runmypg.in/contact",
+    "privacy_url": "https://www.runmypg.in/privacy",
+    "terms_url": "https://www.runmypg.in/terms",
+    "logo_url": "https://www.runmypg.in/icon-512.png",
+    "twitter": "https://x.com/runmypg",
+    "category": "Property Management & Real Estate Tech",
+    "pricing_model": "Free Beta",
+    "founding_year": 2026,
+    "target_country": "India"
+  },
+  "copy": {
+    "tagline_40c": "PG management software for Indian owners",
+    "tagline_60c": "Know which beds are empty & collect rent on time",
+    "awesome_list_bullet": "- [RunMyPG](https://www.runmypg.in) - Open beta PG and hostel management software for Indian property owners.",
+    "description_160c": "RunMyPG is a free PG & hostel management app for Indian owners to track bed occupancy, collect rent on time via UPI/cash, and record security deposits.",
+    "description_500c": "RunMyPG is a dedicated property management console built specifically for Indian paying guest (PG) and hostel owners. It replaces messy physical registers and disorganized WhatsApp chats with an inventory-first bed matrix (Room > Bed A, B, C) and predictable monthly rent ledgers. Owners manage tenant move-ins, record direct UPI or cash receipts without gateway fees, track sub-meter electricity readings, and settle security deposits cleanly. Available via web browser and native Android app on the same synchronized account.",
+    "key_features": [
+      "Visual Bed Matrix (Floor > Room > Bed A/B/C occupancy)",
+      "Direct UPI & Cash rent recording with zero transaction cuts",
+      "One-tap monthly rent ledger (Paid vs Pending)",
+      "Automated WhatsApp rent statement reminders",
+      "Native Android rounds app synced with desktop web console",
+      "Multi-property switcher for owners running multiple buildings"
+    ],
+    "keywords": [
+      "PG management software",
+      "hostel management software india",
+      "pg rent collection app",
+      "pg owner app android",
+      "paying guest management system",
+      "pg occupancy tracker",
+      "trackmypg alternative"
+    ]
+  },
+  "founder": {
+    "name": "Divyansh",
+    "role": "Founder & Developer",
+    "email": "divyanshr243@gmail.com"
+  }
+}

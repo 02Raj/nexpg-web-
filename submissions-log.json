@@ -1,0 +1,107 @@
+{
+  "project": "RunMyPG",
+  "generated_at": "2026-11-21",
+  "target_backlink_goal": "Move from DR 0 to DR 20+",
+  "directories": [
+    {
+      "name": "SoftwareSuggest",
+      "url": "https://www.softwaresuggest.com/vendor-register",
+      "dr": 78,
+      "traffic": "High (India)",
+      "type": "dofollow",
+      "priority": "P0 (Must Submit)",
+      "status": "pending_submission",
+      "category": "Hostel / PG Management Software"
+    },
+    {
+      "name": "TechJockey",
+      "url": "https://www.techjockey.com/vendor/signup",
+      "dr": 69,
+      "traffic": "High (India)",
+      "type": "dofollow",
+      "priority": "P0 (Must Submit)",
+      "status": "pending_submission",
+      "category": "Property Management Software"
+    },
+    {
+      "name": "Product Hunt",
+      "url": "https://www.producthunt.com/posts/new",
+      "dr": 91,
+      "traffic": "Very High",
+      "type": "dofollow",
+      "priority": "P0 (Must Submit)",
+      "status": "pending_submission",
+      "category": "Real Estate / SaaS"
+    },
+    {
+      "name": "SaaSworthy",
+      "url": "https://www.saasworthy.com/submit-software",
+      "dr": 75,
+      "traffic": "High",
+      "type": "dofollow",
+      "priority": "P1",
+      "status": "pending_submission",
+      "category": "Property Management"
+    },
+    {
+      "name": "AlternativeTo",
+      "url": "https://alternativeto.net/software/new/",
+      "dr": 84,
+      "traffic": "Very High",
+      "type": "dofollow",
+      "priority": "P0 (Add as TrackMyPG alternative)",
+      "status": "pending_submission",
+      "category": "Hostel Management"
+    },
+    {
+      "name": "Crunchbase",
+      "url": "https://www.crunchbase.com/add-new",
+      "dr": 92,
+      "traffic": "Massive",
+      "type": "nofollow / entity",
+      "priority": "P1",
+      "status": "pending_submission",
+      "category": "Company Profile"
+    },
+    {
+      "name": "SourceForge",
+      "url": "https://sourceforge.net/create/",
+      "dr": 93,
+      "traffic": "Massive",
+      "type": "dofollow",
+      "priority": "P1",
+      "status": "pending_submission",
+      "category": "Business Software"
+    },
+    {
+      "name": "Capterra India",
+      "url": "https://www.capterra.in/vendors",
+      "dr": 77,
+      "traffic": "High (India)",
+      "type": "dofollow",
+      "priority": "P1",
+      "status": "pending_submission",
+      "category": "Hospitality & Property"
+    },
+    {
+      "name": "Trustpilot",
+      "url": "https://business.trustpilot.com/signup",
+      "dr": 94,
+      "traffic": "Massive",
+      "type": "dofollow / trust",
+      "priority": "P1",
+      "status": "pending_submission",
+      "category": "Business Reviews"
+    },
+    {
+      "name": "StartupIndia",
+      "url": "https://www.startupindia.gov.in/",
+      "dr": 72,
+      "traffic": "Government (India)",
+      "type": "dofollow",
+      "priority": "P2",
+      "status": "pending_submission",
+      "category": "Indian Startup Ecosystem"
+    }
+  ]
+}

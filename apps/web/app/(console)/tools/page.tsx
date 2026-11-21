@@ -22,10 +22,36 @@ const download = (name: string, rows: (string | number)[][]) => {
 export default function ToolsPage() {
   const { building } = useBuilding();
   const buildingId = building?.id ?? '';
+  const buildingName = building?.name ?? 'our PG';
   const [progress, setProgress] = useState('');
   const tenants = useQuery({ queryKey: keys.tenants(buildingId), queryFn: () => fetchTenantDirectory(buildingId), enabled: Boolean(buildingId) });
   const occupancy = useQuery({ queryKey: keys.occupancy(buildingId), queryFn: () => fetchOccupancy(buildingId), enabled: Boolean(buildingId) });
+
+  const activeTenants = (tenants.data ?? []).filter((t) => t.status === 'active');
+  const activePhones = activeTenants
+    .map((t) => t.phone?.replace(/\D/g, ''))
+    .filter(Boolean)
+    .map((p) => (p.length === 10 ? `+91${p}` : `+${p}`));
+
+  const [noticeText, setNoticeText] = useState(
+    `Notice for residents of ${buildingName}: Water supply will be temporarily unavailable today from 2:00 PM to 5:00 PM due to overhead tank maintenance. Kindly store water accordingly.`
+  );
+  const [copied, setCopied] = useState(false);
+
   if (!building) return <NoBuilding />;
+
+  const copyPhones = () => {
+    if (activePhones.length === 0) return toast.error('No active tenants with phone numbers.');
+    void navigator.clipboard.writeText(activePhones.join(', '));
+    setCopied(true);
+    toast.success(`Copied ${activePhones.length} phone numbers to clipboard!`);
+    setTimeout(() => setCopied(false), 3000);
+  };
+
+  const openWhatsApp = () => {
+    const url = `https://wa.me/?text=${encodeURIComponent(noticeText)}`;
+    window.open(url, '_blank');
+  };
 
   const template = () => download('runmypg-tenant-import-template.csv', [
     ['full_name', 'phone', 'room', 'bed', 'monthly_rent', 'security_amount', 'join_date'],
@@ -61,7 +87,35 @@ export default function ToolsPage() {
   };
 
   return <div className={styles.page}>
-    <section className={styles.hero}><div><p className={styles.kicker}>Migration tools</p><h2>Move out of Excel—without losing control.</h2><p>Import tenant records with live validation and export clean backups whenever you need them.</p></div></section>
+    <section className={styles.hero}><div><p className={styles.kicker}>Operations & Migration tools</p><h2>Manage your PG operations without chaos.</h2><p>Send instant announcements to all occupants and manage bulk tenant records.</p></div></section>
+    
+    <section className={styles.panel}>
+      <h3>📢 Broadcast notice to tenants</h3>
+      <p className={styles.sub}>{activeTenants.length} active occupant{activeTenants.length === 1 ? '' : 's'} in {buildingName}. Pick a quick template or compose your notice.</p>
+      
+      <div className={styles.filters}>
+        <button type="button" onClick={() => setNoticeText(`Notice for residents of ${buildingName}: Water supply will be temporarily unavailable today from 2:00 PM to 5:00 PM due to overhead tank maintenance. Kindly store water accordingly.`)}>💧 Water Supply</button>
+        <button type="button" onClick={() => setNoticeText(`Notice for residents of ${buildingName}: Electrical maintenance and generator servicing scheduled today. Power may be intermittent for 1-2 hours.`)}>⚡ Power / Generator</button>
+        <button type="button" onClick={() => setNoticeText(`Notice for residents of ${buildingName}: Wi-Fi fiber router is undergoing routine maintenance. Speeds may vary for the next 30 minutes.`)}>📶 Wi-Fi Maintenance</button>
+        <button type="button" onClick={() => setNoticeText(`Notice for residents of ${buildingName}: A friendly reminder that main gate closes at 10:30 PM. Please inform the caretaker in advance for late returns.`)}>🚪 Gate Timings</button>
+        <button type="button" onClick={() => setNoticeText(`Notice for residents of ${buildingName}: Monthly rent is due. Please clear your dues using UPI or cash with the caretaker today. Thank you.`)}>💵 Rent Reminder</button>
+      </div>
+
+      <div className={styles.field} style={{ marginTop: '12px' }}>
+        <span>Notice message</span>
+        <textarea rows={4} value={noticeText} onChange={(e) => setNoticeText(e.target.value)} />
+      </div>
+
+      <div className={styles.actionRow} style={{ marginTop: '14px' }}>
+        <button type="button" className={styles.secondary} onClick={copyPhones}>
+          {copied ? '✓ Copied numbers!' : `📋 Copy all ${activePhones.length} phone numbers`}
+        </button>
+        <button type="button" className={styles.primary} style={{ padding: '0 18px' }} onClick={openWhatsApp}>
+          Open in WhatsApp
+        </button>
+      </div>
+    </section>
+
     <section className={styles.panel}>
       <h3>Bulk tenant import & export</h3>
       <p className={styles.sub}>Download the template, fill one tenant per row, then upload it. Room and bed must already exist and be empty.</p>
