@@ -7,6 +7,7 @@
     "packages/*"
   ],
   "scripts": {
+    "dev": "npm run dev:web",
     "dev:web": "npm run dev --workspace=@nexpg/web",
     "dev:mobile": "npm run start --workspace=@nexpg/mobile",
     "android": "npm run android --workspace=@nexpg/mobile",
