@@ -1,46 +1,29 @@
-# SEO Roast Roadmap: RunMyPG (runmypg.in)
+# SEO Roast Roadmap: RunMyPG (2026-11-24)
 
-> **Verdict:** The foundation and technical Next.js SEO are clean, but the domain is starving for external authority (DR 0) and missing key bottom-of-funnel comparison routes (`/trackmypg-alternative`), while Google Search Console only indexes 9 of 30+ pages due to low domain crawl confidence.
+> **Verdict:** Google can crawl and render RunMyPG, but the site still needs stronger intent-specific money pages, external authority, and Search Console feedback loops before non-branded impressions can turn into registrations.
 
----
+| # | Tier | Issue | Revenue impact | Fix | Owner | Status |
+|---|---|---|---|---|---|---|
+| 1 | REVENUE | Rent landing page rendered `RunMyPG` twice in its title | A weak or truncated result can depress clicks on a commercial query | Make branded titles bypass the global title template | agent | shipped |
+| 2 | REVENUE | No page directly answered tenant-management intent | Relevant owners landed on a generic page or a competitor's focused page | Add `/tenant-management-software`, sitemap entry, schema, and internal links | agent | shipped |
+| 3 | REVENUE | No page directly answered room-and-bed intent | RunMyPG's strongest product workflow had no dedicated search entry point | Add `/room-and-bed-management`, sitemap entry, schema, and internal links | agent | shipped |
+| 4 | FATAL | Private/API route list in source robots policy was incomplete | Crawlers could waste time requesting owner-console and API routes | Block every current private route family and `/api` | agent | shipped |
+| 5 | REVENUE | Production Cloudflare robots policy differs from the repository policy | AI-search visibility depends on which Cloudflare-managed crawler rules remain enabled | Decide whether to allow search crawlers; keep training crawlers blocked if desired | founder | next |
+| 6 | COMPOUNDING | No verified clean referring-domain comparison is available | Content may remain below established competitors even after on-page fixes | Export Ahrefs/Google links data and compare editorial referring domains, not DR alone | founder | next |
+| 7 | COMPOUNDING | New pages have no GSC indexation evidence yet | Pages cannot earn impressions until discovered and indexed | Deploy, submit sitemap, inspect both URLs, and monitor for 28 days | founder | after deploy |
+| 8 | REVENUE | Core Web Vitals field data was not supplied and was not available in this audit | Mobile friction may reduce both conversion and ranking competitiveness | Review GSC CWV and PageSpeed after deployment; fix failing templates by field impact | founder + agent | next |
 
-## 1. Fatal & Crawl Blockers (Must Fix Immediately)
+## Verification
 
-| Item | Status | Fix Shipped |
-|---|---|---|
-| **Empty Route Trap** | FATAL | `apps/web/app/trackmypg-alternative/` folder was empty; shipped complete comparison landing page. |
-| **Sitemap Completeness** | FATAL | Added `/trackmypg-alternative` and new high-intent guides into `apps/web/app/sitemap.ts`. |
-| **Disallow Leaks** | VERIFIED | `apps/web/app/robots.ts` correctly permits all public routes and blocks `/dashboard`, `/beds`, `/bills`. |
-| **Catch-all 404** | PASS | Root dynamic segments handle 404 safely without soft-404 traps. |
+- Production before this change: canonical `www` host, public routes return 200, unknown route returns 404, dashboard has `noindex, nofollow`.
+- Local production build: 86 static pages generated; both new routes return 200 with unique titles, descriptions, canonicals, H1s, FAQ schema, and crawlable body text.
+- Local `robots.txt` blocks current console routes and `/api` while allowing public marketing pages.
+- `npm run typecheck --workspace=@nexpg/web`: passed.
+- `npm run test --workspace=@nexpg/web -- --runInBand`: 2 suites and 5 tests passed.
+- `npm run build:web`: passed.
 
----
+## Fluff (ignore until the rows above move)
 
-## 2. Revenue Blockers (Pages that index but need to rank & convert)
-
-| Page / Route | Search Intent / Query | Fix Shipped |
-|---|---|---|
-| **`/download`** | `pg owner app india` (18 GSC impressions, Pos 41) | Updated title to `PG Owner App India (Android) \| Free APK Download` and added target meta keywords. |
-| **`/pg-rent-collection-software`** | `pg rent collection app india` (10 GSC impressions) | Updated title to `PG Rent Collection Software & App India — Free Beta \| RunMyPG`. |
-| **`/trackmypg-alternative`** | `trackmypg alternative`, `track my pg app alternative` | Built full high-converting comparison route with switching triggers, pricing comparison, and migration guide. |
-| **Homepage (`/`)** | `paying guest management system`, `pg management software india` | Grounded H1 and kicker with clear Indian PG owner context and direct links to Android APK and web console. |
-
----
-
-## 3. Compounding Authority & AI Search (30-Day Plan)
-
-1. **Directory Submissions (`submission-manifest.json`)**:
-   - Push RunMyPG to 15+ foundational software directories (SoftwareSuggest, SaaSworthy, TechJockey, Product Hunt, AlternativeTo, Trustpilot).
-   - Target: Move domain from DR 0 to DR 15+ in 45 days.
-
-2. **Internal Linking Graph**:
-   - Link every top blog post (`/blog/how-to-fill-pg-vacant-rooms`, `/blog/pg-security-deposit`, `/blog/how-to-manage-pg-hostel-india-guide`) to `/download`, `/signup`, and `/trackmypg-alternative`.
-
-3. **AI Search Optimization (GEO)**:
-   - `llms.txt` and `llms-full.txt` live at `/llms.txt` to feed ChatGPT, Perplexity, and Claude citation engines.
-
----
-
-## 4. Fluff Tier (Do NOT touch until Fatal & Revenue are green)
-- Image alt texts on non-ranking blog posts.
-- Meta descriptions minor length adjustments.
-- Color contrast tweaks in admin console.
+- Minor title/description character-count preferences where the result is already unique and accurate.
+- Decorative image alt-text changes that do not affect product understanding.
+- Heading-order style debates on pages with one clear H1 and readable sections.

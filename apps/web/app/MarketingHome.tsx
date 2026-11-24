@@ -155,6 +155,26 @@ export function MarketingHome() {
               </p>
               <span className={b.cardMore}>Open page →</span>
             </Link>
+            <Link href="/tenant-management-software" className={b.card}>
+              <div className={b.cardMeta}>
+                <span>Tenants</span>
+              </div>
+              <h3 className={b.cardTitle}>Tenant management software</h3>
+              <p className={b.cardDesc}>
+                Keep the tenant, assigned bed, monthly rent and security deposit in one owner record.
+              </p>
+              <span className={b.cardMore}>Open page →</span>
+            </Link>
+            <Link href="/room-and-bed-management" className={b.card}>
+              <div className={b.cardMeta}>
+                <span>Occupancy</span>
+              </div>
+              <h3 className={b.cardTitle}>Room and bed management</h3>
+              <p className={b.cardDesc}>
+                See vacant and occupied beds across sharing rooms and multiple properties.
+              </p>
+              <span className={b.cardMore}>Open page →</span>
+            </Link>
           </div>
         </div>
       </section>

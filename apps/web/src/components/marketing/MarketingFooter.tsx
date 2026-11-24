@@ -37,6 +37,16 @@ export function MarketingFooter() {
                 </Link>
               </li>
               <li>
+                <Link href="/tenant-management-software" className={s.footerLink}>
+                  Tenant management
+                </Link>
+              </li>
+              <li>
+                <Link href="/room-and-bed-management" className={s.footerLink}>
+                  Rooms &amp; beds
+                </Link>
+              </li>
+              <li>
                 <Link href="/#features" className={s.footerLink}>
                   Features
                 </Link>

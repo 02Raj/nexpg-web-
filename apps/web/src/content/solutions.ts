@@ -141,6 +141,100 @@ export const SOLUTION_PAGES: SolutionPage[] = [
     relatedBlog: ['pg-rent-collection', 'pg-security-deposit', 'excel-vs-pg-software'],
     relatedCities: ['delhi', 'gurgaon', 'noida'],
   },
+  {
+    slug: 'tenant-management-software',
+    path: '/tenant-management-software',
+    kicker: 'Tenant records for PG owners',
+    title: 'Tenant Management Software for PGs in India',
+    description:
+      'Tenant management software for Indian PG and hostel owners. Keep each tenant tied to a room, bed, monthly rent and security deposit on web and Android.',
+    h1: 'Tenant management software built around the bed they occupy',
+    lead:
+      'A PG tenant record is useful only when it answers the next operational question: which bed is this person in, what is their monthly rent, and what deposit will need attention at checkout? RunMyPG keeps those details together for owners on web and Android.',
+    sections: [
+      {
+        heading: 'One tenant record, connected to daily operations',
+        body: 'A contact list alone is not tenant management. In a PG, the resident belongs to a specific property, room and bed. Their rent and security deposit need to stay with that record from move-in to vacate.',
+        bullets: [
+          'Assign a tenant to an available bed instead of keeping a separate occupancy sheet',
+          'Record contact details, monthly rent and security deposit together',
+          'See the same tenant and bed information on the owner website and Android app',
+          'Vacate the tenant so the bed becomes available without deleting the operational history',
+        ],
+      },
+      {
+        heading: 'Designed for owners, not a tenant marketplace',
+        body: 'RunMyPG is an owner console for an existing PG or hostel. It does not publish tenant profiles, advertise rooms, perform Aadhaar eKYC, or replace local police-verification requirements. Keep official identity documents according to your own legal and operational process.',
+      },
+      {
+        heading: 'When a spreadsheet starts to fail',
+        body: 'A sheet can store names, but it does not prevent the occupancy map and tenant list from drifting apart. RunMyPG connects the person to the bed and the monthly bill, so an update made at the property is visible when you reconcile at the desk.',
+      },
+    ],
+    faqs: [
+      {
+        q: 'Can I assign each tenant to a room and bed?',
+        a: 'Yes. Add the property, rooms and beds first, then place the tenant on an available bed.',
+      },
+      {
+        q: 'Does RunMyPG perform Aadhaar or police verification?',
+        a: 'No. RunMyPG is not an eKYC or police-verification service. Follow the current requirements in your city and keep official documents through your own approved process.',
+      },
+      {
+        q: 'Can tenants log in to RunMyPG?',
+        a: 'No. RunMyPG is owner software. Tenants do not need an account to appear in your occupancy and rent records.',
+      },
+    ],
+    relatedBlog: ['pg-tenant-verification-india', 'pg-move-out-notice-period-india', 'excel-vs-pg-software'],
+    relatedCities: ['hyderabad', 'bangalore', 'noida'],
+  },
+  {
+    slug: 'room-and-bed-management',
+    path: '/room-and-bed-management',
+    kicker: 'Room, bed & occupancy control',
+    title: 'Room and Bed Management Software for PGs & Hostels',
+    description:
+      'Room and bed management software for Indian PGs and hostels. Track occupied and vacant beds, tenant allocation and multi-property occupancy on web and Android.',
+    h1: 'Room and bed management software for shared accommodation',
+    lead:
+      'PGs and hostels sell bed capacity, not just room numbers. RunMyPG gives owners a bed-level occupancy map so a double- or triple-sharing room shows exactly which spots are occupied and which are ready for the next move-in.',
+    sections: [
+      {
+        heading: 'See vacancy at bed level',
+        body: 'A room marked “occupied” can still have an empty bed. Bed-level inventory makes that vacancy visible without walking every floor or asking a caretaker to check.',
+        bullets: [
+          'Create properties, rooms and individual beds in the same hierarchy as the building',
+          'See occupied and vacant beds without maintaining a second sheet',
+          'Assign move-ins to an available bed and release it on checkout',
+          'Switch between properties while keeping each building’s occupancy separate',
+        ],
+      },
+      {
+        heading: 'Occupancy connected to tenants and rent',
+        body: 'The useful answer is not only “Bed B is occupied.” It is who occupies it and whether the monthly record is current. RunMyPG connects beds, tenant records, rent bills and deposits rather than treating room inventory as a standalone diagram.',
+      },
+      {
+        heading: 'For monthly PG and hostel operations',
+        body: 'This is not a hotel booking engine, OTA channel manager, or nightly-rate calendar. It is for owners who run monthly paying guest homes, sharing hostels and similar accommodation in India.',
+      },
+    ],
+    faqs: [
+      {
+        q: 'Can RunMyPG track more than one bed in a room?',
+        a: 'Yes. Rooms can contain multiple beds, and each bed can be shown as occupied or vacant.',
+      },
+      {
+        q: 'Can I manage more than one PG or hostel?',
+        a: 'Yes. Each property keeps its own rooms, beds, tenants and bills, and you switch properties from one owner account.',
+      },
+      {
+        q: 'Is this a hotel room-booking system?',
+        a: 'No. RunMyPG is for monthly PG and hostel operations. It does not manage OTA channels or nightly hotel reservations.',
+      },
+    ],
+    relatedBlog: ['track-pg-occupancy', 'manage-multiple-pgs', 'pg-monthly-rent-without-spreadsheet-stress'],
+    relatedCities: ['pune', 'bangalore', 'delhi'],
+  },
 ];
 
 export function getSolutionPages(): SolutionPage[] {

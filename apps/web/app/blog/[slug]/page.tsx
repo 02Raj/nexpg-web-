@@ -8,6 +8,33 @@ import b from '../blog.module.css';
 
 type Params = { slug: string };
 
+const BLOG_SOLUTION_LINKS: Record<string, { href: string; label: string }> = {
+  'pg-tenant-verification-india': {
+    href: '/tenant-management-software',
+    label: 'Tenant management software for PG owners',
+  },
+  'pg-move-out-notice-period-india': {
+    href: '/tenant-management-software',
+    label: 'Keep tenant, bed, rent and deposit records together',
+  },
+  'excel-vs-pg-software': {
+    href: '/tenant-management-software',
+    label: 'See the tenant management workflow',
+  },
+  'track-pg-occupancy': {
+    href: '/room-and-bed-management',
+    label: 'Room and bed management for PGs and hostels',
+  },
+  'manage-multiple-pgs': {
+    href: '/room-and-bed-management',
+    label: 'See bed occupancy across multiple properties',
+  },
+  'pg-monthly-rent-without-spreadsheet-stress': {
+    href: '/room-and-bed-management',
+    label: 'Connect room and bed occupancy to monthly records',
+  },
+};
+
 export function generateStaticParams() {
   return getBlogPosts().map((p) => ({ slug: p.slug }));
 }
@@ -30,6 +57,7 @@ export default async function BlogPostPage({ params }: { params: Promise<Params>
 
   const url = `${SITE_URL}/blog/${post.slug}`;
   const related = getRelatedPosts(post.slug, 3);
+  const solutionLink = BLOG_SOLUTION_LINKS[post.slug];
   const jsonLd = {
     '@context': 'https://schema.org',
     '@graph': [
@@ -124,6 +152,11 @@ export default async function BlogPostPage({ params }: { params: Promise<Params>
               <div style={{ display: 'flex', gap: '16px', alignItems: 'center', flexWrap: 'wrap', marginTop: '12px' }}>
                 <Link href="/signup">Create free account →</Link>
                 <Link href="/download" style={{ fontSize: '14px', textDecoration: 'underline', color: 'inherit', opacity: 0.85 }}>Download Android App</Link>
+                {solutionLink ? (
+                  <Link href={solutionLink.href} style={{ fontSize: '14px', textDecoration: 'underline', color: 'inherit', opacity: 0.85 }}>
+                    {solutionLink.label}
+                  </Link>
+                ) : null}
                 <Link href="/trackmypg-alternative" style={{ fontSize: '14px', textDecoration: 'underline', color: 'inherit', opacity: 0.85 }}>TrackMyPG Alternative</Link>
               </div>
             </div>

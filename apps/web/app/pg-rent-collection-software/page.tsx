@@ -5,7 +5,7 @@ import { pageMetadata } from '@/lib/seo';
 const PAGE = getSolution('pg-rent-collection-software')!;
 
 export const metadata = pageMetadata({
-  title: 'PG Rent Collection Software & App India — Free Beta | RunMyPG',
+  title: 'PG Rent Collection Software & App India — Free Beta',
   description:
     'Free PG rent collection software and app for Indian owners. Track paid vs pending rent, record UPI or cash, and manage billing without WhatsApp chaos.',
   path: PAGE.path,

@@ -148,6 +148,8 @@ export default async function CityGuidePage({ params }: { params: Promise<Params
               <Link href="/pg-management-software">PG management software</Link>
               <Link href="/hostel-management-software">Hostel software</Link>
               <Link href="/pg-rent-collection-software">Rent collection</Link>
+              <Link href="/tenant-management-software">Tenant management</Link>
+              <Link href="/room-and-bed-management">Rooms &amp; beds</Link>
             </div>
 
             {related.length > 0 ? (

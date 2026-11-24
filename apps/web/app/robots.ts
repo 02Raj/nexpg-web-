@@ -6,7 +6,12 @@ const DISALLOW = [
   '/dashboard',
   '/beds',
   '/bills',
+  '/guests',
+  '/reports',
   '/tenant',
+  '/tenants',
+  '/tickets',
+  '/tools',
   '/setup',
   '/more',
   '/feedback',
@@ -15,6 +20,7 @@ const DISALLOW = [
   '/login',
   '/forgot-password',
   '/cookies/preferences',
+  '/api',
 ];
 
 /** Allow marketing pages for generative / AI crawlers (same rules as default). */

@@ -64,7 +64,9 @@ export function pageMetadata({
   const url = absoluteUrl(path);
   const titleText = title;
   const ogTitle = titleText.includes(SITE_NAME) ? titleText : `${titleText} | ${SITE_NAME}`;
-  const resolvedTitle = path === '/' ? { absolute: titleText } : titleText;
+  // Titles that already name the brand must bypass the root template or Next.js
+  // will render "... RunMyPG | RunMyPG".
+  const resolvedTitle = path === '/' || titleText.includes(SITE_NAME) ? { absolute: titleText } : titleText;
 
   return {
     title: resolvedTitle,
