@@ -36,7 +36,48 @@ export async function GET(req: Request) {
     return NextResponse.json({ leads: [] });
   }
 
-  return NextResponse.json({ leads: data ?? [] });
+  const rawLeads = data ?? [];
+
+  // Check for auto-conversion: match registered owner phones
+  try {
+    const { data: owners } = await supabase
+      .from('owner_profiles')
+      .select('phone, email')
+      .not('phone', 'is', null);
+
+    const registeredPhones = new Set(
+      (owners ?? [])
+        .map((o) => (o.phone ? o.phone.replace(/\D/g, '').slice(-10) : ''))
+        .filter((p) => p.length === 10)
+    );
+
+    const leadsToConvert = rawLeads.filter(
+      (l) =>
+        l.status !== 'converted' &&
+        registeredPhones.has(l.phone.replace(/\D/g, '').slice(-10))
+    );
+
+    if (leadsToConvert.length > 0) {
+      const idsToUpdate = leadsToConvert.map((l) => l.id);
+      await supabase
+        .from('growth_leads')
+        .update({
+          status: 'converted',
+          updated_at: new Date().toISOString(),
+          notes: 'Auto-converted: owner registered on RunMyPG',
+        })
+        .in('id', idsToUpdate);
+
+      leadsToConvert.forEach((l) => {
+        l.status = 'converted';
+        l.notes = 'Auto-converted: owner registered on RunMyPG';
+      });
+    }
+  } catch {
+    // Non-blocking conversion check
+  }
+
+  return NextResponse.json({ leads: rawLeads });
 }
 
 export async function POST(req: Request) {

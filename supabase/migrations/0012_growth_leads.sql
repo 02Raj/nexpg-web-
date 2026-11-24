@@ -29,3 +29,31 @@ create policy growth_leads_admin_all on public.growth_leads
   with check (public.is_platform_admin());
 
 grant all on public.growth_leads to authenticated;
+
+-- Automatic Lead Conversion Trigger:
+-- When a user registers or updates phone in owner_profiles, mark matching growth_leads as 'converted'
+create or replace function public.trig_auto_convert_growth_lead()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  if new.phone is not null and length(regexp_replace(new.phone, '\D', '', 'g')) >= 10 then
+    update public.growth_leads
+    set 
+      status = 'converted',
+      updated_at = now(),
+      notes = coalesce(notes || E'\n', '') || 'Auto-converted on signup: ' || coalesce(new.email, '')
+    where right(regexp_replace(phone, '\D', '', 'g'), 10) = right(regexp_replace(new.phone, '\D', '', 'g'), 10)
+      and status != 'converted';
+  end if;
+  return new;
+end;
+$$;
+
+drop trigger if exists on_owner_profile_convert_lead on public.owner_profiles;
+create trigger on_owner_profile_convert_lead
+  after insert or update of phone on public.owner_profiles
+  for each row execute function public.trig_auto_convert_growth_lead();
+

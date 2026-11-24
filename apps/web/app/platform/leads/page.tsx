@@ -582,9 +582,14 @@ export default function PlatformLeadsPage() {
                           <option value="new">New</option>
                           <option value="contacted">Contacted</option>
                           <option value="interested">Interested</option>
-                          <option value="converted">Converted</option>
+                          <option value="converted">Converted 🎉</option>
                           <option value="rejected">Rejected</option>
                         </select>
+                        {lead.status === 'converted' ? (
+                          <p style={{ margin: '4px 0 0', fontSize: 11, color: '#059669', fontWeight: 600 }}>
+                            ✅ Signed Up!
+                          </p>
+                        ) : null}
                       </td>
 
                       <td style={{ textAlign: 'right' }}>
