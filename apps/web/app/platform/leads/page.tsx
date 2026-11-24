@@ -36,7 +36,9 @@ export default function PlatformLeadsPage() {
   const [cityFilter, setCityFilter] = useState('all');
   const [statusFilter, setStatusFilter] = useState('all');
   const [scraping, setScraping] = useState(false);
-  const [selectedCity, setSelectedCity] = useState('kota');
+  const [selectedHub, setSelectedHub] = useState('kota');
+  const [isCustomCity, setIsCustomCity] = useState(false);
+  const [customCityInput, setCustomCityInput] = useState('');
   const [generatingPitchId, setGeneratingPitchId] = useState<string | null>(null);
 
   // Pagination State
@@ -221,13 +223,32 @@ export default function PlatformLeadsPage() {
     }
   };
 
+  // Dynamic list of unique cities currently present
+  const availableCities = useMemo(() => {
+    const list = Array.from(new Set(leads.map((l) => l.city.trim()))).filter(Boolean);
+    return list.sort();
+  }, [leads]);
+
   // Scrape PG Hub
   const onScrapeHub = async () => {
+    const targetCity = isCustomCity ? customCityInput.trim() : selectedHub;
+    if (!targetCity) {
+      toast.error('Please enter a city name');
+      return;
+    }
+
     setScraping(true);
     try {
-      const res = await scrapeHubLeads(selectedCity, true);
+      const res = await scrapeHubLeads(targetCity, true);
       toast.success(res.message);
-      await loadLeads();
+      if (res.leads && res.leads.length > 0) {
+        saveLeadsState([...res.leads, ...leads]);
+      } else {
+        await loadLeads();
+      }
+      if (isCustomCity) {
+        setCustomCityInput('');
+      }
     } catch {
       toast.error('Scraping hub leads failed');
     } finally {
@@ -327,11 +348,11 @@ export default function PlatformLeadsPage() {
             onChange={(e) => setCityFilter(e.target.value)}
           >
             <option value="all">All Cities</option>
-            <option value="Kota">Kota</option>
-            <option value="Bangalore">Bangalore</option>
-            <option value="Delhi">Delhi</option>
-            <option value="Pune">Pune</option>
-            <option value="Noida">Noida</option>
+            {availableCities.map((city) => (
+              <option key={city} value={city}>
+                {city}
+              </option>
+            ))}
           </select>
 
           <select
@@ -360,11 +381,18 @@ export default function PlatformLeadsPage() {
         </div>
 
         <div className={styles.actionBtnGroup}>
-          {/* Quick Hub Scraper */}
+          {/* Quick Hub Scraper with Custom City Option */}
           <select
             className={styles.filterSelect}
-            value={selectedCity}
-            onChange={(e) => setSelectedCity(e.target.value)}
+            value={isCustomCity ? 'custom' : selectedHub}
+            onChange={(e) => {
+              if (e.target.value === 'custom') {
+                setIsCustomCity(true);
+              } else {
+                setIsCustomCity(false);
+                setSelectedHub(e.target.value);
+              }
+            }}
             disabled={scraping}
           >
             <option value="kota">Kota Hub</option>
@@ -372,16 +400,36 @@ export default function PlatformLeadsPage() {
             <option value="delhi">Delhi Student Hub</option>
             <option value="pune">Pune Hub</option>
             <option value="noida">Noida Hub</option>
+            <option value="hyderabad">Hyderabad Hub</option>
+            <option value="indore">Indore Hub</option>
+            <option value="jaipur">Jaipur Hub</option>
+            <option value="patna">Patna Hub</option>
+            <option value="custom">✏️ Type Any City...</option>
           </select>
+
+          {isCustomCity ? (
+            <input
+              type="text"
+              className={styles.filterSelect}
+              style={{ minWidth: 150 }}
+              placeholder="e.g. Indore, Dehradun..."
+              value={customCityInput}
+              onChange={(e) => setCustomCityInput(e.target.value)}
+              disabled={scraping}
+              autoFocus
+            />
+          ) : null}
 
           <button
             type="button"
             className={styles.btnPrimary}
             onClick={onScrapeHub}
-            disabled={scraping}
+            disabled={scraping || (isCustomCity && !customCityInput.trim())}
           >
             <Sparkles size={14} />
-            {scraping ? 'Scraping Hub…' : 'Scrape Hub Leads'}
+            {scraping
+              ? 'Scraping Leads…'
+              : `Scrape ${isCustomCity ? (customCityInput.trim() || 'Custom') : selectedHub.toUpperCase()} Leads`}
           </button>
 
           <button
@@ -412,7 +460,7 @@ export default function PlatformLeadsPage() {
             disabled={scraping}
           >
             <Sparkles size={14} />
-            {scraping ? 'Scraping…' : `Scrape ${selectedCity.toUpperCase()} Leads Now`}
+            {scraping ? 'Scraping…' : `Scrape ${selectedHub.toUpperCase()} Leads Now`}
           </button>
         </div>
       ) : (

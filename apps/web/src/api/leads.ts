@@ -85,7 +85,7 @@ export async function regenerateLeadPitch(leadId: string): Promise<string> {
 export async function scrapeHubLeads(
   city: string,
   generatePitches = true
-): Promise<{ count: number; message: string }> {
+): Promise<{ count: number; message: string; leads?: GrowthLead[] }> {
   const res = await fetch('/api/platform/leads/scrape', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -93,5 +93,5 @@ export async function scrapeHubLeads(
     body: JSON.stringify({ city, generatePitches }),
   });
   if (!res.ok) throw new Error('Could not scrape leads');
-  return (await res.json()) as { count: number; message: string };
+  return (await res.json()) as { count: number; message: string; leads?: GrowthLead[] };
 }
