@@ -17,7 +17,11 @@ export default function AuthCallbackPage() {
 
     const supabase = getSupabase();
     const code = searchParams.get('code');
-    const target = sanitizeAuthNext(searchParams.get('next'));
+    const savedNext = typeof window !== 'undefined' ? sessionStorage.getItem('auth_next') : null;
+    const target = sanitizeAuthNext(searchParams.get('next') || savedNext);
+    if (typeof window !== 'undefined') {
+      sessionStorage.removeItem('auth_next');
+    }
 
     const finishAuth = async () => {
       try {

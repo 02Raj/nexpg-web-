@@ -49,7 +49,10 @@ export default function LoginPage() {
   const onGoogleSignIn = async () => {
     setBusy(true);
     try {
-      const redirectUrl = `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}`;
+      if (typeof window !== 'undefined') {
+        sessionStorage.setItem('auth_next', next);
+      }
+      const redirectUrl = `${window.location.origin}/auth/callback`;
       await signInWithGoogle(redirectUrl);
     } catch (err) {
       toast.error(rpcMessage(err, 'Could not start Google sign in'));
