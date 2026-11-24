@@ -153,6 +153,22 @@ export type UserFeedbackInsert = {
   status?: UserFeedback['status'];
 };
 
+export type GrowthLead = {
+  id: string;
+  name: string;
+  owner_name: string | null;
+  phone: string;
+  city: string;
+  area: string | null;
+  source: string;
+  status: 'new' | 'contacted' | 'interested' | 'converted' | 'rejected';
+  ai_pitch: string | null;
+  notes: string | null;
+  last_contacted_at: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
 export type OccupancyCell = Bed & {
   room_name: string;
   tenant?: Pick<Tenant, 'id' | 'full_name' | 'monthly_rent'> | null;
@@ -180,6 +196,7 @@ export type Database = {
       owner_profiles: Table<OwnerProfile>;
       contact_inquiries: Table<ContactInquiry>;
       user_feedback: Table<UserFeedback, UserFeedbackInsert>;
+      growth_leads: Table<GrowthLead>;
     };
     Views: Record<string, never>;
     Functions: {
