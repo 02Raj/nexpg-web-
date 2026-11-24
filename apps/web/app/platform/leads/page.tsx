@@ -12,6 +12,9 @@ import { PageSkeleton } from '@/components/Loading';
 import { toast } from '@/lib/toast';
 import {
   Bot,
+  ChevronLeft,
+  ChevronRight,
+  Copy,
   ExternalLink,
   Filter,
   MessageCircle,
@@ -25,6 +28,8 @@ import {
 import { useEffect, useMemo, useState } from 'react';
 import styles from '../platform.module.css';
 
+const LOCAL_STORAGE_KEY = 'runmypg_growth_leads_cache_v1';
+
 export default function PlatformLeadsPage() {
   const [leads, setLeads] = useState<GrowthLead[]>([]);
   const [loading, setLoading] = useState(true);
@@ -33,6 +38,10 @@ export default function PlatformLeadsPage() {
   const [scraping, setScraping] = useState(false);
   const [selectedCity, setSelectedCity] = useState('kota');
   const [generatingPitchId, setGeneratingPitchId] = useState<string | null>(null);
+
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(6);
 
   // Add lead modal state
   const [showAddModal, setShowAddModal] = useState(false);
@@ -45,15 +54,43 @@ export default function PlatformLeadsPage() {
     area: '',
   });
 
+  // Load from local storage cache initially
+  useEffect(() => {
+    try {
+      const cached = localStorage.getItem(LOCAL_STORAGE_KEY);
+      if (cached) {
+        const parsed = JSON.parse(cached) as GrowthLead[];
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setLeads(parsed);
+          setLoading(false);
+        }
+      }
+    } catch {
+      // ignore
+    }
+  }, []);
+
+  // Save to local storage whenever leads change
+  const saveLeadsState = (updatedList: GrowthLead[]) => {
+    setLeads(updatedList);
+    try {
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedList));
+    } catch {
+      // ignore
+    }
+  };
+
   const loadLeads = async () => {
     try {
       const data = await fetchGrowthLeads({
         city: cityFilter,
         status: statusFilter,
       });
-      setLeads(data);
+      if (data.length > 0) {
+        saveLeadsState(data);
+      }
     } catch {
-      toast.error('Failed to load outreach leads');
+      // Keep cached leads if network error
     } finally {
       setLoading(false);
     }
@@ -62,6 +99,28 @@ export default function PlatformLeadsPage() {
   useEffect(() => {
     void loadLeads();
   }, [cityFilter, statusFilter]);
+
+  // Reset to page 1 on filter change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [cityFilter, statusFilter, pageSize]);
+
+  // Filtered Leads
+  const filteredLeads = useMemo(() => {
+    return leads.filter((l) => {
+      const matchCity =
+        cityFilter === 'all' || l.city.toLowerCase().includes(cityFilter.toLowerCase());
+      const matchStatus = statusFilter === 'all' || l.status === statusFilter;
+      return matchCity && matchStatus;
+    });
+  }, [leads, cityFilter, statusFilter]);
+
+  // Paginated Leads
+  const totalPages = Math.max(1, Math.ceil(filteredLeads.length / pageSize));
+  const paginatedLeads = useMemo(() => {
+    const start = (currentPage - 1) * pageSize;
+    return filteredLeads.slice(start, start + pageSize);
+  }, [filteredLeads, currentPage, pageSize]);
 
   // Metrics
   const stats = useMemo(() => {
@@ -74,7 +133,7 @@ export default function PlatformLeadsPage() {
     };
   }, [leads]);
 
-  // 1-Click WhatsApp Action
+  // 1-Click WhatsApp Action (Psychological short pitch)
   const onWhatsAppClick = async (lead: GrowthLead) => {
     const cleanDigits = lead.phone.replace(/\D/g, '').slice(-10);
     if (!cleanDigits || cleanDigits.length !== 10) {
@@ -82,25 +141,53 @@ export default function PlatformLeadsPage() {
       return;
     }
 
-    const fallbackPitch = `Namaste! Maine aapka ${lead.name} (${lead.area ? `${lead.area}, ` : ''}${lead.city}) dekha. Kya PG ka rent hisab, tenant slips aur bijli sub-meter calculation automate karna chahte hain? RunMyPG app se ye 1-click mein ho jata hai. Free trial: https://www.runmypg.in`;
-    const message = lead.ai_pitch?.trim() || fallbackPitch;
+    const cleanOwner = (lead.owner_name || '').replace(/\s*(ji|garu|kaka|bhaiya|bhai)\s*$/i, '').trim();
+    const salutation = cleanOwner ? `${cleanOwner} Ji` : 'Bhaiya';
+    const fallbackPitch = `Namaste ${salutation} 🙏 Aapka ${lead.name} (${lead.city}) hai na?\n\nEk chhota sawal tha — aapke yahan kamre ke bijli meter aur rent ka hisab diary mein hota hai ya WhatsApp slip pe?\n\nHumne PG owners ke liye 1-click free tool banaya hai runmypg.in pe. Ek baar 1-min ka demo bhejoon kya?`;
+    
+    const message = (lead.ai_pitch?.trim() || fallbackPitch);
     const waUrl = `https://wa.me/91${cleanDigits}?text=${encodeURIComponent(message)}`;
 
     // Open WhatsApp in new tab
     window.open(waUrl, '_blank');
 
-    // Automatically mark as contacted if it was new
+    // Automatically mark as contacted & persist
     if (lead.status === 'new') {
       try {
         const updated = await updateGrowthLead(lead.id, {
           status: 'contacted',
           last_contacted_at: new Date().toISOString(),
         });
-        setLeads((prev) => prev.map((l) => (l.id === lead.id ? updated : l)));
+        saveLeadsState(leads.map((l) => (l.id === lead.id ? updated : l)));
         toast.success(`Marked ${lead.name} as Contacted!`);
       } catch {
-        // non-blocking
+        // Fallback local update
+        saveLeadsState(
+          leads.map((l) =>
+            l.id === lead.id ? { ...l, status: 'contacted', last_contacted_at: new Date().toISOString() } : l
+          )
+        );
       }
+    }
+  };
+
+  // Copy Pitch to Clipboard
+  const onCopyPitch = (pitch: string | null, name: string) => {
+    if (!pitch) return toast.error('No pitch available to copy');
+    void navigator.clipboard.writeText(pitch);
+    toast.success(`Copied message for ${name}!`);
+  };
+
+  // Direct In-Place Edit Pitch & Auto-Save
+  const onPitchChange = (leadId: string, newPitch: string) => {
+    saveLeadsState(leads.map((l) => (l.id === leadId ? { ...l, ai_pitch: newPitch } : l)));
+  };
+
+  const onPitchBlur = async (leadId: string, finalPitch: string) => {
+    try {
+      await updateGrowthLead(leadId, { ai_pitch: finalPitch });
+    } catch {
+      // non-blocking
     }
   };
 
@@ -109,10 +196,10 @@ export default function PlatformLeadsPage() {
     setGeneratingPitchId(lead.id);
     try {
       const newPitch = await regenerateLeadPitch(lead.id);
-      setLeads((prev) =>
-        prev.map((l) => (l.id === lead.id ? { ...l, ai_pitch: newPitch } : l))
+      saveLeadsState(
+        leads.map((l) => (l.id === lead.id ? { ...l, ai_pitch: newPitch } : l))
       );
-      toast.success('Generated fresh AI pitch with RapidRouter!');
+      toast.success('Generated fresh psychological pitch with RapidRouter!');
     } catch {
       toast.error('Could not generate pitch with RapidRouter');
     } finally {
@@ -124,10 +211,10 @@ export default function PlatformLeadsPage() {
   const onStatusChange = async (leadId: string, newStatus: GrowthLead['status']) => {
     try {
       const updated = await updateGrowthLead(leadId, { status: newStatus });
-      setLeads((prev) => prev.map((l) => (l.id === leadId ? updated : l)));
+      saveLeadsState(leads.map((l) => (l.id === leadId ? updated : l)));
       toast.success(`Status updated to ${newStatus.toUpperCase()}`);
     } catch {
-      toast.error('Could not update status');
+      saveLeadsState(leads.map((l) => (l.id === leadId ? { ...l, status: newStatus } : l)));
     }
   };
 
@@ -155,12 +242,31 @@ export default function PlatformLeadsPage() {
     setAddingLead(true);
     try {
       const lead = await addGrowthLead(newLead, true);
-      setLeads((prev) => [lead, ...prev]);
+      saveLeadsState([lead, ...leads]);
       setShowAddModal(false);
       setNewLead({ name: '', owner_name: '', phone: '', city: 'Kota', area: '' });
       toast.success('Lead added & AI pitch generated!');
     } catch {
-      toast.error('Failed to add lead');
+      // Fallback local lead
+      const localLead: GrowthLead = {
+        id: `local_${Date.now()}`,
+        name: newLead.name.trim(),
+        owner_name: newLead.owner_name?.trim() || null,
+        phone: newLead.phone.replace(/\D/g, '').slice(-10),
+        city: newLead.city.trim(),
+        area: newLead.area?.trim() || null,
+        source: 'manual',
+        status: 'new',
+        ai_pitch: `Namaste ${newLead.owner_name || 'Bhaiya'} 🙏 Aapka ${newLead.name} (${newLead.city}) hai na?\n\nKamre ke bijli meter aur rent hisab diary mein karte hain ya WhatsApp slip pe? Humne PG owners ke liye free 1-click tool banaya hai runmypg.in pe. Demo bhejoon?`,
+        notes: null,
+        last_contacted_at: null,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      };
+      saveLeadsState([localLead, ...leads]);
+      setShowAddModal(false);
+      setNewLead({ name: '', owner_name: '', phone: '', city: 'Kota', area: '' });
+      toast.success('Lead added locally & ready to message!');
     } finally {
       setAddingLead(false);
     }
@@ -172,8 +278,8 @@ export default function PlatformLeadsPage() {
       <div>
         <h2 className={styles.section}>Growth & Outreach Engine</h2>
         <p className={styles.lead}>
-          Automate PG owner acquisition. AI-tailored WhatsApp pitches powered by{' '}
-          <strong>RapidRouter AI (google/gemma-4-31b-it)</strong>. Click to chat with zero ban risk.
+          High-conversion PG owner outreach. Short psychological curiosity hooks powered by{' '}
+          <strong>RapidRouter AI (Gemma-4)</strong>. 1-Click WhatsApp with zero ban risk.
         </p>
       </div>
 
@@ -237,6 +343,17 @@ export default function PlatformLeadsPage() {
             <option value="converted">Converted</option>
             <option value="rejected">Rejected</option>
           </select>
+
+          <select
+            className={styles.filterSelect}
+            value={pageSize}
+            onChange={(e) => setPageSize(Number(e.target.value))}
+            title="Rows per page"
+          >
+            <option value="6">6 per page</option>
+            <option value="10">10 per page</option>
+            <option value="20">20 per page</option>
+          </select>
         </div>
 
         <div className={styles.actionBtnGroup}>
@@ -275,9 +392,9 @@ export default function PlatformLeadsPage() {
       </div>
 
       {/* ── Leads Table ── */}
-      {loading ? (
+      {loading && leads.length === 0 ? (
         <PageSkeleton variant="default" />
-      ) : leads.length === 0 ? (
+      ) : filteredLeads.length === 0 ? (
         <div className={styles.empty}>
           <Users size={40} style={{ opacity: 0.3, marginBottom: 12 }} />
           <p style={{ margin: '0 0 12px', fontWeight: 600 }}>No leads found in this filter.</p>
@@ -296,132 +413,200 @@ export default function PlatformLeadsPage() {
           </button>
         </div>
       ) : (
-        <div className={styles.tableWrap}>
-          <table className={styles.table}>
-            <thead>
-              <tr>
-                <th>PG & Location</th>
-                <th>Owner / Phone</th>
-                <th style={{ width: 380 }}>AI WhatsApp Pitch (RapidRouter)</th>
-                <th>Status</th>
-                <th style={{ textAlign: 'right' }}>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {leads.map((lead) => {
-                const isGenerating = generatingPitchId === lead.id;
-                return (
-                  <tr key={lead.id}>
-                    <td>
-                      <strong style={{ fontSize: 14 }}>{lead.name}</strong>
-                      <p style={{ margin: '2px 0 0', fontSize: 12, color: 'var(--ink-muted)' }}>
-                        {lead.area ? `${lead.area}, ` : ''}
-                        <strong>{lead.city}</strong>
-                      </p>
-                    </td>
+        <>
+          <div className={styles.tableWrap}>
+            <table className={styles.table}>
+              <thead>
+                <tr>
+                  <th style={{ width: 220 }}>PG & Location</th>
+                  <th style={{ width: 180 }}>Owner / Phone</th>
+                  <th>Short Psychology Pitch (Click to Edit)</th>
+                  <th style={{ width: 130 }}>Status</th>
+                  <th style={{ textAlign: 'right', width: 140 }}>1-Click Send</th>
+                </tr>
+              </thead>
+              <tbody>
+                {paginatedLeads.map((lead) => {
+                  const isGenerating = generatingPitchId === lead.id;
+                  const cleanOwner = (lead.owner_name || '').replace(/\s*(ji|garu|kaka|bhaiya|bhai)\s*$/i, '').trim();
+                  const salutation = cleanOwner ? `${cleanOwner} Ji` : 'Bhaiya';
 
-                    <td>
-                      <p style={{ margin: '0 0 2px', fontWeight: 600, fontSize: 13 }}>
-                        {lead.owner_name || 'Owner / Manager'}
-                      </p>
-                      <a
-                        href={`tel:${lead.phone}`}
-                        style={{
-                          fontSize: 12,
-                          color: 'var(--brand)',
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: 4,
-                          textDecoration: 'none',
-                        }}
-                      >
-                        <Phone size={11} /> +91 {lead.phone.slice(-10)}
-                      </a>
-                    </td>
+                  return (
+                    <tr key={lead.id}>
+                      <td>
+                        <strong style={{ fontSize: 14, display: 'block', color: 'var(--ink)' }}>
+                          {lead.name}
+                        </strong>
+                        <p style={{ margin: '2px 0 0', fontSize: 12, color: 'var(--ink-muted)' }}>
+                          {lead.area ? `${lead.area}, ` : ''}
+                          <strong>{lead.city}</strong>
+                        </p>
+                      </td>
 
-                    <td>
-                      <div className={styles.pitchPreview}>
-                        <div
+                      <td>
+                        <p style={{ margin: '0 0 2px', fontWeight: 600, fontSize: 13 }}>
+                          {salutation}
+                        </p>
+                        <a
+                          href={`tel:${lead.phone}`}
                           style={{
-                            display: 'flex',
+                            fontSize: 12,
+                            color: 'var(--brand)',
+                            display: 'inline-flex',
                             alignItems: 'center',
-                            justifyContent: 'space-between',
+                            gap: 4,
+                            textDecoration: 'none',
                           }}
                         >
-                          <span className={styles.aiBadge}>
-                            <Bot size={11} /> Gemma-4 AI
-                          </span>
-                          <button
-                            type="button"
-                            title="Regenerate pitch with RapidRouter AI"
-                            onClick={() => onRegeneratePitch(lead)}
-                            disabled={isGenerating}
+                          <Phone size={11} /> +91 {lead.phone.slice(-10)}
+                        </a>
+                      </td>
+
+                      <td>
+                        <div className={styles.pitchPreview}>
+                          <div
                             style={{
-                              border: 'none',
-                              background: 'transparent',
-                              cursor: 'pointer',
-                              color: 'var(--ink-muted)',
-                              padding: 2,
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'space-between',
+                              marginBottom: 4,
                             }}
                           >
-                            <RefreshCw
-                              size={12}
-                              className={isGenerating ? styles.spin : undefined}
+                            <span className={styles.aiBadge}>
+                              <Bot size={11} /> Gemma-4 AI Hook
+                            </span>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                              <button
+                                type="button"
+                                className={styles.btnMiniIcon}
+                                title="Copy message"
+                                onClick={() => onCopyPitch(lead.ai_pitch, lead.name)}
+                              >
+                                <Copy size={12} />
+                              </button>
+                              <button
+                                type="button"
+                                className={styles.btnMiniIcon}
+                                title="Regenerate pitch with RapidRouter AI"
+                                onClick={() => onRegeneratePitch(lead)}
+                                disabled={isGenerating}
+                              >
+                                <RefreshCw
+                                  size={12}
+                                  className={isGenerating ? styles.spin : undefined}
+                                />
+                              </button>
+                            </div>
+                          </div>
+
+                          {isGenerating ? (
+                            <p style={{ margin: '6px 0', fontStyle: 'italic', fontSize: 11, color: '#6366f1' }}>
+                              Crafting high-converting hook with RapidRouter…
+                            </p>
+                          ) : (
+                            <textarea
+                              className={styles.editablePitch}
+                              value={lead.ai_pitch || ''}
+                              onChange={(e) => onPitchChange(lead.id, e.target.value)}
+                              onBlur={(e) => onPitchBlur(lead.id, e.target.value)}
+                              placeholder="Write or edit WhatsApp message..."
+                              title="Click to edit before sending"
                             />
+                          )}
+                        </div>
+                      </td>
+
+                      <td>
+                        <select
+                          className={styles.statusSelect}
+                          data-status={lead.status}
+                          value={lead.status}
+                          onChange={(e) =>
+                            onStatusChange(lead.id, e.target.value as GrowthLead['status'])
+                          }
+                        >
+                          <option value="new">New</option>
+                          <option value="contacted">Contacted</option>
+                          <option value="interested">Interested</option>
+                          <option value="converted">Converted</option>
+                          <option value="rejected">Rejected</option>
+                        </select>
+                      </td>
+
+                      <td style={{ textAlign: 'right' }}>
+                        <div
+                          style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: 6,
+                            justifyContent: 'flex-end',
+                          }}
+                        >
+                          <button
+                            type="button"
+                            className={styles.whatsappBtn}
+                            onClick={() => onWhatsAppClick(lead)}
+                            title="Open WhatsApp chat with pre-written message"
+                          >
+                            <MessageCircle size={14} fill="#fff" /> WhatsApp
                           </button>
                         </div>
-                        {isGenerating ? (
-                          <p style={{ margin: '4px 0 0', fontStyle: 'italic', fontSize: 11 }}>
-                            Generating pitch with RapidRouter…
-                          </p>
-                        ) : (
-                          <p style={{ margin: '4px 0 0' }}>{lead.ai_pitch || 'No pitch generated.'}</p>
-                        )}
-                      </div>
-                    </td>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
 
-                    <td>
-                      <select
-                        className={styles.statusSelect}
-                        data-status={lead.status}
-                        value={lead.status}
-                        onChange={(e) =>
-                          onStatusChange(lead.id, e.target.value as GrowthLead['status'])
-                        }
-                      >
-                        <option value="new">New</option>
-                        <option value="contacted">Contacted</option>
-                        <option value="interested">Interested</option>
-                        <option value="converted">Converted</option>
-                        <option value="rejected">Rejected</option>
-                      </select>
-                    </td>
+          {/* ── Pagination Bar ── */}
+          <div className={styles.paginationBar}>
+            <div>
+              Showing{' '}
+              <strong>{(currentPage - 1) * pageSize + 1}</strong> to{' '}
+              <strong>{Math.min(currentPage * pageSize, filteredLeads.length)}</strong> of{' '}
+              <strong>{filteredLeads.length}</strong> leads
+            </div>
 
-                    <td style={{ textAlign: 'right' }}>
-                      <div
-                        style={{
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: 6,
-                          justifyContent: 'flex-end',
-                        }}
-                      >
-                        <button
-                          type="button"
-                          className={styles.whatsappBtn}
-                          onClick={() => onWhatsAppClick(lead)}
-                          title="Open WhatsApp chat with pre-written message"
-                        >
-                          <MessageCircle size={14} fill="#fff" /> WhatsApp
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
+            <div className={styles.paginationControls}>
+              <button
+                type="button"
+                className={styles.pageBtn}
+                disabled={currentPage <= 1}
+                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                title="Previous page"
+              >
+                <ChevronLeft size={16} />
+              </button>
+
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((num) => (
+                <button
+                  key={num}
+                  type="button"
+                  className={[
+                    styles.pageBtn,
+                    currentPage === num ? styles.pageBtnActive : '',
+                  ]
+                    .filter(Boolean)
+                    .join(' ')}
+                  onClick={() => setCurrentPage(num)}
+                >
+                  {num}
+                </button>
+              ))}
+
+              <button
+                type="button"
+                className={styles.pageBtn}
+                disabled={currentPage >= totalPages}
+                onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                title="Next page"
+              >
+                <ChevronRight size={16} />
+              </button>
+            </div>
+          </div>
+        </>
       )}
 
       {/* ── Add Lead Modal ── */}

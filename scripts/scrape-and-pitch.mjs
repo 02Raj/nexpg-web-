@@ -8,7 +8,7 @@
  *   node scripts/scrape-and-pitch.mjs bangalore
  */
 
-import { readFileSync, writeFileSync, existsSync } from 'node:fs';
+import { writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
 const RAPIDROUTER_API_KEY = process.env.RAPIDROUTER_API_KEY || 'sk-rr-v1-eIDjjYBIT7yvqYoa1SJt8YCqwCEETISN';
@@ -22,16 +22,19 @@ console.log(`📍 Target City: ${targetCity.toUpperCase()}`);
 console.log(`🤖 AI Engine: RapidRouter (${RAPIDROUTER_MODEL})\n`);
 
 async function generatePitch(lead) {
-  const salutation = lead.owner ? `${lead.owner} Ji` : 'Bhaiya';
+  const cleanOwner = (lead.owner || '').replace(/\s*(ji|garu|kaka|bhaiya|bhai)\s*$/i, '').trim();
+  const salutation = cleanOwner ? `${cleanOwner} Ji` : 'Bhaiya';
   const location = lead.area ? `${lead.area}, ${lead.city}` : lead.city;
 
-  const systemPrompt = `You are a growth marketing expert for RunMyPG (https://www.runmypg.in). Write a friendly 3-sentence WhatsApp pitch in Hinglish (Hindi written in English alphabet) to a PG owner.
+  const systemPrompt = `You are a high-conversion WhatsApp copywriter for RunMyPG (runmypg.in).
+Write a SHORT (under 35 words), natural, curiosity-inducing WhatsApp message to a PG owner. Not an ad.
+
 Rules:
-1. Address politely: "Namaste ${salutation} 🙏"
-2. Mention PG name "${lead.name}" and location "${location}".
-3. Highlight pain point: Diary/register mein rent hisab, tenant slips bhejna, aur bijli sub-meter ka calculation.
-4. Call to action: "RunMyPG app se ye 1-click mein automate ho jata hai. Free trial try karke dekhiye: https://www.runmypg.in"
-5. Return ONLY the plain text ready to send. No quotes.`;
+1. Address: "Namaste ${salutation} 🙏"
+2. Question: "Aapka ${lead.name} (${lead.city}) hai na?"
+3. Pain: "Ek chhota sawal — aapke yahan kamre ke bijli meter aur rent hisab diary mein hota hai ya WhatsApp slip pe?"
+4. Hook: "Humne PG owners ke liye free 1-click tool banaya hai runmypg.in pe. 1-min ka demo bhejoon kya?"
+5. Output ONLY raw message text. No quotes.`;
 
   try {
     const res = await fetch(`${RAPIDROUTER_BASE_URL}/chat/completions`, {
@@ -44,10 +47,10 @@ Rules:
         model: RAPIDROUTER_MODEL,
         messages: [
           { role: 'system', content: systemPrompt },
-          { role: 'user', content: `Generate WhatsApp pitch for ${lead.name} in ${location}` },
+          { role: 'user', content: `Generate short conversational WhatsApp message for ${lead.name} in ${location}` },
         ],
-        max_tokens: 250,
-        temperature: 0.5,
+        max_tokens: 180,
+        temperature: 0.4,
       }),
     });
 
@@ -60,7 +63,9 @@ Rules:
 }
 
 function getDefaultPitch(lead) {
-  return `Namaste 🙏 Maine aapka ${lead.name} (${lead.city}) dekha. Kya har mahine tenants ke rent aur bijli sub-meter ka hisab diary mein jodne mein time waste hota hai? RunMyPG app se automated WhatsApp slips aur sub-meter calculation 1-click mein ho jata hai. Bilkul free trial try karke dekhiye: https://www.runmypg.in`;
+  const cleanOwner = (lead.owner || '').replace(/\s*(ji|garu|kaka|bhaiya|bhai)\s*$/i, '').trim();
+  const salutation = cleanOwner ? `${cleanOwner} Ji` : 'Bhaiya';
+  return `Namaste ${salutation} 🙏 Aapka ${lead.name} (${lead.city}) hai na?\n\nEk chhota sawal tha — aapke yahan kamre ke bijli meter aur rent ka hisab diary mein hota hai ya WhatsApp slip pe?\n\nHumne PG owners ke liye 1-click free tool banaya hai runmypg.in pe. Ek baar 1-min ka demo bhejoon kya?`;
 }
 
 async function run() {
@@ -92,7 +97,7 @@ async function run() {
   const outPath = resolve(process.cwd(), `leads-${targetCity}.json`);
   writeFileSync(outPath, JSON.stringify(enriched, null, 2), 'utf-8');
   console.log(`\n💾 Saved ${enriched.length} leads with WhatsApp links to: ${outPath}`);
-  console.log(`\nSample WhatsApp Pitch:\n-------------------------`);
+  console.log(`\nSample Psychological WhatsApp Pitch:\n-------------------------`);
   if (enriched[0]) {
     console.log(enriched[0].pitch);
     console.log(`\nClick to chat: ${enriched[0].whatsapp_url}\n`);
