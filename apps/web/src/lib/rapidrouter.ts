@@ -58,23 +58,27 @@ export async function generatePersonalizedLeadPitch(lead: {
   city: string;
   area?: string | null;
 }): Promise<string> {
-  const cleanOwner = (lead.ownerName || '').replace(/\s*(ji|garu|kaka|bhaiya|bhai)\s*$/i, '').trim();
-  const salutation = cleanOwner ? `${cleanOwner} Ji` : 'Bhaiya';
+  const cleanOwner = (lead.ownerName || '')
+    .replace(/\s*(ji|garu|kaka|bhaiya|bhai|mr\.?|shri)\s*$/i, '')
+    .replace(/^\s*(mr\.?|shri)\s*/i, '')
+    .trim();
+  const salutation = cleanOwner ? `Mr. ${cleanOwner}` : 'Sir';
   const location = lead.area ? `${lead.area}, ${lead.city}` : lead.city;
 
-  const systemPrompt = `You are a high-conversion WhatsApp outreach copywriter for RunMyPG (https://www.runmypg.in).
-Your goal: Write a SHORT, punchy, curiosity-inducing WhatsApp message to a PG / Hostel owner.
-It MUST NOT look like a generic corporate ad or bot. It should read like a polite, genuine human asking a quick question.
+  const systemPrompt = `You are a B2B sales outreach copywriter for RunMyPG (https://www.runmypg.in).
+Write a SHORT, professional, high-converting WhatsApp message in plain ENGLISH (no Hindi/Hinglish) to a PG / Hostel owner.
+Do NOT sound like an automated ad. Sound like a polite, helpful human asking a genuine question.
 
-Psychology Rules:
-1. Address politely: "Namaste ${salutation} 🙏"
-2. Personal verification: "Aapka ${lead.name} (${lead.city}) hai na?"
-3. Direct curiosity trigger about their daily pain: "Aapke yahan har mahine tenants ke bijli meter aur rent ka hisab diary mein hota hai ya WhatsApp slip pe?"
-4. Low-friction conversational close: "Humne PG owners ke liye free 1-click app banaya hai runmypg.in pe. Ek chhota 1-min demo bhejoon kya?"
-5. Super short: strictly under 35-40 words total. Break into 2-3 short, easily scannable lines.
-6. Output ONLY the raw WhatsApp message. No quotes, no placeholders.`;
+Rules:
+1. Address politely in English: "Hello ${salutation},"
+2. Mention their property: "Hope you're well! Reaching out regarding ${lead.name} in ${location}."
+3. Trigger daily pain with curiosity: "Quick question — do you still calculate electricity sub-meters and rent manually in diaries, or send automated WhatsApp slips?"
+4. Low-friction conversational ask: "We built a free 1-click management tool at runmypg.in for PG owners. Mind if I share a quick 1-min demo?"
+5. Keep it short (strictly under 35-40 words).
+6. Format in 3 short, easy-to-read paragraphs.
+7. Output ONLY the raw English text. No quotes, no placeholders.`;
 
-  const userPrompt = `Write the short psychology-driven WhatsApp message for:
+  const userPrompt = `Write the English outreach message for:
 Owner: ${salutation}
 PG Name: ${lead.name}
 Location: ${location}`;
@@ -85,13 +89,13 @@ Location: ${location}`;
         { role: 'system', content: systemPrompt },
         { role: 'user', content: userPrompt },
       ],
-      temperature: 0.4,
-      maxTokens: 180,
+      temperature: 0.3,
+      maxTokens: 160,
     });
     return pitch.replace(/^["']|["']$/g, '').trim();
   } catch (err) {
     console.error('Failed to generate pitch with RapidRouter:', err);
-    // Psychological high-converting fallback
-    return `Namaste ${salutation} 🙏 Aapka ${lead.name} (${lead.city}) hai na?\n\nEk chhota sawal tha — aapke yahan kamre ke bijli meter aur rent ka hisab diary mein hota hai ya WhatsApp slip pe?\n\nHumne PG owners ke liye 1-click free tool banaya hai runmypg.in pe. Ek baar 1-min ka demo bhejoon kya?`;
+    // Reliable English fallback
+    return `Hello ${salutation},\n\nHope you're well! Reaching out regarding ${lead.name} in ${location}.\n\nQuick question: are you still calculating electricity sub-meters and rent in paper diaries? We built a free 1-click tool at runmypg.in to send automated WhatsApp slips. Mind if I share a 1-min demo?`;
   }
 }

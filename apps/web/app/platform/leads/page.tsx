@@ -141,9 +141,12 @@ export default function PlatformLeadsPage() {
       return;
     }
 
-    const cleanOwner = (lead.owner_name || '').replace(/\s*(ji|garu|kaka|bhaiya|bhai)\s*$/i, '').trim();
-    const salutation = cleanOwner ? `${cleanOwner} Ji` : 'Bhaiya';
-    const fallbackPitch = `Namaste ${salutation} 🙏 Aapka ${lead.name} (${lead.city}) hai na?\n\nEk chhota sawal tha — aapke yahan kamre ke bijli meter aur rent ka hisab diary mein hota hai ya WhatsApp slip pe?\n\nHumne PG owners ke liye 1-click free tool banaya hai runmypg.in pe. Ek baar 1-min ka demo bhejoon kya?`;
+    const cleanOwner = (lead.owner_name || '')
+      .replace(/\s*(ji|garu|kaka|bhaiya|bhai|mr\.?|shri)\s*$/i, '')
+      .replace(/^\s*(mr\.?|shri)\s*/i, '')
+      .trim();
+    const salutation = cleanOwner ? `Mr. ${cleanOwner}` : 'Sir';
+    const fallbackPitch = `Hello ${salutation},\n\nHope you're well! Reaching out regarding ${lead.name} in ${lead.city}.\n\nQuick question: are you still calculating electricity sub-meters and rent manually in diaries? We built a free 1-click management tool at runmypg.in to send automated WhatsApp slips. Mind if I share a 1-min demo?`;
     
     const message = (lead.ai_pitch?.trim() || fallbackPitch);
     const waUrl = `https://wa.me/91${cleanDigits}?text=${encodeURIComponent(message)}`;
@@ -428,8 +431,11 @@ export default function PlatformLeadsPage() {
               <tbody>
                 {paginatedLeads.map((lead) => {
                   const isGenerating = generatingPitchId === lead.id;
-                  const cleanOwner = (lead.owner_name || '').replace(/\s*(ji|garu|kaka|bhaiya|bhai)\s*$/i, '').trim();
-                  const salutation = cleanOwner ? `${cleanOwner} Ji` : 'Bhaiya';
+                  const cleanOwner = (lead.owner_name || '')
+                    .replace(/\s*(ji|garu|kaka|bhaiya|bhai|mr\.?|shri)\s*$/i, '')
+                    .replace(/^\s*(mr\.?|shri)\s*/i, '')
+                    .trim();
+                  const salutation = cleanOwner ? `Mr. ${cleanOwner}` : 'Property Owner';
 
                   return (
                     <tr key={lead.id}>

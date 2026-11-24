@@ -1,5 +1,5 @@
 /**
- * RunMyPG Automated Lead Scraper & RapidRouter Pitch Generator
+ * RunMyPG Automated Lead Scraper & RapidRouter Pitch Generator (English Outreach)
  * 
  * Usage:
  *   node scripts/scrape-and-pitch.mjs [city]
@@ -22,19 +22,21 @@ console.log(`📍 Target City: ${targetCity.toUpperCase()}`);
 console.log(`🤖 AI Engine: RapidRouter (${RAPIDROUTER_MODEL})\n`);
 
 async function generatePitch(lead) {
-  const cleanOwner = (lead.owner || '').replace(/\s*(ji|garu|kaka|bhaiya|bhai)\s*$/i, '').trim();
-  const salutation = cleanOwner ? `${cleanOwner} Ji` : 'Bhaiya';
+  const cleanOwner = (lead.owner || '').replace(/\s*(ji|garu|kaka|bhaiya|bhai|mr\.?|shri)\s*$/i, '').trim();
+  const salutation = cleanOwner ? `Mr. ${cleanOwner}` : 'Sir';
   const location = lead.area ? `${lead.area}, ${lead.city}` : lead.city;
 
-  const systemPrompt = `You are a high-conversion WhatsApp copywriter for RunMyPG (runmypg.in).
-Write a SHORT (under 35 words), natural, curiosity-inducing WhatsApp message to a PG owner. Not an ad.
+  const systemPrompt = `You are a B2B sales outreach copywriter for RunMyPG (https://www.runmypg.in).
+Write a SHORT, professional, high-converting WhatsApp message in plain ENGLISH (no Hindi/Hinglish) to a PG / Hostel owner.
+Do NOT sound like an automated ad. Sound like a polite, helpful human asking a genuine question.
 
 Rules:
-1. Address: "Namaste ${salutation} 🙏"
-2. Question: "Aapka ${lead.name} (${lead.city}) hai na?"
-3. Pain: "Ek chhota sawal — aapke yahan kamre ke bijli meter aur rent hisab diary mein hota hai ya WhatsApp slip pe?"
-4. Hook: "Humne PG owners ke liye free 1-click tool banaya hai runmypg.in pe. 1-min ka demo bhejoon kya?"
-5. Output ONLY raw message text. No quotes.`;
+1. Address politely in English: "Hello ${salutation},"
+2. Mention property: "Hope you're well! Reaching out regarding ${lead.name} in ${location}."
+3. Trigger curiosity about manual diary work: "Quick question: are you still calculating electricity sub-meters and rent manually in paper diaries?"
+4. Low friction ask: "We built a free 1-click tool at runmypg.in to send automated WhatsApp slips. Mind if I share a 1-min demo?"
+5. Keep it strictly under 35-40 words in 3 short lines.
+6. Output ONLY raw English text. No quotes.`;
 
   try {
     const res = await fetch(`${RAPIDROUTER_BASE_URL}/chat/completions`, {
@@ -47,10 +49,10 @@ Rules:
         model: RAPIDROUTER_MODEL,
         messages: [
           { role: 'system', content: systemPrompt },
-          { role: 'user', content: `Generate short conversational WhatsApp message for ${lead.name} in ${location}` },
+          { role: 'user', content: `Generate English WhatsApp outreach message for ${lead.name} in ${location}` },
         ],
-        max_tokens: 180,
-        temperature: 0.4,
+        max_tokens: 160,
+        temperature: 0.3,
       }),
     });
 
@@ -63,9 +65,10 @@ Rules:
 }
 
 function getDefaultPitch(lead) {
-  const cleanOwner = (lead.owner || '').replace(/\s*(ji|garu|kaka|bhaiya|bhai)\s*$/i, '').trim();
-  const salutation = cleanOwner ? `${cleanOwner} Ji` : 'Bhaiya';
-  return `Namaste ${salutation} 🙏 Aapka ${lead.name} (${lead.city}) hai na?\n\nEk chhota sawal tha — aapke yahan kamre ke bijli meter aur rent ka hisab diary mein hota hai ya WhatsApp slip pe?\n\nHumne PG owners ke liye 1-click free tool banaya hai runmypg.in pe. Ek baar 1-min ka demo bhejoon kya?`;
+  const cleanOwner = (lead.owner || '').replace(/\s*(ji|garu|kaka|bhaiya|bhai|mr\.?|shri)\s*$/i, '').trim();
+  const salutation = cleanOwner ? `Mr. ${cleanOwner}` : 'Sir';
+  const location = lead.area ? `${lead.area}, ${lead.city}` : lead.city;
+  return `Hello ${salutation},\n\nHope you're well! Reaching out regarding ${lead.name} in ${location}.\n\nQuick question: are you still calculating electricity sub-meters and rent manually in diaries? We built a free 1-click management tool at runmypg.in to send automated WhatsApp slips. Mind if I share a 1-min demo?`;
 }
 
 async function run() {
@@ -83,7 +86,7 @@ async function run() {
 
   const enriched = [];
   for (const lead of sampleData) {
-    process.stdout.write(`⚡ Generating pitch for: ${lead.name}... `);
+    process.stdout.write(`⚡ Generating English pitch for: ${lead.name}... `);
     const pitch = await generatePitch(lead);
     const waUrl = `https://wa.me/91${lead.phone}?text=${encodeURIComponent(pitch)}`;
     enriched.push({
@@ -97,7 +100,7 @@ async function run() {
   const outPath = resolve(process.cwd(), `leads-${targetCity}.json`);
   writeFileSync(outPath, JSON.stringify(enriched, null, 2), 'utf-8');
   console.log(`\n💾 Saved ${enriched.length} leads with WhatsApp links to: ${outPath}`);
-  console.log(`\nSample Psychological WhatsApp Pitch:\n-------------------------`);
+  console.log(`\nSample English WhatsApp Pitch:\n-------------------------`);
   if (enriched[0]) {
     console.log(enriched[0].pitch);
     console.log(`\nClick to chat: ${enriched[0].whatsapp_url}\n`);
