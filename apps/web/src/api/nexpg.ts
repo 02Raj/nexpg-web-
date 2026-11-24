@@ -60,6 +60,40 @@ export async function updateBillingDate(buildingId: string, billingDate: number)
   if (error) throw error;
 }
 
+export async function updateBuildingLogo(buildingId: string, logoUrl: string) {
+  const supabase = getSupabase();
+  const { data, error } = await supabase
+    .from('pg_buildings')
+    .update({ logo_url: logoUrl })
+    .eq('id', buildingId)
+    .select('*')
+    .single();
+  if (error) throw error;
+  return data as Building;
+}
+
+export async function uploadImageFile(
+  file: File,
+  folder = '/runmypg/logos'
+): Promise<{ url: string; fileId: string }> {
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('folder', folder);
+  formData.append('fileName', file.name);
+
+  const res = await fetch('/api/upload', {
+    method: 'POST',
+    body: formData,
+  });
+
+  if (!res.ok) {
+    const err = (await res.json().catch(() => ({}))) as { error?: string };
+    throw new Error(err.error || 'Failed to upload image to ImageKit');
+  }
+
+  return (await res.json()) as { url: string; fileId: string };
+}
+
 export async function addRoomWithBeds(buildingId: string, name: string, bedCount: number) {
   const supabase = getSupabase();
   const { data, error } = await supabase.rpc('rpc_add_room_with_beds', {

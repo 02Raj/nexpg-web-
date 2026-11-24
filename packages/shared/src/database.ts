@@ -14,6 +14,7 @@ export type Building = {
   state: string | null;
   address: string | null;
   billing_date: number;
+  logo_url?: string | null;
   created_at: string;
   updated_at: string;
 };

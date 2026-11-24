@@ -101,7 +101,15 @@ export function ConsoleShell({ children }: { children: React.ReactNode }) {
           <Menu size={22} />
         </button>
         <Link href="/dashboard" className={styles.mobileHeaderBrand}>
-          <span className={styles.brandMark}>R</span>
+          {building?.logo_url ? (
+            <img
+              src={building.logo_url}
+              alt="Logo"
+              style={{ width: 26, height: 26, borderRadius: 6, objectFit: 'cover', flexShrink: 0 }}
+            />
+          ) : (
+            <span className={styles.brandMark}>R</span>
+          )}
           <span className={styles.mobileHeaderText}>
             <strong>{meta.title}</strong>
             <small>{building?.name ?? 'RunMyPG'}</small>
@@ -139,7 +147,15 @@ export function ConsoleShell({ children }: { children: React.ReactNode }) {
             </button>
           )}
           <Link href="/dashboard" className={styles.brand}>
-            <span className={styles.brandMark}>R</span>
+            {building?.logo_url ? (
+              <img
+                src={building.logo_url}
+                alt="Logo"
+                style={{ width: 28, height: 28, borderRadius: 6, objectFit: 'cover', flexShrink: 0 }}
+              />
+            ) : (
+              <span className={styles.brandMark}>R</span>
+            )}
             <span>
               <strong>RunMyPG</strong>
               <small>Owner console</small>

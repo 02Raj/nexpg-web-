@@ -5,6 +5,8 @@ import {
   fetchRefundDue,
   markSecurityRefunded,
   updateBillingDate,
+  updateBuildingLogo,
+  uploadImageFile,
 } from '@/api/nexpg';
 import { Button } from '@/components/Button';
 import { Field } from '@/components/Field';
@@ -29,10 +31,30 @@ export default function MorePage() {
   const [billing, setBilling] = useState(String(building?.billing_date ?? 5));
   const [roomName, setRoomName] = useState('');
   const [beds, setBeds] = useState('2');
+  const [uploadingLogo, setUploadingLogo] = useState(false);
 
   useEffect(() => {
     if (building) setBilling(String(building.billing_date));
   }, [building?.id, building?.billing_date]);
+
+  const onLogoSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) {
+      return toast.error('Image must be under 5MB');
+    }
+    setUploadingLogo(true);
+    try {
+      const { url } = await uploadImageFile(file, '/runmypg/logos');
+      await updateBuildingLogo(building!.id, url);
+      toast.success('PG Logo uploaded to ImageKit and saved!');
+      queryClient.invalidateQueries({ queryKey: keys.buildings });
+    } catch (err) {
+      toast.error(rpcMessage(err, 'Failed to upload logo to ImageKit'));
+    } finally {
+      setUploadingLogo(false);
+    }
+  };
 
   const refunds = useQuery({
     queryKey: ['refunds', building?.id],
@@ -79,7 +101,15 @@ export default function MorePage() {
       <section className={styles.topRow}>
         <div className={styles.propertyHero}>
           <div className={styles.propertyIcon}>
-            <Building2 size={22} />
+            {building.logo_url ? (
+              <img
+                src={building.logo_url}
+                alt={building.name}
+                style={{ width: '100%', height: '100%', borderRadius: 12, objectFit: 'cover' }}
+              />
+            ) : (
+              <Building2 size={22} />
+            )}
           </div>
           <div className={styles.propertyInfo}>
             <h2 className={styles.propertyName}>{building.name}</h2>
@@ -93,6 +123,39 @@ export default function MorePage() {
       </section>
 
       <div className="settingsGrid">
+        <section className="panel">
+          <h2 className="panelTitle">Property logo & branding</h2>
+          <p className="panelMuted">Uploaded to ImageKit CDN. Appears on dashboard header and tenant receipts.</p>
+          <div className={styles.logoPreviewWrap}>
+            {building.logo_url ? (
+              <img src={building.logo_url} alt="PG Logo" className={styles.logoImg} />
+            ) : (
+              <div className={styles.logoImg} style={{ display: 'grid', placeItems: 'center', color: 'var(--ink-muted)' }}>
+                <Building2 size={28} />
+              </div>
+            )}
+            <div>
+              <div className={styles.uploadBtnWrap}>
+                <Button
+                  label={uploadingLogo ? 'Uploading to ImageKit…' : (building.logo_url ? 'Change PG logo' : 'Upload PG logo')}
+                  variant="ghost"
+                  disabled={uploadingLogo}
+                />
+                <input
+                  type="file"
+                  accept="image/*"
+                  className={styles.hiddenFileInput}
+                  onChange={onLogoSelected}
+                  disabled={uploadingLogo}
+                />
+              </div>
+              <p style={{ margin: '6px 0 0', fontSize: 11, color: 'var(--ink-muted)' }}>
+                PNG, JPG or WebP up to 5MB (Powered by ImageKit CDN)
+              </p>
+            </div>
+          </div>
+        </section>
+
         <section className="panel">
           <h2 className="panelTitle">Billing date</h2>
           <p className="panelMuted">Rent invoices are generated on this day each month (IST).</p>
