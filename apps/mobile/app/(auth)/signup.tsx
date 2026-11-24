@@ -12,13 +12,25 @@ import { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 export default function SignupScreen() {
-  const { signUp } = useAuth();
+  const { signUp, signInWithGoogle } = useAuth();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [done, setDone] = useState(false);
+
+  const onGoogleSignUp = async () => {
+    setError(null);
+    setBusy(true);
+    try {
+      await signInWithGoogle();
+    } catch (e) {
+      setError(rpcMessage(e, 'Google sign up failed'));
+    } finally {
+      setBusy(false);
+    }
+  };
 
   const onSubmit = async () => {
     setError(null);
@@ -55,6 +67,18 @@ export default function SignupScreen() {
           </>
         ) : (
           <>
+            <Button
+              label="Continue with Google"
+              variant="secondary"
+              onPress={onGoogleSignUp}
+              disabled={busy}
+            />
+            <View style={styles.dividerRow}>
+              <View style={styles.dividerLine} />
+              <Text style={styles.dividerText}>or sign up with email</Text>
+              <View style={styles.dividerLine} />
+            </View>
+
             <Field label="Your name" value={name} onChangeText={setName} placeholder="Rahul" />
             <Field
               label="Email"
@@ -100,5 +124,21 @@ const styles = StyleSheet.create({
     color: colors.ochreDeep,
     textAlign: 'center',
     paddingVertical: 8,
+  },
+  dividerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    marginVertical: 4,
+  },
+  dividerLine: {
+    flex: 1,
+    height: 1,
+    backgroundColor: colors.line,
+  },
+  dividerText: {
+    fontFamily: fonts.body,
+    fontSize: 12,
+    color: colors.inkMuted,
   },
 });

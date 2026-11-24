@@ -2,6 +2,7 @@ import { env } from '@/lib/env';
 import { authRedirectUrl, passwordResetRedirectUrl } from '@/lib/auth-link';
 import { supabase } from '@/lib/supabase';
 import type { Session, User } from '@supabase/supabase-js';
+import * as Linking from 'expo-linking';
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
 
 type AuthContextValue = {
@@ -9,6 +10,7 @@ type AuthContextValue = {
   user: User | null;
   loading: boolean;
   signIn: (email: string, password: string) => Promise<void>;
+  signInWithGoogle: () => Promise<void>;
   signUp: (email: string, password: string, fullName: string) => Promise<void>;
   requestPasswordReset: (email: string) => Promise<void>;
   updatePassword: (password: string) => Promise<void>;
@@ -56,6 +58,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           password,
         });
         if (error) throw error;
+      },
+      signInWithGoogle: async () => {
+        const redirectTo = authRedirectUrl('auth/callback');
+        const { data, error } = await supabase.auth.signInWithOAuth({
+          provider: 'google',
+          options: {
+            redirectTo,
+            skipBrowserRedirect: true,
+            queryParams: {
+              access_type: 'offline',
+              prompt: 'select_account',
+            },
+          },
+        });
+        if (error) throw error;
+        if (data?.url) {
+          await Linking.openURL(data.url);
+        }
       },
       signUp: async (email, password, fullName) => {
         const { error } = await supabase.auth.signUp({
