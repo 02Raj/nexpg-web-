@@ -130,10 +130,14 @@ export async function POST(req: Request) {
         }
       }
 
+      const cleanSlug = item.name.toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 15);
+      const email = `${item.owner.toLowerCase().replace(/[^a-z]/g, '') || 'stay'}.${cleanSlug}@gmail.com`;
+
       return {
         name: item.name,
         owner_name: item.owner,
         phone: item.phone,
+        email,
         city: item.city,
         area: item.area,
         source: 'google_maps_hub',

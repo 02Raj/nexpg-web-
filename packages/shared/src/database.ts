@@ -159,11 +159,13 @@ export type GrowthLead = {
   name: string;
   owner_name: string | null;
   phone: string;
+  email?: string | null;
   city: string;
   area: string | null;
   source: string;
   status: 'new' | 'contacted' | 'interested' | 'converted' | 'rejected';
   ai_pitch: string | null;
+  email_body?: string | null;
   notes: string | null;
   last_contacted_at: string | null;
   created_at: string;

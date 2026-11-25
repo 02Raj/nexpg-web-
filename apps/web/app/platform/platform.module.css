@@ -360,6 +360,56 @@
   transform: translateY(-1px);
 }
 
+.emailBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 0.1s, background 0.15s;
+}
+
+.emailBtn:hover {
+  background: #1d4ed8;
+  transform: translateY(-1px);
+}
+
+.pitchTabGroup {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 6px;
+  background: #f1f5f9;
+  padding: 2px;
+  border-radius: 6px;
+  width: fit-content;
+}
+
+.pitchTabBtn {
+  border: none;
+  background: transparent;
+  padding: 3px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ink-muted);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.pitchTabBtnActive {
+  background: #fff;
+  color: var(--ink);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+}
+
 .pitchPreview {
   font-size: 12px;
   line-height: 1.45;

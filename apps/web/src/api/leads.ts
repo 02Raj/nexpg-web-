@@ -3,11 +3,13 @@ export type GrowthLead = {
   name: string;
   owner_name: string | null;
   phone: string;
+  email?: string | null;
   city: string;
   area: string | null;
   source: string;
   status: 'new' | 'contacted' | 'interested' | 'converted' | 'rejected';
   ai_pitch: string | null;
+  email_body?: string | null;
   notes: string | null;
   last_contacted_at: string | null;
   created_at: string;
@@ -35,6 +37,7 @@ export async function addGrowthLead(
     name: string;
     owner_name?: string;
     phone: string;
+    email?: string;
     city: string;
     area?: string;
     notes?: string;
@@ -74,12 +77,25 @@ export async function regenerateLeadPitch(leadId: string): Promise<string> {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     credentials: 'include',
-    body: JSON.stringify({ leadId }),
+    body: JSON.stringify({ leadId, type: 'whatsapp' }),
   });
   if (!res.ok) throw new Error('Could not generate pitch');
   const json = (await res.json()) as { pitch?: string; error?: string };
   if (!json.pitch) throw new Error(json.error || 'Empty pitch returned');
   return json.pitch;
+}
+
+export async function regenerateLeadEmail(leadId: string): Promise<string> {
+  const res = await fetch('/api/platform/leads/generate-pitch', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
+    body: JSON.stringify({ leadId, type: 'email' }),
+  });
+  if (!res.ok) throw new Error('Could not generate email pitch');
+  const json = (await res.json()) as { email_body?: string; error?: string };
+  if (!json.email_body) throw new Error(json.error || 'Empty email returned');
+  return json.email_body;
 }
 
 export async function scrapeHubLeads(

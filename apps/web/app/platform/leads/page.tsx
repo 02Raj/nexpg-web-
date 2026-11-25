@@ -5,6 +5,7 @@ import {
   addGrowthLead,
   updateGrowthLead,
   regenerateLeadPitch,
+  regenerateLeadEmail,
   scrapeHubLeads,
   type GrowthLead,
 } from '@/api/leads';
@@ -17,6 +18,7 @@ import {
   Copy,
   ExternalLink,
   Filter,
+  Mail,
   MessageCircle,
   Phone,
   Plus,
@@ -40,6 +42,7 @@ export default function PlatformLeadsPage() {
   const [isCustomCity, setIsCustomCity] = useState(false);
   const [customCityInput, setCustomCityInput] = useState('');
   const [generatingPitchId, setGeneratingPitchId] = useState<string | null>(null);
+  const [pitchChannel, setPitchChannel] = useState<Record<string, 'whatsapp' | 'email'>>({});
 
   // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
@@ -52,6 +55,7 @@ export default function PlatformLeadsPage() {
     name: '',
     owner_name: '',
     phone: '',
+    email: '',
     city: 'Kota',
     area: '',
   });
@@ -135,7 +139,7 @@ export default function PlatformLeadsPage() {
     };
   }, [leads]);
 
-  // 1-Click WhatsApp Action (Psychological short pitch)
+  // 1-Click WhatsApp Action (Primary Preferred Channel)
   const onWhatsAppClick = async (lead: GrowthLead) => {
     const cleanDigits = lead.phone.replace(/\D/g, '').slice(-10);
     if (!cleanDigits || cleanDigits.length !== 10) {
@@ -164,7 +168,7 @@ export default function PlatformLeadsPage() {
           last_contacted_at: new Date().toISOString(),
         });
         saveLeadsState(leads.map((l) => (l.id === lead.id ? updated : l)));
-        toast.success(`Marked ${lead.name} as Contacted!`);
+        toast.success(`Marked ${lead.name} as Contacted via WhatsApp!`);
       } catch {
         // Fallback local update
         saveLeadsState(
@@ -176,6 +180,78 @@ export default function PlatformLeadsPage() {
     }
   };
 
+  // 1-Click Email Action (Secondary Fallback when Phone/WhatsApp is invalid or email preferred)
+  const onEmailClick = async (lead: GrowthLead) => {
+    let email = lead.email?.trim();
+    if (!email) {
+      const entered = window.prompt(`Enter owner's email address for ${lead.name}:`, '');
+      if (!entered || !entered.trim()) {
+        toast.error('No email provided. WhatsApp is available!');
+        return;
+      }
+      email = entered.trim();
+      try {
+        await updateGrowthLead(lead.id, { email });
+        saveLeadsState(leads.map((l) => (l.id === lead.id ? { ...l, email } : l)));
+      } catch {
+        // local update
+        saveLeadsState(leads.map((l) => (l.id === lead.id ? { ...l, email } : l)));
+      }
+    }
+
+    const cleanOwner = (lead.owner_name || '')
+      .replace(/\s*(ji|garu|kaka|bhaiya|bhai|mr\.?|shri)\s*$/i, '')
+      .replace(/^\s*(mr\.?|shri)\s*/i, '')
+      .trim();
+    const salutation = cleanOwner ? `Mr. ${cleanOwner}` : 'Property Owner';
+    const location = lead.area ? `${lead.area}, ${lead.city}` : lead.city;
+
+    let subject = `Quick question regarding ${lead.name} (${location})`;
+    let body = lead.email_body || '';
+
+    if (body.includes('Subject:')) {
+      const lines = body.split('\n\n');
+      subject = lines[0].replace(/^Subject:\s*/i, '').trim();
+      body = lines.slice(1).join('\n\n').trim();
+    } else if (!body) {
+      body = `Hello ${salutation},\n\nHope you're having a productive week. Reaching out regarding ${lead.name} in ${location}.\n\nMost PG owners lose hours each month tracking room occupancies, calculating individual electricity sub-meters, and following up on unpaid rents across paper diaries.\n\nWe created RunMyPG (https://www.runmypg.in) — a simple, modern management platform built specifically for Indian PG owners to send automated rent slips on WhatsApp and track bed vacancies in 1 click.\n\nWould you be open to a quick 2-minute demo or free trial for ${lead.name}?\n\nBest regards,\nRunMyPG Team\nhttps://www.runmypg.in`;
+    }
+
+    const mailtoUrl = `mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.open(mailtoUrl, '_blank');
+
+    if (lead.status === 'new') {
+      try {
+        const updated = await updateGrowthLead(lead.id, {
+          status: 'contacted',
+          last_contacted_at: new Date().toISOString(),
+        });
+        saveLeadsState(leads.map((l) => (l.id === lead.id ? updated : l)));
+        toast.success(`Opened Email & marked ${lead.name} as Contacted!`);
+      } catch {
+        saveLeadsState(
+          leads.map((l) =>
+            l.id === lead.id ? { ...l, status: 'contacted', last_contacted_at: new Date().toISOString() } : l
+          )
+        );
+      }
+    }
+  };
+
+  // Add / Edit email quick prompt
+  const onAddEmail = async (lead: GrowthLead) => {
+    const entered = window.prompt(`Enter or update email for ${lead.name}:`, lead.email || '');
+    if (entered === null) return;
+    const cleanEmail = entered.trim();
+    try {
+      await updateGrowthLead(lead.id, { email: cleanEmail || undefined });
+      saveLeadsState(leads.map((l) => (l.id === lead.id ? { ...l, email: cleanEmail } : l)));
+      toast.success('Updated email address!');
+    } catch {
+      saveLeadsState(leads.map((l) => (l.id === lead.id ? { ...l, email: cleanEmail } : l)));
+    }
+  };
+
   // Copy Pitch to Clipboard
   const onCopyPitch = (pitch: string | null, name: string) => {
     if (!pitch) return toast.error('No pitch available to copy');
@@ -184,27 +260,47 @@ export default function PlatformLeadsPage() {
   };
 
   // Direct In-Place Edit Pitch & Auto-Save
-  const onPitchChange = (leadId: string, newPitch: string) => {
-    saveLeadsState(leads.map((l) => (l.id === leadId ? { ...l, ai_pitch: newPitch } : l)));
+  const onPitchChange = (leadId: string, channel: 'whatsapp' | 'email', newContent: string) => {
+    saveLeadsState(
+      leads.map((l) =>
+        l.id === leadId
+          ? channel === 'email'
+            ? { ...l, email_body: newContent }
+            : { ...l, ai_pitch: newContent }
+          : l
+      )
+    );
   };
 
-  const onPitchBlur = async (leadId: string, finalPitch: string) => {
+  const onPitchBlur = async (leadId: string, channel: 'whatsapp' | 'email', finalContent: string) => {
     try {
-      await updateGrowthLead(leadId, { ai_pitch: finalPitch });
+      if (channel === 'email') {
+        await updateGrowthLead(leadId, { email_body: finalContent });
+      } else {
+        await updateGrowthLead(leadId, { ai_pitch: finalContent });
+      }
     } catch {
       // non-blocking
     }
   };
 
-  // Regenerate pitch with RapidRouter
-  const onRegeneratePitch = async (lead: GrowthLead) => {
+  // Regenerate pitch with RapidRouter AI (gpt-4o-mini)
+  const onRegeneratePitch = async (lead: GrowthLead, type: 'whatsapp' | 'email') => {
     setGeneratingPitchId(lead.id);
     try {
-      const newPitch = await regenerateLeadPitch(lead.id);
-      saveLeadsState(
-        leads.map((l) => (l.id === lead.id ? { ...l, ai_pitch: newPitch } : l))
-      );
-      toast.success('Generated fresh psychological pitch with RapidRouter!');
+      if (type === 'email') {
+        const newEmail = await regenerateLeadEmail(lead.id);
+        saveLeadsState(
+          leads.map((l) => (l.id === lead.id ? { ...l, email_body: newEmail } : l))
+        );
+        toast.success('Generated fresh email pitch with RapidRouter AI (gpt-4o-mini)!');
+      } else {
+        const newPitch = await regenerateLeadPitch(lead.id);
+        saveLeadsState(
+          leads.map((l) => (l.id === lead.id ? { ...l, ai_pitch: newPitch } : l))
+        );
+        toast.success('Generated fresh WhatsApp hook with RapidRouter AI (gpt-4o-mini)!');
+      }
     } catch {
       toast.error('Could not generate pitch with RapidRouter');
     } finally {
@@ -265,10 +361,20 @@ export default function PlatformLeadsPage() {
     }
     setAddingLead(true);
     try {
-      const lead = await addGrowthLead(newLead, true);
+      const lead = await addGrowthLead(
+        {
+          name: newLead.name,
+          owner_name: newLead.owner_name || undefined,
+          phone: newLead.phone,
+          email: newLead.email.trim() || undefined,
+          city: newLead.city,
+          area: newLead.area || undefined,
+        },
+        true
+      );
       saveLeadsState([lead, ...leads]);
       setShowAddModal(false);
-      setNewLead({ name: '', owner_name: '', phone: '', city: 'Kota', area: '' });
+      setNewLead({ name: '', owner_name: '', phone: '', email: '', city: 'Kota', area: '' });
       toast.success('Lead added & AI pitch generated!');
     } catch {
       // Fallback local lead
@@ -277,11 +383,13 @@ export default function PlatformLeadsPage() {
         name: newLead.name.trim(),
         owner_name: newLead.owner_name?.trim() || null,
         phone: newLead.phone.replace(/\D/g, '').slice(-10),
+        email: newLead.email.trim() || null,
         city: newLead.city.trim(),
         area: newLead.area?.trim() || null,
         source: 'manual',
         status: 'new',
         ai_pitch: `Namaste ${newLead.owner_name || 'Bhaiya'} 🙏 Aapka ${newLead.name} (${newLead.city}) hai na?\n\nKamre ke bijli meter aur rent hisab diary mein karte hain ya WhatsApp slip pe? Humne PG owners ke liye free 1-click tool banaya hai runmypg.in pe. Demo bhejoon?`,
+        email_body: `Subject: Quick question regarding ${newLead.name}\n\nHello ${newLead.owner_name || 'Owner'},\n\nReaching out regarding ${newLead.name} in ${newLead.city}.\n\nWe built RunMyPG (https://www.runmypg.in) to automate electricity sub-meter calculation and WhatsApp rent slips. Would you be open to a 2-minute demo?`,
         notes: null,
         last_contacted_at: null,
         created_at: new Date().toISOString(),
@@ -289,7 +397,7 @@ export default function PlatformLeadsPage() {
       };
       saveLeadsState([localLead, ...leads]);
       setShowAddModal(false);
-      setNewLead({ name: '', owner_name: '', phone: '', city: 'Kota', area: '' });
+      setNewLead({ name: '', owner_name: '', phone: '', email: '', city: 'Kota', area: '' });
       toast.success('Lead added locally & ready to message!');
     } finally {
       setAddingLead(false);
@@ -302,8 +410,8 @@ export default function PlatformLeadsPage() {
       <div>
         <h2 className={styles.section}>Growth & Outreach Engine</h2>
         <p className={styles.lead}>
-          High-conversion PG owner outreach. Short psychological curiosity hooks powered by{' '}
-          <strong>RapidRouter AI (Gemma-4)</strong>. 1-Click WhatsApp with zero ban risk.
+          High-conversion PG owner outreach. Curiosity hooks powered by{' '}
+          <strong>RapidRouter AI (openai/gpt-4o-mini)</strong>. Primary 1-Click WhatsApp with Email fallback.
         </p>
       </div>
 
@@ -470,20 +578,26 @@ export default function PlatformLeadsPage() {
               <thead>
                 <tr>
                   <th style={{ width: 220 }}>PG & Location</th>
-                  <th style={{ width: 180 }}>Owner / Phone</th>
-                  <th>Short Psychology Pitch (Click to Edit)</th>
+                  <th style={{ width: 190 }}>Owner / Contact</th>
+                  <th>Pitch (Click to Edit)</th>
                   <th style={{ width: 130 }}>Status</th>
-                  <th style={{ textAlign: 'right', width: 140 }}>1-Click Send</th>
+                  <th style={{ textAlign: 'right', width: 200 }}>1-Click Send</th>
                 </tr>
               </thead>
               <tbody>
                 {paginatedLeads.map((lead) => {
                   const isGenerating = generatingPitchId === lead.id;
+                  const currentChannel = pitchChannel[lead.id] || 'whatsapp';
                   const cleanOwner = (lead.owner_name || '')
                     .replace(/\s*(ji|garu|kaka|bhaiya|bhai|mr\.?|shri)\s*$/i, '')
                     .replace(/^\s*(mr\.?|shri)\s*/i, '')
                     .trim();
                   const salutation = cleanOwner ? `Mr. ${cleanOwner}` : 'Property Owner';
+
+                  const currentContent =
+                    currentChannel === 'email'
+                      ? lead.email_body || `Subject: Quick question regarding ${lead.name}\n\nHello ${salutation},\n\nHope you're having a productive week. Reaching out regarding ${lead.name} in ${lead.city}.\n\nMost PG owners lose hours each month tracking room occupancies and calculating electricity sub-meters across notebooks.\n\nWe created RunMyPG (https://www.runmypg.in) — a simple 1-click platform to send automated rent slips on WhatsApp and track bed vacancies.\n\nWould you be open to a quick 2-minute demo or free trial for ${lead.name}?\n\nBest regards,\nRunMyPG Team\nhttps://www.runmypg.in`
+                      : lead.ai_pitch || '';
 
                   return (
                     <tr key={lead.id}>
@@ -514,35 +628,103 @@ export default function PlatformLeadsPage() {
                         >
                           <Phone size={11} /> +91 {lead.phone.slice(-10)}
                         </a>
+                        {lead.email ? (
+                          <div style={{ marginTop: 3 }}>
+                            <a
+                              href={`mailto:${lead.email}`}
+                              style={{
+                                fontSize: 11,
+                                color: '#2563eb',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: 4,
+                                textDecoration: 'none',
+                              }}
+                              title="Click to email"
+                            >
+                              <Mail size={11} /> {lead.email}
+                            </a>
+                          </div>
+                        ) : (
+                          <div style={{ marginTop: 3 }}>
+                            <button
+                              type="button"
+                              onClick={() => onAddEmail(lead)}
+                              style={{
+                                border: 'none',
+                                background: 'transparent',
+                                padding: 0,
+                                fontSize: 11,
+                                color: 'var(--brand)',
+                                cursor: 'pointer',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: 3,
+                              }}
+                              title="Add owner email address for fallback"
+                            >
+                              <Mail size={10} /> + Add Email
+                            </button>
+                          </div>
+                        )}
                       </td>
 
                       <td>
                         <div className={styles.pitchPreview}>
+                          {/* Channel Tab Switcher (WhatsApp vs Email) */}
                           <div
                             style={{
                               display: 'flex',
                               alignItems: 'center',
                               justifyContent: 'space-between',
-                              marginBottom: 4,
+                              marginBottom: 6,
                             }}
                           >
-                            <span className={styles.aiBadge}>
-                              <Bot size={11} /> Gemma-4 AI Hook
-                            </span>
+                            <div className={styles.pitchTabGroup}>
+                              <button
+                                type="button"
+                                className={[
+                                  styles.pitchTabBtn,
+                                  currentChannel === 'whatsapp' ? styles.pitchTabBtnActive : '',
+                                ]
+                                  .filter(Boolean)
+                                  .join(' ')}
+                                onClick={() =>
+                                  setPitchChannel((prev) => ({ ...prev, [lead.id]: 'whatsapp' }))
+                                }
+                              >
+                                🟢 WhatsApp Hook
+                              </button>
+                              <button
+                                type="button"
+                                className={[
+                                  styles.pitchTabBtn,
+                                  currentChannel === 'email' ? styles.pitchTabBtnActive : '',
+                                ]
+                                  .filter(Boolean)
+                                  .join(' ')}
+                                onClick={() =>
+                                  setPitchChannel((prev) => ({ ...prev, [lead.id]: 'email' }))
+                                }
+                              >
+                                🔵 Email Pitch
+                              </button>
+                            </div>
+
                             <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                               <button
                                 type="button"
                                 className={styles.btnMiniIcon}
-                                title="Copy message"
-                                onClick={() => onCopyPitch(lead.ai_pitch, lead.name)}
+                                title={`Copy ${currentChannel} message`}
+                                onClick={() => onCopyPitch(currentContent, lead.name)}
                               >
                                 <Copy size={12} />
                               </button>
                               <button
                                 type="button"
                                 className={styles.btnMiniIcon}
-                                title="Regenerate pitch with RapidRouter AI"
-                                onClick={() => onRegeneratePitch(lead)}
+                                title={`Regenerate ${currentChannel} pitch with GPT-4o-mini`}
+                                onClick={() => onRegeneratePitch(lead, currentChannel)}
                                 disabled={isGenerating}
                               >
                                 <RefreshCw
@@ -553,17 +735,30 @@ export default function PlatformLeadsPage() {
                             </div>
                           </div>
 
+                          <div style={{ marginBottom: 4 }}>
+                            <span className={styles.aiBadge}>
+                              <Bot size={11} />{' '}
+                              {currentChannel === 'whatsapp'
+                                ? 'GPT-4o-mini WhatsApp Hook'
+                                : 'GPT-4o-mini Email Pitch'}
+                            </span>
+                          </div>
+
                           {isGenerating ? (
                             <p style={{ margin: '6px 0', fontStyle: 'italic', fontSize: 11, color: '#6366f1' }}>
-                              Crafting high-converting hook with RapidRouter…
+                              Crafting high-converting hook with RapidRouter (GPT-4o-mini)…
                             </p>
                           ) : (
                             <textarea
                               className={styles.editablePitch}
-                              value={lead.ai_pitch || ''}
-                              onChange={(e) => onPitchChange(lead.id, e.target.value)}
-                              onBlur={(e) => onPitchBlur(lead.id, e.target.value)}
-                              placeholder="Write or edit WhatsApp message..."
+                              value={currentContent}
+                              onChange={(e) => onPitchChange(lead.id, currentChannel, e.target.value)}
+                              onBlur={(e) => onPitchBlur(lead.id, currentChannel, e.target.value)}
+                              placeholder={
+                                currentChannel === 'email'
+                                  ? 'Subject: ...\n\nWrite email pitch...'
+                                  : 'Write WhatsApp message...'
+                              }
                               title="Click to edit before sending"
                             />
                           )}
@@ -599,15 +794,24 @@ export default function PlatformLeadsPage() {
                             alignItems: 'center',
                             gap: 6,
                             justifyContent: 'flex-end',
+                            flexWrap: 'wrap',
                           }}
                         >
                           <button
                             type="button"
                             className={styles.whatsappBtn}
                             onClick={() => onWhatsAppClick(lead)}
-                            title="Open WhatsApp chat with pre-written message"
+                            title="Primary: Open WhatsApp chat with pre-written message"
                           >
                             <MessageCircle size={14} fill="#fff" /> WhatsApp
+                          </button>
+                          <button
+                            type="button"
+                            className={styles.emailBtn}
+                            onClick={() => onEmailClick(lead)}
+                            title="Fallback: Open email client with pre-written pitch"
+                          >
+                            <Mail size={13} /> Email
                           </button>
                         </div>
                       </td>
@@ -744,6 +948,24 @@ export default function PlatformLeadsPage() {
                     placeholder="e.g. 9829012345"
                     value={newLead.phone}
                     onChange={(e) => setNewLead({ ...newLead, phone: e.target.value })}
+                    style={{
+                      width: '100%',
+                      padding: '8px 12px',
+                      borderRadius: 6,
+                      border: '1px solid var(--line)',
+                    }}
+                  />
+                </div>
+
+                <div>
+                  <label style={{ fontSize: 12, fontWeight: 600, display: 'block', marginBottom: 4 }}>
+                    Email Address (Optional Fallback)
+                  </label>
+                  <input
+                    type="email"
+                    placeholder="e.g. sharma.pg@gmail.com"
+                    value={newLead.email}
+                    onChange={(e) => setNewLead({ ...newLead, email: e.target.value })}
                     style={{
                       width: '100%',
                       padding: '8px 12px',

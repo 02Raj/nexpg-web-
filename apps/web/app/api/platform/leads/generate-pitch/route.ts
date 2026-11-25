@@ -1,6 +1,10 @@
 import { isPlatformAdminEmail } from '@/lib/platform-admin';
-import { generatePersonalizedLeadPitch } from '@/lib/rapidrouter';
+import {
+  generatePersonalizedLeadPitch,
+  generatePersonalizedLeadEmail,
+} from '@/lib/rapidrouter';
 import { createClient } from '@/lib/supabase/server';
+import type { GrowthLead } from '@nexpg/shared';
 import { NextResponse } from 'next/server';
 
 export async function POST(req: Request) {
@@ -15,6 +19,7 @@ export async function POST(req: Request) {
 
   let body: {
     leadId?: string;
+    type?: 'whatsapp' | 'email' | 'all';
     name?: string;
     ownerName?: string;
     city?: string;
@@ -52,21 +57,44 @@ export async function POST(req: Request) {
   }
 
   try {
-    const pitch = await generatePersonalizedLeadPitch({
-      name,
-      ownerName,
-      city,
-      area,
-    });
+    const targetType = body.type || 'whatsapp';
+    let pitch: string | undefined;
+    let emailResult: { subject: string; body: string } | undefined;
+    const updates: Partial<GrowthLead> = { updated_at: new Date().toISOString() };
+
+    if (targetType === 'whatsapp' || targetType === 'all') {
+      pitch = await generatePersonalizedLeadPitch({
+        name,
+        ownerName,
+        city,
+        area,
+      });
+      updates.ai_pitch = pitch;
+    }
+
+    if (targetType === 'email' || targetType === 'all') {
+      emailResult = await generatePersonalizedLeadEmail({
+        name,
+        ownerName,
+        city,
+        area,
+      });
+      // Store full body formatted with subject line on top if needed
+      updates.email_body = `Subject: ${emailResult.subject}\n\n${emailResult.body}`;
+    }
 
     if (body.leadId) {
       await supabase
         .from('growth_leads')
-        .update({ ai_pitch: pitch, updated_at: new Date().toISOString() })
+        .update(updates)
         .eq('id', body.leadId);
     }
 
-    return NextResponse.json({ pitch });
+    return NextResponse.json({
+      pitch,
+      email_subject: emailResult?.subject,
+      email_body: updates.email_body,
+    });
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : 'Error generating pitch';
     return NextResponse.json({ error: msg }, { status: 500 });

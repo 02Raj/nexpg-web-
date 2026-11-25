@@ -17,7 +17,7 @@ export async function rapidrouterChatCompletion(options: {
   const model =
     options.model ||
     process.env.RAPIDROUTER_MODEL?.trim() ||
-    'google/gemma-4-31b-it:free';
+    'openai/gpt-4o-mini';
 
   const res = await fetch(`${baseUrl.replace(/\/$/, '')}/chat/completions`, {
     method: 'POST',
@@ -98,4 +98,61 @@ Location: ${location}`;
     // Reliable English fallback
     return `Hello ${salutation},\n\nHope you're well! Reaching out regarding ${lead.name} in ${location}.\n\nQuick question: are you still calculating electricity sub-meters and rent in paper diaries? We built a free 1-click tool at runmypg.in to send automated WhatsApp slips. Mind if I share a 1-min demo?`;
   }
+}
+
+export async function generatePersonalizedLeadEmail(lead: {
+  name: string;
+  ownerName?: string | null;
+  city: string;
+  area?: string | null;
+}): Promise<{ subject: string; body: string }> {
+  const cleanOwner = (lead.ownerName || '')
+    .replace(/\s*(ji|garu|kaka|bhaiya|bhai|mr\.?|shri)\s*$/i, '')
+    .replace(/^\s*(mr\.?|shri)\s*/i, '')
+    .trim();
+  const salutation = cleanOwner ? `Mr. ${cleanOwner}` : 'Property Owner';
+  const location = lead.area ? `${lead.area}, ${lead.city}` : lead.city;
+
+  const systemPrompt = `You are a B2B sales outreach copywriter for RunMyPG (https://www.runmypg.in).
+Write a SHORT, professional, highly converting cold email in clean ENGLISH (no Hindi/Hinglish) to a PG / Hostel owner.
+Rules:
+1. Subject line: Curious, high-open-rate, no spam words (e.g. "Quick question regarding ${lead.name}" or "Automating rent & electricity slips for ${lead.name}").
+2. Body:
+   - Polite opening: "Hello ${salutation},"
+   - Mention property: "Hope you are having a productive week. Reaching out regarding ${lead.name} in ${location}."
+   - The Core Problem: "Most PG owners lose hours each month tracking room occupancies, calculating individual electricity sub-meters, and following up on unpaid rents across paper diaries or spreadsheets."
+   - The Solution: "We created RunMyPG (https://www.runmypg.in) — a simple, modern management platform built specifically for Indian PG owners to send automated rent slips on WhatsApp and track bed vacancies in 1 click."
+   - Call to action: "Would you be open to a quick 2-minute demo or a free trial to see how it works for ${lead.name}?"
+   - Sign-off: "Best regards,\nDivyansh Raj\nFounder, RunMyPG\ncontact@runmypg.in"
+3. Output format: strictly valid JSON with keys: "subject" and "body". No markdown fences or backticks.`;
+
+  const userPrompt = `Generate the cold email for:
+Owner: ${salutation}
+PG Name: ${lead.name}
+Location: ${location}`;
+
+  try {
+    const raw = await rapidrouterChatCompletion({
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: userPrompt },
+      ],
+      temperature: 0.3,
+      maxTokens: 350,
+    });
+
+    const cleaned = raw.replace(/^```json\s*/i, '').replace(/```\s*$/, '').trim();
+    const parsed = JSON.parse(cleaned) as { subject?: string; body?: string };
+    if (parsed.subject && parsed.body) {
+      return { subject: parsed.subject.trim(), body: parsed.body.trim() };
+    }
+  } catch (err) {
+    console.error('Failed to generate email with RapidRouter:', err);
+  }
+
+  // Reliable Fallback
+  return {
+    subject: `Quick question regarding ${lead.name} (${location})`,
+    body: `Hello ${salutation},\n\nHope you're having a productive week. Reaching out regarding ${lead.name} in ${location}.\n\nMost PG owners we speak with lose hours every month calculating electricity sub-meter readings and chasing rent manually across notebooks.\n\nWe built RunMyPG (https://www.runmypg.in) — a simple, 1-click management tool for Indian PG owners to send automated rent slips on WhatsApp and track room vacancies.\n\nWould you be open to a quick 2-minute demo or a free trial for ${lead.name}?\n\nBest regards,\nRunMyPG Team\nhttps://www.runmypg.in`,
+  };
 }

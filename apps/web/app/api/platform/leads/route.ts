@@ -95,10 +95,12 @@ export async function POST(req: Request) {
       name: string;
       owner_name?: string;
       phone: string;
+      email?: string;
       city: string;
       area?: string;
       source?: string;
       notes?: string;
+      email_body?: string;
     }>;
     generateAiPitch?: boolean;
   };
@@ -133,11 +135,13 @@ export async function POST(req: Request) {
         name: l.name.trim(),
         owner_name: l.owner_name?.trim() || null,
         phone: l.phone.replace(/\D/g, '').slice(-10),
+        email: l.email?.trim() || null,
         city: l.city.trim(),
         area: l.area?.trim() || null,
         source: l.source || 'manual',
         status: 'new',
         ai_pitch: pitch,
+        email_body: l.email_body || null,
         notes: l.notes || null,
       };
     })
@@ -168,7 +172,9 @@ export async function PATCH(req: Request) {
   let body: {
     id: string;
     status?: string;
+    email?: string;
     ai_pitch?: string;
+    email_body?: string;
     notes?: string;
     last_contacted_at?: string;
   };
@@ -185,7 +191,9 @@ export async function PATCH(req: Request) {
 
   const updates: Partial<GrowthLead> = { updated_at: new Date().toISOString() };
   if (body.status) updates.status = body.status as GrowthLead['status'];
+  if (body.email !== undefined) updates.email = body.email;
   if (body.ai_pitch !== undefined) updates.ai_pitch = body.ai_pitch;
+  if (body.email_body !== undefined) updates.email_body = body.email_body;
   if (body.notes !== undefined) updates.notes = body.notes;
   if (body.last_contacted_at !== undefined) updates.last_contacted_at = body.last_contacted_at;
 
